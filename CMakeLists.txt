@@ -26,3 +26,17 @@ target_include_directories(${SDE_PROJECT_TARGET} PRIVATE
         ./thirdparty/stb)
 
 target_link_libraries(${SDE_PROJECT_TARGET} glfw ${GLFW_LIBRARIES})
+
+### Copy Resources ###
+set(RESOURES_DIRETORIES resources)
+
+foreach (RESOURCES_DIR ${RESOURES_DIRETORIES})
+    add_custom_command(TARGET ${SDE_PROJECT_TARGET} PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E remove_directory
+            ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
+
+    add_custom_command(TARGET ${SDE_PROJECT_TARGET} PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/${RESOURCES_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
+endforeach ()
+######################
