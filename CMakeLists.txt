@@ -5,6 +5,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(SDE_PROJECT_TARGET sde)
+
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_compile_options(-DDEBUG -Wall -Wextra)
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi)
@@ -13,11 +15,5 @@ else ()
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi -Wl,--strip-all)
 endif ()
 
-if (WIN32)
-    set(PROJECT_TARGET sde.exe)
-else ()
-    set(PROJECT_TARGET sde)
-endif ()
-
-add_executable(${PROJECT_TARGET} main.cpp)
-target_include_directories(${PROJECT_TARGET} PRIVATE ./thirdparty/glad/include)
+add_executable(${SDE_PROJECT_TARGET} WIN32 main.cpp)
+target_include_directories(${SDE_PROJECT_TARGET} PRIVATE ./thirdparty/glad/include)
