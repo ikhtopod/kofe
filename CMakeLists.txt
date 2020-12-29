@@ -15,5 +15,12 @@ else ()
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi -Wl,--strip-all)
 endif ()
 
-add_executable(${SDE_PROJECT_TARGET} WIN32 main.cpp)
-target_include_directories(${SDE_PROJECT_TARGET} PRIVATE ./thirdparty/glad/include)
+add_subdirectory(./thirdparty/glfw)
+
+add_executable(${SDE_PROJECT_TARGET} main.cpp ./thirdparty/glad/src/glad.c)
+
+target_include_directories(${SDE_PROJECT_TARGET} PRIVATE
+        ./thirdparty/glfw/include
+        ./thirdparty/glad/include)
+
+target_link_libraries(${SDE_PROJECT_TARGET} glfw ${GLFW_LIBRARIES})
