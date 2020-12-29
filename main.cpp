@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -15,6 +16,12 @@
 #include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
+
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_ONLY_PNG
+
+#include <stb_image.h>
 
 
 int main() {
