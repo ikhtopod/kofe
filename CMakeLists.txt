@@ -28,6 +28,8 @@ target_include_directories(${SDE_PROJECT_TARGET} PRIVATE
 
 target_link_libraries(${SDE_PROJECT_TARGET} glfw ${GLFW_LIBRARIES} glad stb)
 
+target_precompile_headers(${SDE_PROJECT_TARGET} PRIVATE pch/pch.h)
+
 
 ##### Copy Resources #####
 set(RESOURES_DIRETORIES resources)

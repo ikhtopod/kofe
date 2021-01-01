@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.0, 2021-01-01T20:20:37. -->
+<!-- Written by QtCreator 4.14.0, 2021-01-01T20:38:22. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -347,7 +347,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.1">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -418,7 +418,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.10">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -489,7 +489,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.11">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -560,7 +560,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.12">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -631,7 +631,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.13">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -702,7 +702,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.14">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -773,7 +773,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.15">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -844,7 +844,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.16">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -915,7 +915,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.17">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -986,7 +986,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.18">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1057,7 +1057,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.19">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1199,7 +1199,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.20">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1270,7 +1270,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.21">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1341,7 +1341,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.22">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1412,7 +1412,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.23">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1483,7 +1483,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.24">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1554,7 +1554,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.25">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1625,7 +1625,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.26">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1696,7 +1696,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.27">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1767,7 +1767,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.28">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1838,7 +1838,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.29">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1909,7 +1909,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.3">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -1980,7 +1980,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.4">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2051,7 +2051,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.5">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2122,7 +2122,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.6">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2193,7 +2193,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.7">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2264,7 +2264,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.8">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2335,7 +2335,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/examples</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/examples</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.9">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -2406,7 +2406,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glm/tests</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/prometheus/cpp/project/seductive-dream-engine/build/debug/thirdparty/glfw/tests</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">30</value>
   </valuemap>

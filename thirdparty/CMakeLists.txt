@@ -3,7 +3,6 @@ set(GLAD_DIRECTORY ${THIRDPARTY_DIRECTORY}/glad)
 add_library(${GLAD_PROJECT} STATIC ${GLAD_DIRECTORY}/include/glad/glad.h ${GLAD_DIRECTORY}/src/glad.c)
 target_include_directories(${GLAD_PROJECT} PUBLIC ${GLAD_DIRECTORY}/include)
 
-
 set(STB_PROJECT stb)
 set(STB_DIRECTORY ${THIRDPARTY_DIRECTORY}/stb)
 add_library(${STB_PROJECT} STATIC ${STB_DIRECTORY}/headers/stb_image.h ${STB_DIRECTORY}/sources/stb_image.c)
