@@ -75,5 +75,7 @@
 
 # End of https://www.toptal.com/developers/gitignore/api/qtcreator,c++
 
+*~
 *.orig
 [Bb]uild/
+CMakeLists.txt.user*
