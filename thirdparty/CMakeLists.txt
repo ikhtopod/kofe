@@ -9,4 +9,5 @@ set(STB_DIRECTORY ${THIRDPARTY_DIRECTORY}/stb)
 add_library(${STB_PROJECT} STATIC ${STB_DIRECTORY}/headers/stb_image.h ${STB_DIRECTORY}/sources/stb_image.c)
 target_include_directories(${STB_PROJECT} PUBLIC ${STB_DIRECTORY}/headers)
 
-add_subdirectory(${THIRDPARTY_DIRECTORY}/glfw ${THIRDPARTY_DIRECTORY}/glm)
+add_subdirectory(${THIRDPARTY_DIRECTORY}/glm)
+add_subdirectory(${THIRDPARTY_DIRECTORY}/glfw)
