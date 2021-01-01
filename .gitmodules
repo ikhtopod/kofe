@@ -4,6 +4,6 @@
 [submodule "thirdparty/glm"]
 	path = thirdparty/glm
 	url = git@github.com:g-truc/glm.git
-[submodule "thirdparty/stb"]
-	path = thirdparty/stb
+[submodule "thirdparty/stb/headers"]
+	path = thirdparty/stb/headers
 	url = git@github.com:nothings/stb.git

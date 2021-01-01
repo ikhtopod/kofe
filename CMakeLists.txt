@@ -15,17 +15,19 @@ else ()
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi -Wl,--strip-all)
 endif ()
 
-add_subdirectory(./thirdparty/glfw ./thirdparty/glm)
 
-add_executable(${SDE_PROJECT_TARGET} main.cpp ./thirdparty/glad/src/glad.c)
+set(THIRDPARTY_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty)
+add_subdirectory(${THIRDPARTY_DIRECTORY})
+
+
+add_executable(${SDE_PROJECT_TARGET} main.cpp)
 
 target_include_directories(${SDE_PROJECT_TARGET} PRIVATE
-    ./thirdparty/glfw/include
-    ./thirdparty/glad/include
-    ./thirdparty/glm
-    ./thirdparty/stb)
+    ${THIRDPARTY_DIRECTORY}/glfw/include
+    ${THIRDPARTY_DIRECTORY}/glm)
 
-target_link_libraries(${SDE_PROJECT_TARGET} glfw ${GLFW_LIBRARIES})
+target_link_libraries(${SDE_PROJECT_TARGET} glfw ${GLFW_LIBRARIES} glad stb)
+
 
 ##### Copy Resources #####
 set(RESOURES_DIRETORIES resources)
@@ -37,10 +39,10 @@ foreach (RESOURCES_DIR ${RESOURES_DIRETORIES})
             ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
     endif ()
 
-    if (EXISTS "${CMAKE_SOURCE_DIR}/${RESOURCES_DIR}" AND IS_DIRECTORY "${CMAKE_SOURCE_DIR}/${RESOURCES_DIR}")
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR}" AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR}")
         add_custom_command(TARGET ${SDE_PROJECT_TARGET} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/${RESOURCES_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
+            ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
     endif ()
 endforeach ()
 ##########################
