@@ -1,5 +1,21 @@
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
+#include <core/appexceptions.h>
+#include <core/application.h>
+
+
 int main() {
-    std::string message { "Hello, The Seductive Dream engine!" };
-    std::cout << message << std::endl;
+    try {
+        Application{"Seductive Dream Engine"}.Run();
+    } catch (const ApplicationException& e) {
+        std::cerr << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "[Exception] Unknown error" << std::endl;
+    }
+
     return EXIT_SUCCESS;
 }
