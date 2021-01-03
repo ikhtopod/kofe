@@ -1,18 +1,41 @@
 #include "application.h"
 
-#ifdef DEBUG
-#include <iostream>
-#endif
+#include "app_exceptions.h"
+#include "everywhere.h"
 
-#include <core/appexceptions.h>
+#include <GLFW/glfw3.h>
 
 
-Application::Application(const std::string& title) :
-    m_title { title } {}
+Application::Application() : Application { ":notitle:" } {}
+
+Application::Application(const std::string& title) {
+    try {
+        Window* window = new Window { ScreenSize { 960, 540 }, title };
+        Everywhere::Get().InitWindow(window);
+    } catch (...) {
+        Application::~Application();
+        throw;
+    }
+}
 
 Application::Application(const char* title) :
     Application { std::string { title } } {}
 
+Application::~Application() {
+    Everywhere::Get().FreeWindow();
+    glfwTerminate();
+}
+
+
+void Application::MainLoop() {
+    GLFWwindow* context = Everywhere::Get().GetWindow().GetContext();
+
+    while (glfwWindowShouldClose(context) == GLFW_FALSE) {
+        glfwPollEvents();
+        glfwSwapBuffers(context);
+    }
+}
+
 void Application::Run() {
-    std::cout << "[Title] " << m_title << std::endl;
+    MainLoop();
 }

@@ -1,0 +1,62 @@
+#include "app_exceptions.h"
+
+#include <iostream>
+
+
+ApplicationException::ApplicationException() :
+    m_message { "[ApplicationException] " } {}
+
+ApplicationException::ApplicationException(const std::string& message) :
+    ApplicationException {}
+{
+    m_message += message;
+}
+
+ApplicationException::ApplicationException(const char* message) :
+    ApplicationException { std::string { message } } {}
+
+const char* ApplicationException::what() const noexcept {
+    return m_message.c_str();
+}
+
+
+WindowException::WindowException() : ApplicationException {} {
+    m_message = "[WindowException] ";
+}
+
+WindowException::WindowException(const std::string& message) :
+    WindowException {}
+{
+    m_message += message;
+}
+
+WindowException::WindowException(const char* message) :
+    WindowException { std::string { message } } {}
+
+
+ShaderException::ShaderException() : ApplicationException {} {
+    m_message = "[ShaderException] ";
+}
+
+ShaderException::ShaderException(const std::string& message) :
+    ShaderException {}
+{
+    m_message += message;
+}
+
+ShaderException::ShaderException(const char* message) :
+    ShaderException { std::string { message } } {}
+
+
+TextureException::TextureException() : ApplicationException {} {
+    m_message = "[TextureException] ";
+}
+
+TextureException::TextureException(const std::string& message) :
+    TextureException {}
+{
+    m_message += message;
+}
+
+TextureException::TextureException(const char* message) :
+    TextureException { std::string { message } } {}

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include <core/appexceptions.h>
+#include <core/app_exceptions.h>
 #include <core/application.h>
 
 
