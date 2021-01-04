@@ -42,6 +42,17 @@ public:
 };
 
 
+class InputException : public ApplicationException {
+protected:
+    InputException();
+
+public:
+    explicit InputException(const std::string& message);
+    explicit InputException(const char* message);
+
+};
+
+
 class ShaderException : public ApplicationException {
 protected:
     ShaderException();

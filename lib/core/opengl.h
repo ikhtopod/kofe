@@ -1,10 +1,12 @@
 #ifndef OPENGL_H
 #define OPENGL_H
 
-#include "irendered.h"
+#include "iprocess.h"
+
+#include <cstdint>
 
 
-class OpenGL final : public IRendered {
+class OpenGL final : public IProcess {
 private:
     void InitOpenGL();
     void Init();
@@ -12,8 +14,10 @@ private:
 public:
     OpenGL();
 
-public: /* IRendered */
-    void Rendering() override;
+    void UpdateViewportSize() const;
+
+public: /* IProcess */
+    void Processing() override;
 };
 
 #endif // OPENGL_H

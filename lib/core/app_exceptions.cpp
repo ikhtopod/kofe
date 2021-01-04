@@ -48,6 +48,20 @@ OpenGLException::OpenGLException(const char* message) :
     OpenGLException { std::string { message } } {}
 
 
+InputException::InputException() : ApplicationException {} {
+    m_message = "[InputException] ";
+}
+
+InputException::InputException(const std::string& message) :
+    InputException {}
+{
+    m_message += message;
+}
+
+InputException::InputException(const char* message) :
+    InputException { std::string { message } } {}
+
+
 ShaderException::ShaderException() : ApplicationException {} {
     m_message = "[ShaderException] ";
 }

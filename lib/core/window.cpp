@@ -89,3 +89,11 @@ void Window::SetContext(GLFWwindow* context) { m_context = context; }
 std::string Window::GetTitle() const { return m_title; }
 
 void Window::SetTitle(const std::string& title) { m_title = title; }
+
+bool Window::CanProcess() {
+    return glfwWindowShouldClose(m_context) == GLFW_FALSE;
+}
+
+void Window::SwapBuffers() {
+    glfwSwapBuffers(m_context);
+}

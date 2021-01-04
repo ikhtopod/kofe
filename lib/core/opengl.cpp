@@ -17,8 +17,7 @@ void OpenGL::InitOpenGL() {
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    const ScreenSize& screen = Everywhere::Get().GetWindow().GetScreen();
-    glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
+    UpdateViewportSize();
 
     glClearColor(.05f, .0f, .1f, 1.f);
 }
@@ -35,6 +34,11 @@ OpenGL::OpenGL() {
     Init();
 }
 
-void OpenGL::Rendering() {
+void OpenGL::UpdateViewportSize() const {
+    const ScreenSize& screen = Everywhere::Get().GetWindow().GetScreen();
+    glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
+}
+
+void OpenGL::Processing() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

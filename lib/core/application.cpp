@@ -16,6 +16,7 @@ Application::Application(const std::string& title) {
     try {
         Everywhere::Get().InitWindow(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Get().InitOpenGL(new OpenGL {});
+        Everywhere::Get().InitInput(new Input {});
     } catch (...) {
         Application::~Application();
         throw;
@@ -23,6 +24,7 @@ Application::Application(const std::string& title) {
 }
 
 Application::~Application() {
+    Everywhere::Get().FreeInput();
     Everywhere::Get().FreeOpenGL();
     Everywhere::Get().FreeWindow();
 
@@ -31,13 +33,11 @@ Application::~Application() {
 
 
 void Application::MainLoop() {
-    GLFWwindow* context = Everywhere::Get().GetWindow().GetContext();
+    while (Everywhere::Get().GetWindow().CanProcess()) {
+        Everywhere::Get().GetOpenGL().Processing();
+        Everywhere::Get().GetInput().Processing();
 
-    while (glfwWindowShouldClose(context) == GLFW_FALSE) {
-        Everywhere::Get().GetOpenGL().Rendering();
-
-        glfwPollEvents();
-        glfwSwapBuffers(context);
+        Everywhere::Get().GetWindow().SwapBuffers();
     }
 }
 

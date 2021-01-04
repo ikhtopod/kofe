@@ -44,6 +44,10 @@ public:
 
     std::string GetTitle() const;
     void SetTitle(const std::string& title);
+
+public:
+    bool CanProcess();
+    void SwapBuffers();
 };
 
 void swap(Window& lhs, Window& rhs);
