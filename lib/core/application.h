@@ -7,8 +7,8 @@
 class Application final {
 public:
     Application();
-    explicit Application(const std::string& title);
     explicit Application(const char* title);
+    explicit Application(const std::string& title);
     ~Application();
 
 public:

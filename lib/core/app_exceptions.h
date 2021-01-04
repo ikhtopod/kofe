@@ -31,6 +31,17 @@ public:
 };
 
 
+class OpenGLException : public ApplicationException {
+protected:
+    OpenGLException();
+
+public:
+    explicit OpenGLException(const std::string& message);
+    explicit OpenGLException(const char* message);
+
+};
+
+
 class ShaderException : public ApplicationException {
 protected:
     ShaderException();

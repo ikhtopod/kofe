@@ -34,6 +34,20 @@ WindowException::WindowException(const char* message) :
     WindowException { std::string { message } } {}
 
 
+OpenGLException::OpenGLException() : ApplicationException {} {
+    m_message = "[OpenGLException] ";
+}
+
+OpenGLException::OpenGLException(const std::string& message) :
+    OpenGLException {}
+{
+    m_message += message;
+}
+
+OpenGLException::OpenGLException(const char* message) :
+    OpenGLException { std::string { message } } {}
+
+
 ShaderException::ShaderException() : ApplicationException {} {
     m_message = "[ShaderException] ";
 }
