@@ -15,4 +15,4 @@ target_include_directories(${SDE_CORE_TARGET} PUBLIC
 
 target_link_libraries(${SDE_CORE_TARGET}
     glfw ${GLFW_LIBRARIES}
-    glad stb)
+    glad-4.6-core stb)
