@@ -3,9 +3,9 @@
 #include "app_exceptions.h"
 
 
-Space::Space() {
-
-}
+Space::Space() :
+    MODEL { 1.0f },
+    m_scenes {} {}
 
 Space::~Space() {
 
