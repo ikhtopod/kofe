@@ -3,19 +3,19 @@
 #include "everywhere.h"
 
 
-void Input::Callback::Assign() {
+void Input::AssignCallbacks() {
     GLFWwindow* context = Everywhere::Get().GetWindow().GetContext();
-    glfwSetFramebufferSizeCallback(context, Input::Callback::FramebufferSizeCallback);
+    glfwSetFramebufferSizeCallback(context, Input::FramebufferSizeCallback);
 }
 
-void Input::Callback::FramebufferSizeCallback(GLFWwindow*, int width, int height) {
+void Input::FramebufferSizeCallback(GLFWwindow*, int width, int height) {
     Everywhere::Get().GetWindow().GetScreen().Update(width, height);
     Everywhere::Get().GetOpenGL().UpdateViewportSize();
 }
 
 void Input::Init() {
     GLFWwindow* context = Everywhere::Get().GetWindow().GetContext();
-    Input::Callback::Assign();
+    Input::AssignCallbacks();
     glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
