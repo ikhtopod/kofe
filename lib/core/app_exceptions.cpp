@@ -62,6 +62,20 @@ InputException::InputException(const char* message) :
     InputException { std::string { message } } {}
 
 
+SpaceException::SpaceException() : ApplicationException {} {
+    m_message = "[SpaceException] ";
+}
+
+SpaceException::SpaceException(const std::string& message) :
+    SpaceException {}
+{
+    m_message += message;
+}
+
+SpaceException::SpaceException(const char* message) :
+    SpaceException { std::string { message } } {}
+
+
 ShaderException::ShaderException() : ApplicationException {} {
     m_message = "[ShaderException] ";
 }

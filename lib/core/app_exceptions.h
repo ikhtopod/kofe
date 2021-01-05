@@ -53,6 +53,17 @@ public:
 };
 
 
+class SpaceException : public ApplicationException {
+protected:
+    SpaceException();
+
+public:
+    explicit SpaceException(const std::string& message);
+    explicit SpaceException(const char* message);
+
+};
+
+
 class ShaderException : public ApplicationException {
 protected:
     ShaderException();
