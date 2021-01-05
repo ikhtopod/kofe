@@ -8,10 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SDE_TARGET sde)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_compile_options(-DDEBUG -Wall -Wextra)
+    add_compile_options(-DDEBUG -Wall -Wextra -std=c++17)
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi)
 else ()
-    add_compile_options(-Wall -Wextra -O2 -flto)
+    add_compile_options(-Wall -Wextra -std=c++17 -O2 -flto)
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi -Wl,--strip-all)
 endif ()
 
