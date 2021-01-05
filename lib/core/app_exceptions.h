@@ -75,6 +75,17 @@ public:
 };
 
 
+class ObjectException : public ApplicationException {
+protected:
+    ObjectException();
+
+public:
+    explicit ObjectException(const std::string& message);
+    explicit ObjectException(const char* message);
+
+};
+
+
 class ShaderException : public ApplicationException {
 protected:
     ShaderException();

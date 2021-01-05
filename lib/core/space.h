@@ -15,8 +15,9 @@ class Space final : public IProcess {
     using SceneSPtr = std::shared_ptr<Scene>;
 
 private:
-    const glm::mat4 MODEL;
+    static const glm::mat4 MODEL;
 
+private:
     std::vector<SceneSPtr> m_scenes;
 
 public:
@@ -24,7 +25,7 @@ public:
     ~Space();
 
 public: /* Scene operations */
-    void AddScene(SceneSPtr& scene);
+    void AddScene(const SceneSPtr& scene);
     void DeleteScene(size_t index);
     void ClearScenes();
 

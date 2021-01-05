@@ -90,6 +90,20 @@ SceneException::SceneException(const char* message) :
     SceneException { std::string { message } } {}
 
 
+ObjectException::ObjectException() : ApplicationException {} {
+    m_message = "[ObjectException] ";
+}
+
+ObjectException::ObjectException(const std::string& message) :
+    ObjectException {}
+{
+    m_message += message;
+}
+
+ObjectException::ObjectException(const char* message) :
+    ObjectException { std::string { message } } {}
+
+
 ShaderException::ShaderException() : ApplicationException {} {
     m_message = "[ShaderException] ";
 }

@@ -17,7 +17,16 @@ Application::Application(const std::string& title) {
         Everywhere::Get().InitWindow(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Get().InitOpenGL(new OpenGL {});
         Everywhere::Get().InitInput(new Input {});
-        Everywhere::Get().InitSpace(new Space {});
+
+        /* Temp Space */
+        std::shared_ptr<Object> tempObject { new Object {} };
+        std::shared_ptr<Scene> tempScene { new Scene {} };
+        tempScene->AddObject(tempObject);
+        Space* tempSpace = new Space {};
+        tempSpace->AddScene(tempScene);
+
+        Everywhere::Get().InitSpace(tempSpace);
+        /* ********** */
     } catch (...) {
         Application::~Application();
         throw;

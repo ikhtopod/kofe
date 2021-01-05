@@ -4,15 +4,17 @@
 #include <iterator>
 
 
+const glm::mat4 Space::MODEL { 1.0f };
+
+
 Space::Space() :
-    MODEL { 1.0f },
     m_scenes {} {}
 
 Space::~Space() {
     ClearScenes();
 }
 
-void Space::AddScene(SceneSPtr& scene) {
+void Space::AddScene(const Space::SceneSPtr& scene) {
     m_scenes.push_back(scene);
 }
 
@@ -24,7 +26,7 @@ void Space::DeleteScene(size_t index) {
 }
 
 void Space::ClearScenes() {
-    for (SceneSPtr& scene : m_scenes) {
+    for (auto& scene : m_scenes) {
         scene.reset();
     }
 
@@ -32,7 +34,8 @@ void Space::ClearScenes() {
 }
 
 void Space::Processing() {
-    for (SceneSPtr& scene : m_scenes) {
-        scene->Processing();
+    for (auto& scene : m_scenes) {
+        if (scene)
+            scene->Processing();
     }
 }
