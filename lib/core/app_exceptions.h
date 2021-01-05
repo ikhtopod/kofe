@@ -1,5 +1,5 @@
-#ifndef APPEXCEPTIONS_H
-#define APPEXCEPTIONS_H
+#ifndef APP_EXCEPTIONS_H
+#define APP_EXCEPTIONS_H
 
 #include <exception>
 #include <string>
@@ -64,6 +64,17 @@ public:
 };
 
 
+class SceneException : public ApplicationException {
+protected:
+    SceneException();
+
+public:
+    explicit SceneException(const std::string& message);
+    explicit SceneException(const char* message);
+
+};
+
+
 class ShaderException : public ApplicationException {
 protected:
     ShaderException();
@@ -85,4 +96,4 @@ public:
 
 };
 
-#endif // APPEXCEPTIONS_H
+#endif // APP_EXCEPTIONS_H
