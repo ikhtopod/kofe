@@ -11,31 +11,17 @@ Space::Space() :
     m_scenes {} {}
 
 Space::~Space() {
-    ClearScenes();
+    m_scenes.Clear();
 }
 
-void Space::AddScene(const Space::SceneSPtr& scene) {
-    m_scenes.push_back(scene);
-}
+CollectionOf<Scene>& Space::GetScenes() { return m_scenes; }
 
-void Space::DeleteScene(size_t index) {
-    if (index >= m_scenes.size()) return;
-
-    m_scenes[index].reset();
-    m_scenes.erase(std::next(m_scenes.begin(), index));
-}
-
-void Space::ClearScenes() {
-    for (auto& scene : m_scenes) {
-        scene.reset();
-    }
-
-    m_scenes.clear();
-}
+const CollectionOf<Scene>& Space::GetScenes() const { return m_scenes; }
 
 void Space::Processing() {
-    for (auto& scene : m_scenes) {
-        if (scene)
+    for (auto& scene : m_scenes.Get()) {
+        if (scene) {
             scene->Processing();
+        }
     }
 }

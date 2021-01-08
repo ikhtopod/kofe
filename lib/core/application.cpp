@@ -19,12 +19,16 @@ Application::Application(const std::string& title) {
         Everywhere::Get().InitInput(new Input {});
 
         /* Temp Space */
+        std::shared_ptr<Mesh> tempMesh { new Mesh {} };
+        std::shared_ptr<Material> tempMaterial { new Material {} };
         std::shared_ptr<Object> tempObject { new Object {} };
+        tempObject->GetMeshes().Add(tempMesh);
+        tempObject->GetMaterials().Add(tempMaterial);
         std::shared_ptr<Scene> tempScene { new Scene {} };
-        tempScene->AddObject(tempObject);
+        tempScene->GetObjects().Add(tempObject);
         Space* tempSpace = new Space {};
-        tempSpace->AddScene(tempScene);
-
+        tempSpace->GetScenes().Add(tempScene);
+        /* ********** */
         Everywhere::Get().InitSpace(tempSpace);
         /* ********** */
     } catch (...) {

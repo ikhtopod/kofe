@@ -8,31 +8,17 @@ Scene::Scene() :
     m_objects {} {}
 
 Scene::~Scene() {
-    ClearObjects();
+    m_objects.Clear();
 }
 
-void Scene::AddObject(const Scene::ObjectSPtr& object) {
-    m_objects.push_back(object);
-}
+CollectionOf<Object>& Scene::GetObjects() { return m_objects; }
 
-void Scene::DeleteObjects(size_t index) {
-    if (index >= m_objects.size()) return;
-
-    m_objects[index].reset();
-    m_objects.erase(std::next(m_objects.begin(), index));
-}
-
-void Scene::ClearObjects() {
-    for (auto& object : m_objects) {
-        object.reset();
-    }
-
-    m_objects.clear();
-}
+const CollectionOf<Object>& Scene::GetObjects() const { return m_objects; }
 
 void Scene::Processing() {
-    for (auto& object : m_objects) {
-        if (object)
+    for (auto& object : m_objects.Get()) {
+        if (object) {
             object->Processing();
+        }
     }
 }
