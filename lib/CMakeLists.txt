@@ -1,18 +1,18 @@
-set(SDE_CORE_TARGET core)
-set(SDE_CORE_DIRECTORY ${SDE_LIB_DIRECTORY}/core)
+set(SD_CORE_TARGET core)
+set(SD_CORE_DIRECTORY ${SD_LIB_DIRECTORY}/core)
 
-file(GLOB_RECURSE SDE_CORE_HEADER_FILES *.h)
-file(GLOB_RECURSE SDE_CORE_SOURCE_FILES *.cpp)
+file(GLOB_RECURSE SD_CORE_HEADER_FILES *.h)
+file(GLOB_RECURSE SD_CORE_SOURCE_FILES *.cpp)
 
-add_library(${SDE_CORE_TARGET} STATIC
-    ${SDE_CORE_HEADER_FILES}
-    ${SDE_CORE_SOURCE_FILES})
+add_library(${SD_CORE_TARGET} STATIC
+    ${SD_CORE_HEADER_FILES}
+    ${SD_CORE_SOURCE_FILES})
 
-target_include_directories(${SDE_CORE_TARGET} PUBLIC
+target_include_directories(${SD_CORE_TARGET} PUBLIC
     ${THIRDPARTY_DIRECTORY}/glfw/include
     ${THIRDPARTY_DIRECTORY}/glm
-    ${SDE_LIB_DIRECTORY})
+    ${SD_LIB_DIRECTORY})
 
-target_link_libraries(${SDE_CORE_TARGET}
+target_link_libraries(${SD_CORE_TARGET}
     glfw ${GLFW_LIBRARIES}
     glad-4.6-core stb)
