@@ -27,7 +27,6 @@ protected:
 public:
     explicit WindowException(const std::string& message);
     explicit WindowException(const char* message);
-
 };
 
 
@@ -38,7 +37,6 @@ protected:
 public:
     explicit OpenGLException(const std::string& message);
     explicit OpenGLException(const char* message);
-
 };
 
 
@@ -49,7 +47,6 @@ protected:
 public:
     explicit InputException(const std::string& message);
     explicit InputException(const char* message);
-
 };
 
 
@@ -60,7 +57,6 @@ protected:
 public:
     explicit SpaceException(const std::string& message);
     explicit SpaceException(const char* message);
-
 };
 
 
@@ -71,7 +67,6 @@ protected:
 public:
     explicit SceneException(const std::string& message);
     explicit SceneException(const char* message);
-
 };
 
 
@@ -82,7 +77,26 @@ protected:
 public:
     explicit ObjectException(const std::string& message);
     explicit ObjectException(const char* message);
+};
 
+
+class MeshException : public ApplicationException {
+protected:
+    MeshException();
+
+public:
+    explicit MeshException(const std::string& message);
+    explicit MeshException(const char* message);
+};
+
+
+class MaterialException : public ApplicationException {
+protected:
+    MaterialException();
+
+public:
+    explicit MaterialException(const std::string& message);
+    explicit MaterialException(const char* message);
 };
 
 
@@ -93,7 +107,6 @@ protected:
 public:
     explicit ShaderException(const std::string& message);
     explicit ShaderException(const char* message);
-
 };
 
 
@@ -104,7 +117,6 @@ protected:
 public:
     explicit TextureException(const std::string& message);
     explicit TextureException(const char* message);
-
 };
 
 #endif // APP_EXCEPTIONS_H

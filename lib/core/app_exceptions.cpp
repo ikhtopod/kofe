@@ -104,6 +104,34 @@ ObjectException::ObjectException(const char* message) :
     ObjectException { std::string { message } } {}
 
 
+MeshException::MeshException() : ApplicationException {} {
+    m_message = "[MeshException] ";
+}
+
+MeshException::MeshException(const std::string& message) :
+    MeshException {}
+{
+    m_message += message;
+}
+
+MeshException::MeshException(const char* message) :
+    MeshException { std::string { message } } {}
+
+
+MaterialException::MaterialException() : ApplicationException {} {
+    m_message = "[MaterialException] ";
+}
+
+MaterialException::MaterialException(const std::string& message) :
+    MaterialException {}
+{
+    m_message += message;
+}
+
+MaterialException::MaterialException(const char* message) :
+    MaterialException { std::string { message } } {}
+
+
 ShaderException::ShaderException() : ApplicationException {} {
     m_message = "[ShaderException] ";
 }
