@@ -53,12 +53,20 @@ public:
 
 public:
     TypeSPtr<T>& operator[](size_type idx) { return m_objects[idx]; }
-    TypeSPtr<T>& operator[](size_type idx) const { return m_objects[idx]; }
+    const TypeSPtr<T>& operator[](size_type idx) const { return m_objects[idx]; }
 
     TypeSPtr<T>& At(size_type idx) { return m_objects.at(idx); }
-    TypeSPtr<T>& At(size_type idx) const { return m_objects.at(idx); }
+    const TypeSPtr<T>& At(size_type idx) const { return m_objects.at(idx); }
 
     size_type Size() const { return m_objects.size(); }
+
+    bool IsEmpty() const { return m_objects.empty(); }
+
+    TypeSPtr<T>& Front() { return m_objects.front(); }
+    const TypeSPtr<T>& Front() const { return m_objects.front(); }
+
+    TypeSPtr<T>& Back() { return m_objects.back(); }
+    const TypeSPtr<T>& Back() const { return m_objects.back(); }
 
     void Add(const TypeSPtr<T>& object) {
         m_objects.push_back(object);
