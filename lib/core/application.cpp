@@ -20,7 +20,9 @@ Application::Application(const std::string& title) {
 
         /* Temp Space */
         std::shared_ptr<Mesh> tempMesh { new Mesh {} };
+        std::shared_ptr<Shader> tempShader { new Shader {} };
         std::shared_ptr<Material> tempMaterial { new Material {} };
+        tempMaterial->GetShaders().Add(tempShader);
         std::shared_ptr<Object> tempObject { new Object {} };
         tempObject->GetMeshes().Add(tempMesh);
         tempObject->GetMaterials().Add(tempMaterial);
