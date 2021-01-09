@@ -114,7 +114,7 @@ void Shader::DeleteShaders(unsigned* vertex, unsigned* fragment) {
 
 void Shader::CheckLocationError(int location, const std::string& uniformName) const {
     if (location == LOCATION_ERROR_FLAG) {
-        throw ShaderException("For uniform \"" + uniformName + "\" not found location");
+        throw UniformShaderException("For uniform \"" + uniformName + "\" not found location");
     }
 }
 
