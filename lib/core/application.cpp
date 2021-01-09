@@ -26,7 +26,11 @@ Application::Application(const std::string& title) {
                 std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
             }
         };
-        std::shared_ptr<Texture> tempTexture { new Texture {} };
+        std::shared_ptr<Texture> tempTexture {
+            new Texture {
+                std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
+            }
+        };
         std::shared_ptr<Material> tempMaterial { new Material {} };
         tempMaterial->GetShaders().Add(tempShader);
         tempMaterial->GetTextures().Add(tempTexture);
