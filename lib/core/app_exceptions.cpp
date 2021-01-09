@@ -146,6 +146,63 @@ ShaderException::ShaderException(const char* message) :
     ShaderException { std::string { message } } {}
 
 
+
+VertexShaderException::VertexShaderException() : ShaderException {} {
+    m_message = "[VertexShaderException] ";
+}
+
+VertexShaderException::VertexShaderException(const std::string& message) :
+    VertexShaderException {}
+{
+    m_message += message;
+}
+
+VertexShaderException::VertexShaderException(const char* message) :
+    VertexShaderException { std::string { message } } {}
+
+
+FragmentShaderException::FragmentShaderException() : ShaderException {} {
+    m_message = "[FragmentShaderException] ";
+}
+
+FragmentShaderException::FragmentShaderException(const std::string& message) :
+    FragmentShaderException {}
+{
+    m_message += message;
+}
+
+FragmentShaderException::FragmentShaderException(const char* message) :
+    FragmentShaderException { std::string { message } } {}
+
+
+ProgramShaderException::ProgramShaderException() : ShaderException {} {
+    m_message = "[ProgramShaderException] ";
+}
+
+ProgramShaderException::ProgramShaderException(const std::string& message) :
+    ProgramShaderException {}
+{
+    m_message += message;
+}
+
+ProgramShaderException::ProgramShaderException(const char* message) :
+    ProgramShaderException { std::string { message } } {}
+
+
+UniformShaderException::UniformShaderException() : ShaderException {} {
+    m_message = "[UniformShaderException] ";
+}
+
+UniformShaderException::UniformShaderException(const std::string& message) :
+    UniformShaderException {}
+{
+    m_message += message;
+}
+
+UniformShaderException::UniformShaderException(const char* message) :
+    UniformShaderException { std::string { message } } {}
+
+
 TextureException::TextureException() : ApplicationException {} {
     m_message = "[TextureException] ";
 }
@@ -158,3 +215,17 @@ TextureException::TextureException(const std::string& message) :
 
 TextureException::TextureException(const char* message) :
     TextureException { std::string { message } } {}
+
+
+FilesystemException::FilesystemException() : ApplicationException {} {
+    m_message = "[FilesystemException] ";
+}
+
+FilesystemException::FilesystemException(const std::string& message) :
+    FilesystemException {}
+{
+    m_message += message;
+}
+
+FilesystemException::FilesystemException(const char* message) :
+    FilesystemException { std::string { message } } {}

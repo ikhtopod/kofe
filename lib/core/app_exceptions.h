@@ -110,6 +110,46 @@ public:
 };
 
 
+class VertexShaderException : public ShaderException {
+protected:
+    VertexShaderException();
+
+public:
+    explicit VertexShaderException(const std::string& message);
+    explicit VertexShaderException(const char* message);
+};
+
+
+class FragmentShaderException : public ShaderException {
+protected:
+    FragmentShaderException();
+
+public:
+    explicit FragmentShaderException(const std::string& message);
+    explicit FragmentShaderException(const char* message);
+};
+
+
+class ProgramShaderException : public ShaderException {
+protected:
+    ProgramShaderException();
+
+public:
+    explicit ProgramShaderException(const std::string& message);
+    explicit ProgramShaderException(const char* message);
+};
+
+
+class UniformShaderException : public ShaderException {
+protected:
+    UniformShaderException();
+
+public:
+    explicit UniformShaderException(const std::string& message);
+    explicit UniformShaderException(const char* message);
+};
+
+
 class TextureException : public ApplicationException {
 protected:
     TextureException();
@@ -118,5 +158,16 @@ public:
     explicit TextureException(const std::string& message);
     explicit TextureException(const char* message);
 };
+
+
+class FilesystemException : public ApplicationException {
+protected:
+    FilesystemException();
+
+public:
+    explicit FilesystemException(const std::string& message);
+    explicit FilesystemException(const char* message);
+};
+
 
 #endif // APP_EXCEPTIONS_H

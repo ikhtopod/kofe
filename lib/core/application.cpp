@@ -20,7 +20,12 @@ Application::Application(const std::string& title) {
 
         /* Temp Space */
         std::shared_ptr<Mesh> tempMesh { new Mesh {} };
-        std::shared_ptr<Shader> tempShader { new Shader {} };
+        std::shared_ptr<Shader> tempShader {
+            new Shader {
+                std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
+                std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
+            }
+        };
         std::shared_ptr<Texture> tempTexture { new Texture {} };
         std::shared_ptr<Material> tempMaterial { new Material {} };
         tempMaterial->GetShaders().Add(tempShader);
