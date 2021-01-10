@@ -48,7 +48,9 @@ public:
 
     void SetBool(const std::string& uniformName, bool value) const;
     void SetInt(const std::string& uniformName, GLint value) const;
+    void SetUInt(const std::string& uniformName, GLuint value) const;
     void SetFloat(const std::string& uniformName, GLfloat value) const;
+    void SetDouble(const std::string& uniformName, GLdouble value) const;
 
     void SetVec1(const std::string& uniformName, glm::vec1 value) const;
     void SetVec2(const std::string& uniformName, glm::vec2 value) const;

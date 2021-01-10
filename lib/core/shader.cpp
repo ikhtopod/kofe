@@ -126,7 +126,7 @@ void Shader::SetUniformProcessingFunc(Shader::UniformProcessing& func) {
 }
 
 void Shader::SetBool(const std::string& uniformName, bool value) const {
-    SetInt(uniformName, static_cast<GLuint>(value));
+    SetUInt(uniformName, static_cast<GLuint>(value));
 }
 
 void Shader::SetInt(const std::string& uniformName, GLint value) const {
@@ -135,10 +135,22 @@ void Shader::SetInt(const std::string& uniformName, GLint value) const {
     glUniform1i(location, value);
 }
 
+void Shader::SetUInt(const std::string& uniformName, GLuint value) const {
+    GLint location = glGetUniformLocation(m_program, uniformName.c_str());
+    CheckLocationError(location, uniformName);
+    glUniform1ui(location, value);
+}
+
 void Shader::SetFloat(const std::string& uniformName, GLfloat value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
     glUniform1f(location, value);
+}
+
+void Shader::SetDouble(const std::string& uniformName, GLdouble value) const {
+    GLint location = glGetUniformLocation(m_program, uniformName.c_str());
+    CheckLocationError(location, uniformName);
+    glUniform1d(location, value);
 }
 
 void Shader::SetVec1(const std::string& uniformName, glm::vec1 value) const {
