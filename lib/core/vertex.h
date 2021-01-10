@@ -8,10 +8,9 @@
 
 
 struct Vertex final {
-private:
-    glm::vec3 m_position;
-    glm::vec2 m_texture;
-    GLuint m_index;
+public:
+    glm::vec3 position;
+    glm::vec2 texture;
 
 public:
     friend void swap(Vertex&, Vertex&);
@@ -24,19 +23,9 @@ public:
     Vertex& operator=(Vertex&& other) noexcept;
     ~Vertex() = default;
 
-    Vertex(glm::vec3 position, glm::vec2 texture, GLuint index);
+    Vertex(glm::vec3 pos, glm::vec2 tex);
 
     bool operator==(const Vertex& other) const;
-
-public:
-    glm::vec3 GetPosition() const;
-    void SetPosition(const glm::vec3& position);
-
-    glm::vec2 GetTexture() const;
-    void SetTexture(const glm::vec2& texture);
-
-    GLuint GetIndex() const;
-    void SetIndex(GLuint index);
 };
 
 void swap(Vertex& lhs, Vertex& rhs);

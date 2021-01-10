@@ -44,7 +44,7 @@ private:
 public:
     void Use() const;
 
-    void SetUniformProcessingFunc(UniformProcessing& func);
+    void SetUniformProcessingFunc(const UniformProcessing& func);
 
     void SetBool(const std::string& uniformName, bool value) const;
     void SetInt(const std::string& uniformName, GLint value) const;

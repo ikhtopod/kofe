@@ -17,11 +17,11 @@ CollectionOf<Material>& Object::GetMaterials() { return m_materials; }
 const CollectionOf<Material>& Object::GetMaterials() const { return m_materials; }
 
 void Object::Processing() {
-    for (auto& mesh : m_meshes.Get()) {
-        mesh->Processing();
-    }
-
     for (auto& material : m_materials.Get()) {
         material->Processing();
+    }
+
+    for (auto& mesh : m_meshes.Get()) {
+        mesh->Processing();
     }
 }

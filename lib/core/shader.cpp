@@ -121,7 +121,7 @@ void Shader::Use() const {
     glUseProgram(m_program);
 }
 
-void Shader::SetUniformProcessingFunc(Shader::UniformProcessing& func) {
+void Shader::SetUniformProcessingFunc(const Shader::UniformProcessing& func) {
     m_uniformProcessingFunc = func;
 }
 
