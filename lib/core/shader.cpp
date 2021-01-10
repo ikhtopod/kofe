@@ -153,25 +153,25 @@ void Shader::SetDouble(const std::string& uniformName, GLdouble value) const {
     glUniform1d(location, value);
 }
 
-void Shader::SetVec1(const std::string& uniformName, glm::vec1 value) const {
+void Shader::SetVec1(const std::string& uniformName, const glm::vec1& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
     glUniform1fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec2(const std::string& uniformName, glm::vec2 value) const {
+void Shader::SetVec2(const std::string& uniformName, const glm::vec2& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
     glUniform2fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec3(const std::string& uniformName, glm::vec3 value) const {
+void Shader::SetVec3(const std::string& uniformName, const glm::vec3& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
     glUniform3fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec4(const std::string& uniformName, glm::vec4 value) const {
+void Shader::SetVec4(const std::string& uniformName, const glm::vec4& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
     glUniform4fv(location, 1, &value[0]);

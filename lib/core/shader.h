@@ -52,10 +52,10 @@ public:
     void SetFloat(const std::string& uniformName, GLfloat value) const;
     void SetDouble(const std::string& uniformName, GLdouble value) const;
 
-    void SetVec1(const std::string& uniformName, glm::vec1 value) const;
-    void SetVec2(const std::string& uniformName, glm::vec2 value) const;
-    void SetVec3(const std::string& uniformName, glm::vec3 value) const;
-    void SetVec4(const std::string& uniformName, glm::vec4 value) const;
+    void SetVec1(const std::string& uniformName, const glm::vec1& value) const;
+    void SetVec2(const std::string& uniformName, const glm::vec2& value) const;
+    void SetVec3(const std::string& uniformName, const glm::vec3& value) const;
+    void SetVec4(const std::string& uniformName, const glm::vec4& value) const;
 
     void SetMat2(const std::string& uniformName, const glm::mat2& value) const;
     void SetMat3(const std::string& uniformName, const glm::mat3& value) const;
