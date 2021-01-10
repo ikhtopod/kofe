@@ -106,8 +106,10 @@ void Shader::LinkShadersToProgram(GLuint* vertex, GLuint* fragment) {
 
 void Shader::DeleteShaders(GLuint* vertex, GLuint* fragment) {
     for (auto* shader : { vertex, fragment }) {
-        glDeleteShader(*shader);
-        delete shader;
+        if (shader) {
+            glDeleteShader(*shader);
+            delete shader;
+        }
     }
 }
 
