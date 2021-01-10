@@ -8,13 +8,13 @@
 
 int main() {
     try {
-        Application{"Seductive Dream Engine"}.Run();
+        Application{"Seductive Dream"}.Run();
     } catch (const ApplicationException& e) {
         std::cerr << e.what() << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "[Exception] " << e.what() << std::endl;
     } catch (...) {
-        std::cerr << "[Exception] Unknown error" << std::endl;
+        std::cerr << "[Error] Unknown error" << std::endl;
     }
 
     return EXIT_SUCCESS;
