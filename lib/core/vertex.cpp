@@ -43,9 +43,21 @@ bool Vertex::operator==(const Vertex& other) const {
 
 glm::vec3 Vertex::GetPosition() const { return m_position; }
 
+void Vertex::SetPosition(const glm::vec3& position) {
+    m_position = position;
+}
+
 glm::vec2 Vertex::GetTexture() const { return m_texture; }
 
+void Vertex::SetTexture(const glm::vec2& texture) {
+    m_texture = texture;
+}
+
 GLuint Vertex::GetIndex() const { return m_index; }
+
+void Vertex::SetIndex(GLuint index) {
+    m_index = index;
+}
 
 void swap(Vertex& lhs, Vertex& rhs) {
     if (&lhs == &rhs) return;

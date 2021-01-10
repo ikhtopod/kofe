@@ -28,9 +28,15 @@ public:
 
     bool operator==(const Vertex& other) const;
 
+public:
     glm::vec3 GetPosition() const;
+    void SetPosition(const glm::vec3& position);
+
     glm::vec2 GetTexture() const;
+    void SetTexture(const glm::vec2& texture);
+
     GLuint GetIndex() const;
+    void SetIndex(GLuint index);
 };
 
 void swap(Vertex& lhs, Vertex& rhs);
