@@ -3,6 +3,7 @@
 
 #include "iprocess.h"
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 #include <functional>
@@ -12,11 +13,11 @@
 class Shader final : public IProcess {
     using UniformProcessing = std::function<void(Shader*)>;
 
-    static const unsigned INFOLOG_SIZE { 512 };
-    static constexpr int LOCATION_ERROR_FLAG { -1 };
+    static const GLuint INFOLOG_SIZE { 512 };
+    static constexpr GLint LOCATION_ERROR_FLAG { -1 };
 
 private:
-    unsigned m_program;
+    GLuint m_program;
     UniformProcessing m_uniformProcessingFunc;
 
 public:
@@ -33,12 +34,12 @@ public:
 private:
     void CreateProgram(const std::filesystem::path& vertexPath,
                        const std::filesystem::path& fragmentPath);
-    unsigned* CompileVertex(const std::filesystem::path& vertexPath);
-    unsigned* CompileFragment(const std::filesystem::path& fragmentPath);
-    void LinkShadersToProgram(unsigned* vertex, unsigned* fragment);
-    void DeleteShaders(unsigned* vertex, unsigned* fragment);
+    GLuint* CompileVertex(const std::filesystem::path& vertexPath);
+    GLuint* CompileFragment(const std::filesystem::path& fragmentPath);
+    void LinkShadersToProgram(GLuint* vertex, GLuint* fragment);
+    void DeleteShaders(GLuint* vertex, GLuint* fragment);
 
-    void CheckLocationError(int location, const std::string& uniformName) const;
+    void CheckLocationError(GLint location, const std::string& uniformName) const;
 
 public:
     void Use() const;
@@ -46,8 +47,8 @@ public:
     void SetUniformProcessingFunc(UniformProcessing& func);
 
     void SetBool(const std::string& uniformName, bool value) const;
-    void SetInt(const std::string& uniformName, int value) const;
-    void SetFloat(const std::string& uniformName, float value) const;
+    void SetInt(const std::string& uniformName, GLint value) const;
+    void SetFloat(const std::string& uniformName, GLfloat value) const;
 
     void SetVec1(const std::string& uniformName, glm::vec1 value) const;
     void SetVec2(const std::string& uniformName, glm::vec2 value) const;

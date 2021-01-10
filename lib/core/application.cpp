@@ -3,8 +3,6 @@
 #include "app_exceptions.h"
 #include "everywhere.h"
 
-#include <GLFW/glfw3.h>
-
 
 Application::Application() : Application { ":notitle:" } {}
 

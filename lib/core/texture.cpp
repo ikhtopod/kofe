@@ -2,8 +2,6 @@
 
 #include "app_exceptions.h"
 
-#include <glad/glad.h>
-
 
 const glm::vec4 Texture::TEXTURE_BORDER_COLOR { .0f, .0f, .0f, 1.f };
 const int Texture::TEXTURE_WRAP { GL_CLAMP_TO_EDGE };

@@ -3,7 +3,6 @@
 #include "app_exceptions.h"
 #include "fs.h"
 
-#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
@@ -39,7 +38,7 @@ void Shader::CreateProgram(const std::filesystem::path& vertexPath,
     DeleteShaders(vertex, fragment);
 }
 
-unsigned* Shader::CompileVertex(const std::filesystem::path& vertexPath) {
+GLuint* Shader::CompileVertex(const std::filesystem::path& vertexPath) {
     GLuint* vertex = new GLuint { glCreateShader(GL_VERTEX_SHADER) };
 
     std::string vertexSourceCode = filesystem::GetContentFile(vertexPath);
@@ -62,7 +61,7 @@ unsigned* Shader::CompileVertex(const std::filesystem::path& vertexPath) {
     return vertex;
 }
 
-unsigned* Shader::CompileFragment(const std::filesystem::path& fragmentPath) {
+GLuint* Shader::CompileFragment(const std::filesystem::path& fragmentPath) {
     GLuint* fragment = new GLuint { glCreateShader(GL_FRAGMENT_SHADER) };
 
     std::string fragmentSourceCode = filesystem::GetContentFile(fragmentPath);
@@ -85,7 +84,7 @@ unsigned* Shader::CompileFragment(const std::filesystem::path& fragmentPath) {
     return fragment;
 }
 
-void Shader::LinkShadersToProgram(unsigned* vertex, unsigned* fragment) {
+void Shader::LinkShadersToProgram(GLuint* vertex, GLuint* fragment) {
     m_program = glCreateProgram();
 
     glAttachShader(m_program, *vertex);
@@ -105,14 +104,14 @@ void Shader::LinkShadersToProgram(unsigned* vertex, unsigned* fragment) {
     }
 }
 
-void Shader::DeleteShaders(unsigned* vertex, unsigned* fragment) {
+void Shader::DeleteShaders(GLuint* vertex, GLuint* fragment) {
     for (auto* shader : { vertex, fragment }) {
         glDeleteShader(*shader);
         delete shader;
     }
 }
 
-void Shader::CheckLocationError(int location, const std::string& uniformName) const {
+void Shader::CheckLocationError(GLint location, const std::string& uniformName) const {
     if (location == LOCATION_ERROR_FLAG) {
         throw UniformShaderException("For uniform \"" + uniformName + "\" not found location");
     }
@@ -127,19 +126,19 @@ void Shader::SetUniformProcessingFunc(Shader::UniformProcessing& func) {
 }
 
 void Shader::SetBool(const std::string& uniformName, bool value) const {
-    SetInt(uniformName, static_cast<int>(value));
+    SetInt(uniformName, static_cast<GLuint>(value));
 }
 
-void Shader::SetInt(const std::string& uniformName, int value) const {
+void Shader::SetInt(const std::string& uniformName, GLint value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
-    glUniform1i(location, static_cast<GLint>(value));
+    glUniform1i(location, value);
 }
 
-void Shader::SetFloat(const std::string& uniformName, float value) const {
+void Shader::SetFloat(const std::string& uniformName, GLfloat value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
     CheckLocationError(location, uniformName);
-    glUniform1f(location, static_cast<GLfloat>(value));
+    glUniform1f(location, value);
 }
 
 void Shader::SetVec1(const std::string& uniformName, glm::vec1 value) const {

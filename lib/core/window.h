@@ -1,11 +1,12 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "screensize.h"
+
 #include <utility>
 #include <string>
 
-#include "screensize.h"
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 
