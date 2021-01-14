@@ -52,6 +52,7 @@ public:
         }
 
         delete m_units[U::ToString()];
+        m_units[U::ToString()] = nullptr;
     }
 
 };
