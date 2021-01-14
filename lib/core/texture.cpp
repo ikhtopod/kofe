@@ -4,10 +4,9 @@
 
 
 const glm::vec4 Texture::TEXTURE_BORDER_COLOR { .0f, .0f, .0f, 1.f };
-const int Texture::TEXTURE_WRAP { GL_CLAMP_TO_EDGE };
-const size_t Texture::BUFFER_SIZE { 1 };
-const int Texture::MIPMAP_LEVEL { 0 };
-const int Texture::BORDER { 0 }; // always zero (legacy)
+const GLsizei Texture::BUFFER_SIZE { 1 };
+const GLint Texture::MIPMAP_LEVEL { 0 };
+const GLint Texture::BORDER { 0 }; // always zero (legacy)
 
 void Texture::InitTextureWrapParameters() const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -82,7 +81,7 @@ void Texture::InvertVertical() {
     m_flipVertical = !m_flipVertical;
 }
 
-unsigned Texture::NextTextureUnit() const {
+GLenum Texture::NextTextureUnit() const {
     if (m_textureUnit == GL_TEXTURE31) {
         throw TextureException { "Cannot use next texture unit" };
     }

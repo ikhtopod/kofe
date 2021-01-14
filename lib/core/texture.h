@@ -22,22 +22,21 @@ enum class TextureChannelComponents : int {
 
 class Texture final : public IProcess {
     static const glm::vec4 TEXTURE_BORDER_COLOR;
-    static const int TEXTURE_WRAP;
 
-    static const size_t BUFFER_SIZE;
-    static const int MIPMAP_LEVEL;
-    static const int BORDER;
+    static const GLsizei BUFFER_SIZE;
+    static const GLint MIPMAP_LEVEL;
+    static const GLint BORDER;
 
 private:
     const TextureChannelComponents m_textureChannelComponents;
-    const unsigned m_textureUnit; // GL_TEXTURE0 - always activated by default
+    const GLenum m_textureUnit; // GL_TEXTURE0 - always activated by default
     bool m_flipVertical;
 
     int m_width;
     int m_height;
     int m_channels;
 
-    unsigned int tex;
+    GLuint tex;
 
 private:
     void InitTextureWrapParameters() const;
@@ -61,7 +60,7 @@ public: /* IProcess */
     void Processing() override;
 
     void InvertVertical();
-    unsigned NextTextureUnit() const;
+    GLenum NextTextureUnit() const;
 };
 
 #endif // TEXTURE_H
