@@ -5,7 +5,7 @@
 template <typename T>
 class Singleton {
 public:
-    static T& Get() {
+    static T& Instance() {
         static T instance {};
         return instance;
     }

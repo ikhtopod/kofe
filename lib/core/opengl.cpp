@@ -35,7 +35,7 @@ OpenGL::OpenGL() {
 }
 
 void OpenGL::UpdateViewportSize() const {
-    const ScreenSize& screen = Everywhere::Get().GetWindow().GetScreen();
+    const ScreenSize& screen = Everywhere::Instance().window().Get().GetScreen();
     glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
 }
 

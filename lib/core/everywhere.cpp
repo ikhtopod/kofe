@@ -1,18 +1,34 @@
 #include "everywhere.h"
 
 
-void Everywhere::InitWindow(Window* window) { m_window = window; }
-Window& Everywhere::GetWindow() { return *m_window; }
-void Everywhere::FreeWindow() { delete m_window; }
+Everywhere::EverywherePtr<Window>& Everywhere::window() {
+    return m_window;
+}
 
-void Everywhere::InitOpenGL(OpenGL* opengl) { m_opengl = opengl; }
-OpenGL& Everywhere::GetOpenGL() { return *m_opengl; }
-void Everywhere::FreeOpenGL() { delete m_opengl; }
+const Everywhere::EverywherePtr<Window>& Everywhere::window() const {
+    return m_window;
+}
 
-void Everywhere::InitInput(Input* input) { m_input = input; }
-Input& Everywhere::GetInput() { return *m_input; }
-void Everywhere::FreeInput() { delete m_input; }
+Everywhere::EverywherePtr<OpenGL>& Everywhere::openGL() {
+    return m_opengl;
+}
 
-void Everywhere::InitSpace(Space* space) { m_space = space; }
-Space& Everywhere::GetSpace() { return *m_space; }
-void Everywhere::FreeSpace() { delete m_space; }
+const Everywhere::EverywherePtr<OpenGL>& Everywhere::openGL() const {
+    return m_opengl;
+}
+
+Everywhere::EverywherePtr<Input>& Everywhere::input() {
+    return m_input;
+}
+
+const Everywhere::EverywherePtr<Input>& Everywhere::input() const {
+    return m_input;
+}
+
+Everywhere::EverywherePtr<Space>& Everywhere::space() {
+    return m_space;
+}
+
+const Everywhere::EverywherePtr<Space>& Everywhere::space() const {
+    return m_space;
+}

@@ -9,28 +9,44 @@
 
 
 class Everywhere final : public Singleton<Everywhere> {
+    template <typename T>
+    class EverywherePtr final {
+    private:
+        T* m_value;
+
+    public:
+        EverywherePtr(const EverywherePtr&) = delete;
+        EverywherePtr(EverywherePtr&&) noexcept = delete;
+        EverywherePtr& operator=(const EverywherePtr&) = delete;
+        EverywherePtr& operator=(EverywherePtr&&) noexcept = delete;
+
+        EverywherePtr() : m_value {} {}
+        ~EverywherePtr() = default;
+
+        void Init(T* value) { m_value = value; }
+        T& Get() { return *m_value; }
+        const T& Get() const { return *m_value; }
+        void Free() { delete m_value; }
+    };
+
 private:
-    Window* m_window;
-    OpenGL* m_opengl;
-    Input* m_input;
-    Space* m_space;
+    EverywherePtr<Window> m_window;
+    EverywherePtr<OpenGL> m_opengl;
+    EverywherePtr<Input> m_input;
+    EverywherePtr<Space> m_space;
 
 public:
-    void InitWindow(Window* window);
-    Window& GetWindow();
-    void FreeWindow();
+    EverywherePtr<Window>& window();
+    const EverywherePtr<Window>& window() const;
 
-    void InitOpenGL(OpenGL* opengl);
-    OpenGL& GetOpenGL();
-    void FreeOpenGL();
+    EverywherePtr<OpenGL>& openGL();
+    const EverywherePtr<OpenGL>& openGL() const;
 
-    void InitInput(Input* input);
-    Input& GetInput();
-    void FreeInput();
+    EverywherePtr<Input>& input();
+    const EverywherePtr<Input>& input() const;
 
-    void InitSpace(Space* space);
-    Space& GetSpace();
-    void FreeSpace();
+    EverywherePtr<Space>& space();
+    const EverywherePtr<Space>& space() const;
 };
 
 
