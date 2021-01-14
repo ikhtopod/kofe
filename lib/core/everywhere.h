@@ -1,53 +1,59 @@
 #ifndef EVERYWHERE_H
 #define EVERYWHERE_H
 
+#include "app_exceptions.h"
+
+#include "icanbeeverywhere.h"
 #include "singleton.h"
 #include "window.h"
 #include "opengl.h"
 #include "input.h"
 #include "space.h"
 
+#include <string>
+#include <unordered_map>
+
 
 class Everywhere final : public Singleton<Everywhere> {
-    template <typename T>
-    class EverywherePtr final {
-    private:
-        T* m_value;
-
-    public:
-        EverywherePtr(const EverywherePtr&) = delete;
-        EverywherePtr(EverywherePtr&&) noexcept = delete;
-        EverywherePtr& operator=(const EverywherePtr&) = delete;
-        EverywherePtr& operator=(EverywherePtr&&) noexcept = delete;
-
-        EverywherePtr() : m_value {} {}
-        ~EverywherePtr() = default;
-
-        void Init(T* value) { m_value = value; }
-        T& Get() { return *m_value; }
-        const T& Get() const { return *m_value; }
-        void Free() { delete m_value; }
-    };
-
 private:
-    EverywherePtr<Window> m_window;
-    EverywherePtr<OpenGL> m_opengl;
-    EverywherePtr<Input> m_input;
-    EverywherePtr<Space> m_space;
+    std::unordered_map<std::string, ICanBeEverywhere*> m_units;
 
 public:
-    EverywherePtr<Window>& window();
-    const EverywherePtr<Window>& window() const;
+    Everywhere();
+    virtual ~Everywhere();
 
-    EverywherePtr<OpenGL>& openGL();
-    const EverywherePtr<OpenGL>& openGL() const;
+    template <typename U>
+    U& Get() {
+        return *dynamic_cast<U*>(m_units.at(U::ToString()));
+    }
 
-    EverywherePtr<Input>& input();
-    const EverywherePtr<Input>& input() const;
+    template <typename U>
+    const U& Get() const {
+        return *dynamic_cast<U*>(m_units.at(U::ToString()));
+    }
 
-    EverywherePtr<Space>& space();
-    const EverywherePtr<Space>& space() const;
+    template <typename U>
+    void Init(U* unit) {
+        if (!dynamic_cast<ICanBeEverywhere*>(unit)) {
+            throw EverywhereException { "Some unit cannot Init to Everywhere" };
+        }
+
+        if (m_units.count(U::ToString())) {
+            throw EverywhereException { "Unit \"" + U::ToString() + "\" already exists" };
+        }
+
+        m_units[U::ToString()] = unit;
+    }
+
+    template <typename U>
+    void Free() {
+        if (!m_units.count(U::ToString())) {
+            throw EverywhereException { "Unit \"" + U::ToString() + "\" not exists" };
+        }
+
+        delete m_units[U::ToString()];
+    }
+
 };
-
 
 #endif // EVERYWHERE_H

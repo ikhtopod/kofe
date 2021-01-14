@@ -20,6 +20,20 @@ const char* ApplicationException::what() const noexcept {
 }
 
 
+EverywhereException::EverywhereException() : ApplicationException {} {
+    m_message = "[EverywhereException] ";
+}
+
+EverywhereException::EverywhereException(const std::string& message) :
+    EverywhereException {}
+{
+    m_message += message;
+}
+
+EverywhereException::EverywhereException(const char* message) :
+    EverywhereException { std::string { message } } {}
+
+
 WindowException::WindowException() : ApplicationException {} {
     m_message = "[WindowException] ";
 }

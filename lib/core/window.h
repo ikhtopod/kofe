@@ -1,6 +1,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "iprocess.h"
+#include "icanbeeverywhere.h"
 #include "screensize.h"
 
 #include <utility>
@@ -10,7 +12,10 @@
 #include <GLFW/glfw3.h>
 
 
-class Window final {
+class Window final :
+        public IProcess,
+        public ICanBeEverywhere
+{
 private:
     GLFWwindow* m_context;
     ScreenSize m_screen;
@@ -49,6 +54,12 @@ public:
 public:
     bool CanProcess();
     void SwapBuffers();
+
+public: /* IProcess */
+    void Processing() override;
+
+public:
+    static std::string ToString();
 };
 
 void swap(Window& lhs, Window& rhs);

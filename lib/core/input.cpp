@@ -4,17 +4,17 @@
 
 
 void Input::AssignCallbacks() {
-    GLFWwindow* context = Everywhere::Instance().window().Get().GetContext();
+    GLFWwindow* context = Everywhere::Instance().Get<Window>().GetContext();
     glfwSetFramebufferSizeCallback(context, Input::FramebufferSizeCallback);
 }
 
 void Input::FramebufferSizeCallback(GLFWwindow*, int width, int height) {
-    Everywhere::Instance().window().Get().GetScreen().Update(width, height);
-    Everywhere::Instance().openGL().Get().UpdateViewportSize();
+    Everywhere::Instance().Get<Window>().GetScreen().Update(width, height);
+    Everywhere::Instance().Get<OpenGL>().UpdateViewportSize();
 }
 
 void Input::Init() {
-    GLFWwindow* context = Everywhere::Instance().window().Get().GetContext();
+    GLFWwindow* context = Everywhere::Instance().Get<Window>().GetContext();
     Input::AssignCallbacks();
     glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
@@ -24,7 +24,7 @@ Input::Input() {
 }
 
 void Input::KeyEvents() {
-    GLFWwindow* context = Everywhere::Instance().window().Get().GetContext();
+    GLFWwindow* context = Everywhere::Instance().Get<Window>().GetContext();
 
     if (glfwGetKey(context, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(context, GLFW_TRUE);
@@ -34,4 +34,9 @@ void Input::KeyEvents() {
 void Input::Processing() {
     KeyEvents();
     glfwPollEvents();
+}
+
+std::string Input::ToString() {
+    static std::string className { "Input" };
+    return className;
 }

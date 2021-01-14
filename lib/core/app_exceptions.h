@@ -20,6 +20,16 @@ public:
 };
 
 
+class EverywhereException : public ApplicationException {
+protected:
+    EverywhereException();
+
+public:
+    explicit EverywhereException(const std::string& message);
+    explicit EverywhereException(const char* message);
+};
+
+
 class WindowException : public ApplicationException {
 protected:
     WindowException();

@@ -35,10 +35,15 @@ OpenGL::OpenGL() {
 }
 
 void OpenGL::UpdateViewportSize() const {
-    const ScreenSize& screen = Everywhere::Instance().window().Get().GetScreen();
+    const ScreenSize& screen = Everywhere::Instance().Get<Window>().GetScreen();
     glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
 }
 
 void OpenGL::Processing() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+std::string OpenGL::ToString() {
+    static std::string className { "OpenGL" };
+    return className;
 }

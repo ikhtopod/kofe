@@ -18,10 +18,10 @@ Application::Application(const char* title) :
 
 Application::Application(const std::string& title) {
     try {
-        Everywhere::Instance().window().Init(new Window { ScreenSize { 960, 540 }, title });
-        Everywhere::Instance().openGL().Init(new OpenGL {});
-        Everywhere::Instance().input().Init(new Input {});
-        Everywhere::Instance().space().Init(CreateDemoSpace());
+        Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
+        Everywhere::Instance().Init<OpenGL>(new OpenGL {});
+        Everywhere::Instance().Init<Input>(new Input {});
+        Everywhere::Instance().Init<Space>(CreateDemoSpace());
     } catch (...) {
         Application::~Application();
         throw;
@@ -29,23 +29,23 @@ Application::Application(const std::string& title) {
 }
 
 Application::~Application() {
-    Everywhere::Instance().space().Free();
-    Everywhere::Instance().input().Free();
-    Everywhere::Instance().openGL().Free();
-    Everywhere::Instance().window().Free();
+    Everywhere::Instance().Free<Space>();
+    Everywhere::Instance().Free<Input>();
+    Everywhere::Instance().Free<OpenGL>();
+    Everywhere::Instance().Free<Window>();
 
     glfwTerminate();
 }
 
 
 void Application::MainLoop() {
-    while (Everywhere::Instance().window().Get().CanProcess()) {
-        Everywhere::Instance().openGL().Get().Processing();
-        Everywhere::Instance().input().Get().Processing();
+    while (Everywhere::Instance().Get<Window>().CanProcess()) {
+        Everywhere::Instance().Get<OpenGL>().Processing();
+        Everywhere::Instance().Get<Input>().Processing();
 
-        Everywhere::Instance().space().Get().Processing();
+        Everywhere::Instance().Get<Space>().Processing();
 
-        Everywhere::Instance().window().Get().SwapBuffers();
+        Everywhere::Instance().Get<Window>().Processing();
     }
 }
 
@@ -95,7 +95,7 @@ Space* Application::CreateDemoSpace() {
 
     tempShader->SetUniformProcessingFunc([](Shader* that) {
         static const glm::mat4 IDENTITY_MATRIX { 1.0f };
-        static const ScreenSize& screen = Everywhere::Instance().window().Get().GetScreen();
+        static const ScreenSize& screen = Everywhere::Instance().Get<Window>().GetScreen();
 
         glm::mat4 transform = IDENTITY_MATRIX;
         GLdouble angleAccel { 40.0 };

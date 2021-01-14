@@ -97,3 +97,12 @@ bool Window::CanProcess() {
 void Window::SwapBuffers() {
     glfwSwapBuffers(m_context);
 }
+
+void Window::Processing() {
+    SwapBuffers();
+}
+
+std::string Window::ToString() {
+    static std::string className { "Window" };
+    return className;
+}

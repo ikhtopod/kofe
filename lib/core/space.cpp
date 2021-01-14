@@ -25,3 +25,8 @@ void Space::Processing() {
         }
     }
 }
+
+std::string Space::ToString() {
+    static std::string className { "Space" };
+    return className;
+}
