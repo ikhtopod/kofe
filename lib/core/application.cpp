@@ -22,6 +22,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<OpenGL>(new OpenGL {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
+        Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
     } catch (...) {
         Application::~Application();
         throw;
@@ -29,6 +30,7 @@ Application::Application(const std::string& title) {
 }
 
 Application::~Application() {
+    Everywhere::Instance().Free<DeltaTime>();
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Input>();
     Everywhere::Instance().Free<OpenGL>();
@@ -40,6 +42,7 @@ Application::~Application() {
 
 void Application::MainLoop() {
     while (Everywhere::Instance().Get<Window>().CanProcess()) {
+        Everywhere::Instance().Get<DeltaTime>().Update();
         Everywhere::Instance().Get<OpenGL>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
