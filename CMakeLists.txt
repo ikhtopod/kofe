@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(seductive_dream LANGUAGES C CXX)
+project(kofe LANGUAGES C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SD_TARGET sd)
+set(PROJECT_TARGET kofe)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_compile_options(-DDEBUG -Wall -Wextra -std=c++17)
@@ -16,14 +16,14 @@ else ()
 endif ()
 
 set(THIRDPARTY_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty)
-set(SD_LIB_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(PROJECT_LIB_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 add_subdirectory(${THIRDPARTY_DIRECTORY})
-add_subdirectory(${SD_LIB_DIRECTORY})
+add_subdirectory(${PROJECT_LIB_DIRECTORY})
 
-add_executable(${SD_TARGET} main.cpp)
+add_executable(${PROJECT_TARGET} main.cpp)
 
-target_link_libraries(${SD_TARGET} core)
+target_link_libraries(${PROJECT_TARGET} core)
 
 
 ##### Copy Resources #####
@@ -33,7 +33,7 @@ foreach (RESOURCES_DIR ${RESOURES_DIRETORIES})
     if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR}" AND
             IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR}")
 
-        add_custom_command(TARGET ${SD_TARGET} PRE_BUILD
+        add_custom_command(TARGET ${PROJECT_TARGET} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E remove_directory
             ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})
     endif ()
@@ -41,7 +41,7 @@ foreach (RESOURCES_DIR ${RESOURES_DIRETORIES})
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR}" AND
             IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR}")
 
-        add_custom_command(TARGET ${SD_TARGET} PRE_BUILD
+        add_custom_command(TARGET ${PROJECT_TARGET} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_DIR}
             ${CMAKE_CURRENT_BINARY_DIR}/${RESOURCES_DIR})

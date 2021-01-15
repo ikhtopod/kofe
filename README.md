@@ -1,1 +1,3 @@
-# Seductive Dream
+# Kofe
+
+Interactive Graphics System
