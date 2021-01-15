@@ -20,6 +20,7 @@ private:
     GLFWwindow* m_context;
     ScreenSize m_screen;
     std::string m_title;
+    bool m_vSync;
 
 public:
     friend void swap(Window&, Window&);

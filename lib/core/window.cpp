@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include "app_exceptions.h"
+#include "everywhere.h"
 
 
 void swap(Window& lhs, Window& rhs) {
@@ -11,6 +12,7 @@ void swap(Window& lhs, Window& rhs) {
     swap(lhs.m_context, rhs.m_context);
     swap(lhs.m_screen, rhs.m_screen);
     swap(lhs.m_title, rhs.m_title);
+    swap(lhs.m_vSync, rhs.m_vSync);
 }
 
 bool Window::ContextIsValid() const { return m_context != nullptr; }
@@ -20,6 +22,10 @@ void Window::InitWindowHints() const {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 8);
+
+    if (!m_vSync) {
+        glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
+    }
 
 #if defined(__APPLE__) || defined(__MACH__)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -41,7 +47,11 @@ void Window::InitContext() {
 
     glfwMakeContextCurrent(m_context);
 
-    glfwSwapInterval(1); // vSync
+    if (m_vSync) {
+        glfwSwapInterval(1);
+    } else {
+        glfwSwapInterval(0);
+    }
 }
 
 Window::Window() :
@@ -50,7 +60,8 @@ Window::Window() :
 Window::Window(ScreenSize screen, std::string title) :
     m_context { nullptr },
     m_screen { screen },
-    m_title { title }
+    m_title { title },
+    m_vSync { true }
 {
     InitContext();
 }
@@ -58,7 +69,8 @@ Window::Window(ScreenSize screen, std::string title) :
 Window::Window(Window&& other) noexcept :
     m_context { std::move(other.m_context) },
     m_screen { std::move(other.m_screen) },
-    m_title { std::move(other.m_title) }
+    m_title { std::move(other.m_title) },
+    m_vSync { std::move(other.m_vSync) }
 {
     other.m_context = nullptr;
 }
@@ -70,6 +82,7 @@ Window& Window::operator=(Window&& other) noexcept {
 
         m_screen = std::move(other.m_screen);
         m_title = std::move(other.m_title);
+        m_vSync = std::move(other.m_vSync);
     }
 
     return *this;
@@ -95,7 +108,11 @@ bool Window::CanProcess() {
 }
 
 void Window::SwapBuffers() {
-    glfwSwapBuffers(m_context);
+    if (m_vSync) {
+        glfwSwapBuffers(m_context);
+    } else {
+        Everywhere::Instance().Get<OpenGL>().Flush();
+    }
 }
 
 void Window::Processing() {

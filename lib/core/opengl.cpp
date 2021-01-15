@@ -39,6 +39,10 @@ void OpenGL::UpdateViewportSize() const {
     glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
 }
 
+void OpenGL::Flush() {
+    glFlush();
+}
+
 void OpenGL::Processing() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

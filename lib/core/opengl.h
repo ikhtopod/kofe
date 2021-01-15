@@ -27,6 +27,9 @@ public:
 
     void UpdateViewportSize() const;
 
+public:
+    static void Flush();
+
 public: /* IProcess */
     void Processing() override;
 
