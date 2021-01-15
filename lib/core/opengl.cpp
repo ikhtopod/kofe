@@ -48,6 +48,6 @@ void OpenGL::Processing() {
 }
 
 std::string OpenGL::ToString() {
-    static std::string className { "OpenGL" };
-    return className;
+    static const std::string CLASS_NAME { "OpenGL" };
+    return CLASS_NAME;
 }

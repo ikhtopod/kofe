@@ -37,6 +37,6 @@ void Input::Processing() {
 }
 
 std::string Input::ToString() {
-    static std::string className { "Input" };
-    return className;
+    static const std::string CLASS_NAME { "Input" };
+    return CLASS_NAME;
 }

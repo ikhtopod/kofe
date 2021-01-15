@@ -120,6 +120,6 @@ void Window::Processing() {
 }
 
 std::string Window::ToString() {
-    static std::string className { "Window" };
-    return className;
+    static const std::string CLASS_NAME { "Window" };
+    return CLASS_NAME;
 }
