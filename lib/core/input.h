@@ -35,9 +35,6 @@ public:
 
 public: /* IProcess */
     void Processing() override;
-
-public:
-    static std::string ToString();
 };
 
 #endif // INPUT_H

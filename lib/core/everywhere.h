@@ -13,9 +13,17 @@
 
 #include <string>
 #include <unordered_map>
+#include <typeinfo>
 
 
 class Everywhere final : public Singleton<Everywhere> {
+private:
+    template <typename T>
+    static std::string ClassName() {
+        static const std::string CLASS_NAME { typeid(T).name() };
+        return CLASS_NAME;
+    }
+
 private:
     std::unordered_map<std::string, ICanBeEverywhere*> m_units;
 
@@ -25,12 +33,12 @@ public:
 
     template <typename U>
     U& Get() {
-        return *dynamic_cast<U*>(m_units.at(U::ToString()));
+        return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
     template <typename U>
     const U& Get() const {
-        return *dynamic_cast<U*>(m_units.at(U::ToString()));
+        return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
     template <typename U>
@@ -39,21 +47,19 @@ public:
             throw EverywhereException { "Some unit cannot Init to Everywhere" };
         }
 
-        if (m_units.count(U::ToString())) {
-            throw EverywhereException { "Unit \"" + U::ToString() + "\" already exists" };
+        if (m_units.count(ClassName<U>())) {
+            throw EverywhereException { "Unit \"" + ClassName<U>() + "\" already exists" };
         }
 
-        m_units[U::ToString()] = unit;
+        m_units[ClassName<U>()] = unit;
     }
 
     template <typename U>
     void Free() {
-        if (!m_units.count(U::ToString())) {
-            throw EverywhereException { "Unit \"" + U::ToString() + "\" not exists" };
+        if (m_units.count(ClassName<U>())) {
+            delete m_units[ClassName<U>()];
+            m_units[ClassName<U>()] = nullptr;
         }
-
-        delete m_units[U::ToString()];
-        m_units[U::ToString()] = nullptr;
     }
 
 };

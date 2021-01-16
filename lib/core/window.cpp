@@ -118,8 +118,3 @@ void Window::SwapBuffers() {
 void Window::Processing() {
     SwapBuffers();
 }
-
-std::string Window::ToString() {
-    static const std::string CLASS_NAME { "Window" };
-    return CLASS_NAME;
-}

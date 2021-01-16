@@ -46,8 +46,3 @@ void OpenGL::Flush() {
 void OpenGL::Processing() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
-std::string OpenGL::ToString() {
-    static const std::string CLASS_NAME { "OpenGL" };
-    return CLASS_NAME;
-}

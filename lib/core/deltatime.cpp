@@ -51,8 +51,3 @@ void DeltaTime::Update() {
 DeltaTime::Type DeltaTime::GetDelta() const {
     return m_delta;
 }
-
-std::string DeltaTime::ToString() {
-    static const std::string CLASS_NAME { "DeltaTime" };
-    return CLASS_NAME;
-}

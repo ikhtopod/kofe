@@ -35,8 +35,3 @@ void Input::Processing() {
     KeyEvents();
     glfwPollEvents();
 }
-
-std::string Input::ToString() {
-    static const std::string CLASS_NAME { "Input" };
-    return CLASS_NAME;
-}

@@ -58,9 +58,6 @@ public:
 
 public: /* IProcess */
     void Processing() override;
-
-public:
-    static std::string ToString();
 };
 
 void swap(Window& lhs, Window& rhs);

@@ -25,8 +25,3 @@ void Space::Processing() {
         }
     }
 }
-
-std::string Space::ToString() {
-    static const std::string CLASS_NAME { "Space" };
-    return CLASS_NAME;
-}

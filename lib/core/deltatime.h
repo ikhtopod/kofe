@@ -33,9 +33,6 @@ public:
 public:
     void Update();
     Type GetDelta() const;
-
-public:
-    static std::string ToString();
 };
 
 void swap(DeltaTime& lhs, DeltaTime& rhs);
