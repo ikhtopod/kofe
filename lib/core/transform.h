@@ -59,7 +59,7 @@ public:
 
 void swap(Transform& lhs, Transform& rhs);
 
-
+glm::vec3 QuaternionToVector_Degrees(const glm::quat& quaternion);
 Transform MatrixToTransform(const glm::mat4& matrix);
 
 #endif // TRANSFORM_H

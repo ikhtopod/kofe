@@ -26,16 +26,21 @@ const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
 const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
+
+glm::vec3 QuaternionToVector_Degrees(const glm::quat& quaternion) {
+    return glm::degrees(glm::eulerAngles(quaternion));
+}
+
 Transform MatrixToTransform(const glm::mat4& matrix) {
     glm::vec3 scale;
     glm::quat orientation;
     glm::vec3 translation;
-    glm::vec3 skew;
-    glm::vec4 perspective;
+    [[maybe_unused]] glm::vec3 skew;
+    [[maybe_unused]] glm::vec4 perspective;
 
     glm::decompose(matrix, scale, orientation, translation, skew, perspective);
 
-    return { translation, glm::degrees(glm::eulerAngles(orientation)), scale };
+    return { translation, QuaternionToVector_Degrees(orientation), scale };
 }
 
 Transform::Transform() :
