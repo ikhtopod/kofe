@@ -5,6 +5,8 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 #include <utility>
 
@@ -23,6 +25,18 @@ void swap(Transform& lhs, Transform& rhs) {
 const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
 const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
+
+Transform MatrixToTransform(const glm::mat4& matrix) {
+    glm::vec3 scale;
+    glm::quat orientation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+
+    glm::decompose(matrix, scale, orientation, translation, skew, perspective);
+
+    return { translation, glm::degrees(glm::eulerAngles(orientation)), scale };
+}
 
 Transform::Transform() :
     Transform { DEFAULT_POSITION,
@@ -72,6 +86,12 @@ Transform::Transform(glm::vec3&& position,
     m_position { std::move(position) },
     m_rotation { std::move(rotation) },
     m_scale { std::move(scale) } {}
+
+Transform::Transform(const glm::mat4& matrix) :
+    Transform { MatrixToTransform(matrix) } {}
+
+Transform::Transform(glm::mat4&& matrix) noexcept :
+    Transform { MatrixToTransform(matrix) } {}
 
 void Transform::Reset() {
     *this = Transform {};

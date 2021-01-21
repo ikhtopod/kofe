@@ -9,13 +9,13 @@ class Transform final {
     static const glm::vec3 DEFAULT_ROTATION;
     static const glm::vec3 DEFAULT_SCALE;
 
+public:
+    friend void swap(Transform& lhs, Transform& rhs);
+
 private:
     glm::vec3 m_position;
     glm::vec3 m_rotation;
     glm::vec3 m_scale;
-
-public:
-    friend void swap(Transform& lhs, Transform& rhs);
 
 public:
     Transform();
@@ -32,6 +32,9 @@ public:
     Transform(glm::vec3&& position,
               glm::vec3&& rotation,
               glm::vec3&& scale) noexcept;
+
+    Transform(const glm::mat4& matrix);
+    Transform(glm::mat4&& matrix) noexcept;
 
 public:
     void Reset();
@@ -55,5 +58,8 @@ public:
 
 
 void swap(Transform& lhs, Transform& rhs);
+
+
+Transform MatrixToTransform(const glm::mat4& matrix);
 
 #endif // TRANSFORM_H
