@@ -18,11 +18,13 @@ Application::Application(const char* title) :
 
 Application::Application(const std::string& title) {
     try {
+        Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
+        Everywhere::Instance().Init<MaterialStorage>(new MaterialStorage {});
+
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<OpenGL>(new OpenGL {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
-        Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
     } catch (...) {
         Application::~Application();
         throw;
@@ -30,11 +32,13 @@ Application::Application(const std::string& title) {
 }
 
 Application::~Application() {
-    Everywhere::Instance().Free<DeltaTime>();
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Input>();
     Everywhere::Instance().Free<OpenGL>();
     Everywhere::Instance().Free<Window>();
+
+    Everywhere::Instance().Free<MaterialStorage>();
+    Everywhere::Instance().Free<DeltaTime>();
 
     glfwTerminate();
 }
@@ -60,35 +64,6 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    std::vector<Vertex> vertices {
-        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f } },
-        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } },
-        { { 0.5f, 0.5f, -0.5f }, { 1.0f, 1.0f } },
-        { { -0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f } },
-        { { -0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f } },
-        { { 0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f } },
-        { { 0.5f, 0.5f, 0.5f }, { 1.0f, 1.0f } },
-        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 1.0f } },
-        { { -0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f } },
-        { { -0.5f, 0.5f, -0.5f }, { 1.0f, 1.0f } },
-        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-        { { 0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f } },
-        { { 0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-        { { 0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f } },
-        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
-        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f } },
-    };
-
-    std::vector<GLuint> indices {
-        0, 1, 2, 2, 3, 0,
-        4, 5, 6, 6, 7, 4,
-        8, 9, 10, 10, 4, 8,
-        11, 2, 12, 12, 13, 11,
-        10, 14, 5, 5, 4, 10,
-        3, 2, 11, 11, 15, 3,
-    };
-
-    std::shared_ptr<Mesh> tempMesh { new Mesh { vertices, indices } };
     std::shared_ptr<Shader> tempShader {
         new Shader {
             std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
@@ -123,9 +98,43 @@ Space* Application::CreateDemoSpace() {
     std::shared_ptr<Material> tempMaterial { new Material {} };
     tempMaterial->GetShaders().Add(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
+
+    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
+    size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
+
+    std::vector<Vertex> vertices {
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f } },
+        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } },
+        { { 0.5f, 0.5f, -0.5f }, { 1.0f, 1.0f } },
+        { { -0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f } },
+        { { -0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f } },
+        { { 0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f } },
+        { { 0.5f, 0.5f, 0.5f }, { 1.0f, 1.0f } },
+        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 1.0f } },
+        { { -0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f } },
+        { { -0.5f, 0.5f, -0.5f }, { 1.0f, 1.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+        { { 0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f } },
+        { { 0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+        { { 0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f } },
+        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
+        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f } },
+    };
+
+    std::vector<GLuint> indices {
+        0, 1, 2, 2, 3, 0,
+        4, 5, 6, 6, 7, 4,
+        8, 9, 10, 10, 4, 8,
+        11, 2, 12, 12, 13, 11,
+        10, 14, 5, 5, 4, 10,
+        3, 2, 11, 11, 15, 3,
+    };
+
+    std::shared_ptr<Mesh> tempMesh { new Mesh { vertices, indices } };
+    tempMesh->SetMaterialId(materialId);
+
     std::shared_ptr<Object> tempObject { new Object {} };
     tempObject->GetMeshes().Add(tempMesh);
-    tempObject->GetMaterials().Add(tempMaterial);
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempObject);
     Space* tempSpace = new Space {};

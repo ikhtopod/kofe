@@ -1,22 +1,38 @@
 #include "mesh.h"
 
+#include "everywhere.h"
+
+#include <utility>
+
 
 Mesh::~Mesh() { Free(); }
 
 Mesh::Mesh(const std::vector<Vertex>& verices, const std::vector<GLuint>& indices) :
+    Transformable {},
     vao {}, vbo {}, ebo {},
     m_verices { verices },
-    m_indices { indices }
+    m_indices { indices },
+    m_materialId {}
 {
     Init();
 }
 
 Mesh::Mesh(std::vector<Vertex>&& verices, std::vector<GLuint>&& indices) noexcept :
+    Transformable {},
     vao {}, vbo {}, ebo {},
     m_verices { std::move(verices) },
-    m_indices { std::move(indices) }
+    m_indices { std::move(indices) },
+    m_materialId {}
 {
     Init();
+}
+
+size_t Mesh::GetMaterialId() const {
+    return m_materialId;
+}
+
+void Mesh::SetMaterialId(size_t materialId) {
+    m_materialId = materialId;
 }
 
 void Mesh::Init() {
@@ -57,6 +73,8 @@ void Mesh::Free() {
 }
 
 void Mesh::Processing() {
+    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId)->Processing();
+
     glDisable(GL_CULL_FACE);
 
     glBindVertexArray(vao);

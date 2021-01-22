@@ -8,6 +8,7 @@
 #include "window.h"
 #include "opengl.h"
 #include "input.h"
+#include "materialstorage.h"
 #include "space.h"
 #include "deltatime.h"
 

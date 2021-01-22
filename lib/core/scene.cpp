@@ -1,10 +1,12 @@
 #include "scene.h"
 
 #include "app_exceptions.h"
+
 #include <iterator>
 
 
 Scene::Scene() :
+    Transformable {},
     m_objects {} {}
 
 Scene::~Scene() {

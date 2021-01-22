@@ -2,11 +2,15 @@
 #define SCENE_H
 
 #include "iprocess.h"
+#include "transformable.h"
 #include "collectionof.h"
 #include "object.h"
 
 
-class Scene : public IProcess {
+class Scene final :
+        public IProcess,
+        public Transformable
+{
 private:
     CollectionOf<Object> m_objects;
 

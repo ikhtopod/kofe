@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include "iprocess.h"
+#include "transformable.h"
 #include "vertex.h"
 
 #include <glad/glad.h>
@@ -9,7 +10,6 @@
 
 #include <cstddef>
 #include <vector>
-#include <utility>
 
 
 enum class AttribIndex : GLuint {
@@ -18,7 +18,11 @@ enum class AttribIndex : GLuint {
 };
 
 
-class Mesh : public IProcess {
+class Mesh :
+        public IProcess,
+        public Transformable
+{
+private:
     static const GLsizei BUFFER_SIZE { 1 };
 
 public:
@@ -29,6 +33,8 @@ private:
 
     std::vector<Vertex> m_verices;
     std::vector<GLuint> m_indices;
+
+    size_t m_materialId;
 
 private:
     void Init();
@@ -41,9 +47,14 @@ public:
     Mesh& operator=(const Mesh&) = delete;
     Mesh& operator=(Mesh&&) noexcept = delete;
 
+public:
     Mesh(const std::vector<Vertex>& verices, const std::vector<GLuint>& indices);
     Mesh(std::vector<Vertex>&& verices, std::vector<GLuint>&& indices) noexcept;
     ~Mesh();
+
+public:
+    size_t GetMaterialId() const;
+    void SetMaterialId(size_t materialId);
 
 public: /* IProcess */
     void Processing() override;
