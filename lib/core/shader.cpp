@@ -10,6 +10,7 @@
 
 Shader::Shader(const std::filesystem::path& vertexPath,
                const std::filesystem::path& fragmentPath) :
+    GlobalTransformation {},
     m_program {},
     m_uniformProcessingFunc {}
 {
@@ -113,12 +114,6 @@ void Shader::DeleteShaders(GLuint* vertex, GLuint* fragment) {
     }
 }
 
-void Shader::CheckLocationError(GLint location, const std::string& uniformName) const {
-    if (location == LOCATION_ERROR_FLAG) {
-        throw UniformShaderException("For uniform \"" + uniformName + "\" not found location");
-    }
-}
-
 void Shader::Use() const {
     glUseProgram(m_program);
 }
@@ -129,6 +124,12 @@ void Shader::SetUniformProcessingFunc(const Shader::UniformProcessing& func) {
 
 void Shader::SetBool(const std::string& uniformName, bool value) const {
     SetUInt(uniformName, static_cast<GLuint>(value));
+}
+
+void Shader::CheckLocationError(GLint location, const std::string& uniformName) const {
+    if (location == LOCATION_ERROR_FLAG) {
+        throw UniformShaderException("For uniform \"" + uniformName + "\" not found location");
+    }
 }
 
 void Shader::SetInt(const std::string& uniformName, GLint value) const {

@@ -14,6 +14,7 @@ const CollectionOf<Mesh>& Object::GetMeshes() const { return m_meshes; }
 
 void Object::Processing() {
     for (auto& mesh : m_meshes.Get()) {
+        mesh->SetGlobalTransform(GetGlobalTransform() + GetTransform());
         mesh->Processing();
     }
 }

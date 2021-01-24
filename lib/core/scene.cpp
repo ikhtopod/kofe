@@ -20,6 +20,7 @@ const CollectionOf<Object>& Scene::GetObjects() const { return m_objects; }
 void Scene::Processing() {
     for (auto& object : m_objects.Get()) {
         if (object) {
+            object->SetGlobalTransform(GetGlobalTransform() + GetTransform());
             object->Processing();
         }
     }

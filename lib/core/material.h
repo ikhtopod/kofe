@@ -5,9 +5,13 @@
 #include "collectionof.h"
 #include "shader.h"
 #include "texture.h"
+#include "globaltransformation.h"
 
 
-class Material : public IProcess {
+class Material :
+        public IProcess,
+        public GlobalTransformation
+{
 private:
     CollectionOf<Shader> m_shaders;
     CollectionOf<Texture> m_textures;

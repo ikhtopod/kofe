@@ -4,6 +4,7 @@
 
 
 Material::Material() :
+    GlobalTransformation {},
     m_shaders {},
     m_textures {} {}
 
@@ -20,6 +21,7 @@ const CollectionOf<Texture>& Material::GetTextures() const { return m_textures; 
 
 void Material::Processing() {
     for (auto& shader : m_shaders.Get()) {
+        shader->SetGlobalTransform(this->GetGlobalTransform());
         shader->Processing();
     }
 

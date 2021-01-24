@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include "iprocess.h"
+#include "globaltransformation.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -10,7 +11,10 @@
 #include <filesystem>
 
 
-class Shader final : public IProcess {
+class Shader final :
+        public IProcess,
+        public GlobalTransformation
+{
     using UniformProcessing = std::function<void(Shader*)>;
 
     static const GLuint INFOLOG_SIZE { 512 };
@@ -39,12 +43,12 @@ private:
     void LinkShadersToProgram(GLuint* vertex, GLuint* fragment);
     void DeleteShaders(GLuint* vertex, GLuint* fragment);
 
-    void CheckLocationError(GLint location, const std::string& uniformName) const;
-
 public:
     void Use() const;
 
     void SetUniformProcessingFunc(const UniformProcessing& func);
+
+    void CheckLocationError(GLint location, const std::string& uniformName) const;
 
     void SetBool(const std::string& uniformName, bool value) const;
     void SetInt(const std::string& uniformName, GLint value) const;

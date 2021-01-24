@@ -1,6 +1,8 @@
 #include "space.h"
 
 #include "app_exceptions.h"
+#include "transform.h"
+
 #include <iterator>
 
 
@@ -21,6 +23,7 @@ const CollectionOf<Scene>& Space::GetScenes() const { return m_scenes; }
 void Space::Processing() {
     for (auto& scene : m_scenes.Get()) {
         if (scene) {
+            scene->SetGlobalTransform(Transform { MODEL });
             scene->Processing();
         }
     }

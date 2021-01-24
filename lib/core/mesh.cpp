@@ -73,7 +73,9 @@ void Mesh::Free() {
 }
 
 void Mesh::Processing() {
-    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId)->Processing();
+    auto& material = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
+    material->SetGlobalTransform(GetGlobalTransform() + GetTransform());
+    material->Processing();
 
     glDisable(GL_CULL_FACE);
 
