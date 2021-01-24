@@ -75,19 +75,14 @@ Space* Application::CreateDemoSpace() {
         static const glm::mat4 IDENTITY_MATRIX { 1.0f };
         static const ScreenSize& screen = Everywhere::Instance().Get<Window>().GetScreen();
 
-        glm::mat4 transform = IDENTITY_MATRIX;
-        GLdouble angleAccel { 40.0 };
-        GLfloat rotationAngleRad = glm::radians(static_cast<GLfloat>(std::fmod(glfwGetTime() * angleAccel, 360.0)));
-        transform = glm::rotate(transform, rotationAngleRad, glm::vec3(1.f, .0f, 1.0f));
-        transform = glm::scale(transform, glm::vec3(1.0f));
-
-        that->SetMat4("model", transform);
-        that->SetMat4("view", glm::translate(IDENTITY_MATRIX, glm::vec3(.0f, .0f, -2.f)));
-        that->SetMat4("projection",
+        that->SetMat4("mvp.model", IDENTITY_MATRIX);
+        that->SetMat4("mvp.view", glm::translate(IDENTITY_MATRIX, glm::vec3(.0f, .0f, -2.f)));
+        that->SetMat4("mvp.projection",
                       glm::perspective(glm::radians(85.0f),
                                        static_cast<GLfloat>(screen.GetWidth()) /
                                        static_cast<GLfloat>(screen.GetHeight()),
                                        .1f, 2000.f));
+        that->SetMat4("transform", Transform {}.ToMatrix());
     });
 
     std::shared_ptr<Texture> tempTexture {
