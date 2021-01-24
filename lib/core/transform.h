@@ -36,6 +36,8 @@ public:
     Transform(const glm::mat4& matrix);
     Transform(glm::mat4&& matrix) noexcept;
 
+    Transform& operator+=(const Transform& other);
+
 public:
     void Reset();
 
@@ -56,6 +58,8 @@ public:
     glm::mat4 ToMatrix() const;
 };
 
+
+Transform operator+(Transform lhs, const Transform& rhs);
 
 void swap(Transform& lhs, Transform& rhs);
 

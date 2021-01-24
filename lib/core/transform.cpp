@@ -98,6 +98,21 @@ Transform::Transform(const glm::mat4& matrix) :
 Transform::Transform(glm::mat4&& matrix) noexcept :
     Transform { MatrixToTransform(matrix) } {}
 
+Transform& Transform::operator+=(const Transform& other) {
+    glm::mat4 matrix =
+            GetPositionMatrix() * other.GetPositionMatrix() *
+            GetRotationMatrix() * other.GetRotationMatrix() *
+            GetScaleMatrix() * other.GetScaleMatrix();
+
+    *this = MatrixToTransform(matrix);
+
+    return *this;
+}
+
+Transform operator+(Transform lhs, const Transform& rhs) {
+    return lhs += rhs;
+}
+
 void Transform::Reset() {
     *this = Transform {};
 }
@@ -131,11 +146,7 @@ glm::mat4 Transform::GetPositionMatrix() const {
 }
 
 glm::mat4 Transform::GetRotationMatrix() const {
-    glm::mat4 rotX = glm::rotate(glm::radians(m_rotation.x), Axis::RIGHT);
-    glm::mat4 rotY = glm::rotate(glm::radians(m_rotation.y), Axis::UP);
-    glm::mat4 rotZ = glm::rotate(glm::radians(m_rotation.z), Axis::FRONT);
-
-    return rotX * rotY * rotZ;
+    return glm::yawPitchRoll(m_rotation.y, m_rotation.x, m_rotation.z);
 }
 
 glm::mat4 Transform::GetScaleMatrix() const {
