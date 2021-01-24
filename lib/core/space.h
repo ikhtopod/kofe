@@ -14,6 +14,7 @@ class Space final :
         public IProcess,
         public ICanBeEverywhere
 {
+public:
     static const glm::mat4 MODEL;
 
 private:

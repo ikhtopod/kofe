@@ -23,7 +23,6 @@ const CollectionOf<Scene>& Space::GetScenes() const { return m_scenes; }
 void Space::Processing() {
     for (auto& scene : m_scenes.Get()) {
         if (scene) {
-            scene->SetGlobalTransform(Transform { MODEL });
             scene->Processing();
         }
     }

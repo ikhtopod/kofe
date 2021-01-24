@@ -71,19 +71,7 @@ Space* Application::CreateDemoSpace() {
         }
     };
 
-    tempShader->SetUniformProcessingFunc([](Shader* that) {
-        static const glm::mat4 IDENTITY_MATRIX { 1.0f };
-        static const ScreenSize& screen = Everywhere::Instance().Get<Window>().GetScreen();
-
-        that->SetMat4("mvp.model", IDENTITY_MATRIX);
-        that->SetMat4("mvp.view", glm::translate(IDENTITY_MATRIX, glm::vec3(.0f, .0f, -2.f)));
-        that->SetMat4("mvp.projection",
-                      glm::perspective(glm::radians(85.0f),
-                                       static_cast<GLfloat>(screen.GetWidth()) /
-                                       static_cast<GLfloat>(screen.GetHeight()),
-                                       .1f, 2000.f));
-        that->SetMat4("transform", Transform {}.ToMatrix());
-    });
+    tempShader->SetUniformProcessingFunc([](Shader*) {});
 
     std::shared_ptr<Texture> tempTexture {
         new Texture {
