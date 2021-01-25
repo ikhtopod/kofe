@@ -2,11 +2,13 @@
 #define TRANSFORM_H
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 
 class Transform final {
     static const glm::vec3 DEFAULT_POSITION;
     static const glm::vec3 DEFAULT_ROTATION;
+    static const glm::quat DEFAULT_ORIENTATION;
     static const glm::vec3 DEFAULT_SCALE;
 
 public:
@@ -14,7 +16,7 @@ public:
 
 private:
     glm::vec3 m_position;
-    glm::vec3 m_rotation;
+    glm::quat m_orientation;
     glm::vec3 m_scale;
 
 public:
@@ -26,11 +28,11 @@ public:
     ~Transform() = default;
 
     Transform(const glm::vec3& position,
-              const glm::vec3& rotation,
+              const glm::quat& orientation,
               const glm::vec3& scale);
 
     Transform(glm::vec3&& position,
-              glm::vec3&& rotation,
+              glm::quat&& orientation,
               glm::vec3&& scale) noexcept;
 
     Transform(const glm::mat4& matrix);
@@ -43,16 +45,25 @@ public:
 
     glm::vec3 GetPosition() const;
     void SetPosition(const glm::vec3& position);
+    void AddPosition(const glm::vec3& position);
+
+    glm::quat GetOrientation() const;
+    void SetOrientation(const glm::quat& orientation);
+    void SetOrientation(float angle, const glm::vec3& rotation);
+    void AddOrientation(const glm::quat& orientation);
+    void AddOrientation(float angle, const glm::vec3& rotation);
 
     glm::vec3 GetRotation() const;
     void SetRotation(const glm::vec3& rotation);
+    void AddRotation(const glm::vec3& rotation);
 
     glm::vec3 GetScale() const;
     void SetScale(const glm::vec3& scale);
+    void AddScale(const glm::vec3& scale);
 
 public:
     glm::mat4 GetPositionMatrix() const;
-    glm::mat4 GetRotationMatrix() const;
+    glm::mat4 GetOrientationMatrix() const;
     glm::mat4 GetScaleMatrix() const;
 
     glm::mat4 ToMatrix() const;

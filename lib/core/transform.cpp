@@ -17,13 +17,14 @@ void swap(Transform& lhs, Transform& rhs) {
     using std::swap;
 
     swap(lhs.m_position, rhs.m_position);
-    swap(lhs.m_rotation, rhs.m_rotation);
+    swap(lhs.m_orientation, rhs.m_orientation);
     swap(lhs.m_scale, rhs.m_scale);
 }
 
 
 const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
 const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
+const glm::quat Transform::DEFAULT_ORIENTATION { Transform::DEFAULT_ROTATION };
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
 
@@ -40,28 +41,28 @@ Transform MatrixToTransform(const glm::mat4& matrix) {
 
     glm::decompose(matrix, scale, orientation, translation, skew, perspective);
 
-    return { translation, QuaternionToVector_Degrees(orientation), scale };
+    return { translation, orientation, scale };
 }
 
 Transform::Transform() :
     Transform { DEFAULT_POSITION,
-                DEFAULT_ROTATION,
+                DEFAULT_ORIENTATION,
                 DEFAULT_SCALE } {}
 
 Transform::Transform(const Transform& other) :
     Transform { other.m_position,
-                other.m_rotation,
+                other.m_orientation,
                 other.m_scale } {}
 
 Transform::Transform(Transform&& other) noexcept :
     Transform { std::move(other.m_position),
-                std::move(other.m_rotation),
+                std::move(other.m_orientation),
                 std::move(other.m_scale) } {}
 
 Transform& Transform::operator=(const Transform& other) {
     if (this != &other) {
         m_position = other.m_position;
-        m_rotation = other.m_rotation;
+        m_orientation = other.m_orientation;
         m_scale = other.m_scale;
     }
 
@@ -71,7 +72,7 @@ Transform& Transform::operator=(const Transform& other) {
 Transform& Transform::operator=(Transform&& other) noexcept {
     if (this != &other) {
         m_position = std::move(other.m_position);
-        m_rotation = std::move(other.m_rotation);
+        m_orientation = std::move(other.m_orientation);
         m_scale = std::move(other.m_scale);
     }
 
@@ -79,17 +80,17 @@ Transform& Transform::operator=(Transform&& other) noexcept {
 }
 
 Transform::Transform(const glm::vec3& position,
-                     const glm::vec3& rotation,
+                     const glm::quat& orientation,
                      const glm::vec3& scale) :
     m_position { position },
-    m_rotation { rotation },
+    m_orientation { orientation },
     m_scale { scale } {}
 
 Transform::Transform(glm::vec3&& position,
-                     glm::vec3&& rotation,
+                     glm::quat&& orientation,
                      glm::vec3&& scale) noexcept :
     m_position { std::move(position) },
-    m_rotation { std::move(rotation) },
+    m_orientation { std::move(orientation) },
     m_scale { std::move(scale) } {}
 
 Transform::Transform(const glm::mat4& matrix) :
@@ -101,13 +102,13 @@ Transform::Transform(glm::mat4&& matrix) noexcept :
 Transform& Transform::operator+=(const Transform& other) {
     glm::mat4 matrix =
             GetPositionMatrix() * other.GetPositionMatrix() *
-            GetRotationMatrix() * other.GetRotationMatrix() *
+            GetOrientationMatrix() * other.GetOrientationMatrix() *
             GetScaleMatrix() * other.GetScaleMatrix();
 
     Transform tmp = MatrixToTransform(matrix);
 
     SetPosition(tmp.GetPosition());
-    SetRotation(tmp.GetRotation());
+    SetOrientation(tmp.GetOrientation());
     SetScale(tmp.GetScale());
 
     return *this;
@@ -129,12 +130,40 @@ void Transform::SetPosition(const glm::vec3& position) {
     m_position = position;
 }
 
+void Transform::AddPosition(const glm::vec3& position) {
+    m_position += position;
+}
+
+glm::quat Transform::GetOrientation() const {
+    return m_orientation;
+}
+
+void Transform::SetOrientation(const glm::quat& orientation) {
+    m_orientation = orientation;
+}
+
+void Transform::SetOrientation(float angle, const glm::vec3& axis) {
+    m_orientation = glm::angleAxis(angle, axis);
+}
+
+void Transform::AddOrientation(const glm::quat& orientation) {
+    m_orientation *= orientation;
+}
+
+void Transform::AddOrientation(float angle, const glm::vec3& rotation) {
+    m_orientation *= glm::angleAxis(angle, rotation);
+}
+
 glm::vec3 Transform::GetRotation() const {
-    return m_rotation;
+    return glm::eulerAngles(m_orientation);
 }
 
 void Transform::SetRotation(const glm::vec3& rotation) {
-    m_rotation = rotation;
+    m_orientation = glm::quat(rotation);
+}
+
+void Transform::AddRotation(const glm::vec3& rotation) {
+    m_orientation *= glm::quat(rotation);
 }
 
 glm::vec3 Transform::GetScale() const {
@@ -145,17 +174,16 @@ void Transform::SetScale(const glm::vec3& scale) {
     m_scale = scale;
 }
 
+void Transform::AddScale(const glm::vec3& scale) {
+    m_scale *= scale;
+}
+
 glm::mat4 Transform::GetPositionMatrix() const {
     return glm::translate(m_position);
 }
 
-glm::mat4 Transform::GetRotationMatrix() const {
-    //return glm::yawPitchRoll(m_rotation.y, m_rotation.x, m_rotation.z);
-    glm::mat4 rotX = glm::rotate(glm::radians(m_rotation.x), Axis::RIGHT);
-    glm::mat4 rotY = glm::rotate(glm::radians(m_rotation.y), Axis::UP);
-    glm::mat4 rotZ = glm::rotate(glm::radians(m_rotation.z), Axis::FRONT);
-
-    return rotX * rotY * rotZ;
+glm::mat4 Transform::GetOrientationMatrix() const {
+    return glm::mat4_cast(m_orientation);
 }
 
 glm::mat4 Transform::GetScaleMatrix() const {
@@ -163,5 +191,5 @@ glm::mat4 Transform::GetScaleMatrix() const {
 }
 
 glm::mat4 Transform::ToMatrix() const {
-    return GetPositionMatrix() * GetRotationMatrix() * GetScaleMatrix();
+    return GetPositionMatrix() * GetOrientationMatrix() * GetScaleMatrix();
 }
