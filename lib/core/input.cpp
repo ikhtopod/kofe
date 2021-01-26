@@ -19,7 +19,9 @@ void Input::Init() {
     glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-Input::Input() {
+Input::Input() :
+    Observable{}
+{
     Init();
 }
 
@@ -32,6 +34,7 @@ void Input::KeyEvents() {
 }
 
 void Input::Processing() {
+    Notify();
     KeyEvents();
     glfwPollEvents();
 }
