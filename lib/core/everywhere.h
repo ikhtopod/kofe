@@ -5,12 +5,18 @@
 
 #include "icanbeeverywhere.h"
 #include "singleton.h"
+
+#include "deltatime.h"
 #include "window.h"
 #include "opengl.h"
 #include "input.h"
+
+#include "camera.h"
+#include "freecamera.h"
+#include "targetcamera.h"
+
 #include "materialstorage.h"
 #include "space.h"
-#include "deltatime.h"
 #include "projection.h"
 #include "orthographic.h"
 #include "perspective.h"

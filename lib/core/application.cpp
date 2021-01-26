@@ -25,6 +25,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<OpenGL>(new OpenGL {});
         Everywhere::Instance().Init<Input>(new Input {});
+        Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
     } catch (...) {
         Application::~Application();
@@ -34,6 +35,7 @@ Application::Application(const std::string& title) {
 
 Application::~Application() {
     Everywhere::Instance().Free<Space>();
+    Everywhere::Instance().Free<Camera>();
     Everywhere::Instance().Free<Input>();
     Everywhere::Instance().Free<OpenGL>();
     Everywhere::Instance().Free<Window>();

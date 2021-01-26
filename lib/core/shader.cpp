@@ -5,6 +5,7 @@
 #include "everywhere.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <string>
 
@@ -200,7 +201,7 @@ void Shader::SetMat4(const std::string& uniformName, const glm::mat4& value) con
 }
 
 void Shader::Processing() {
-    const glm::mat4 VIEW_DUMMY = glm::translate(Space::MODEL, glm::vec3(.0f, .0f, -2.f));
+    const glm::mat4 VIEW_DUMMY = glm::translate(glm::vec3(.0f, .0f, -2.f));
 
     Use();
 
