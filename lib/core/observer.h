@@ -32,11 +32,12 @@ public:
     Observable();
     virtual ~Observable();
 
-public:
+private:
     bool NeedClear() const;
     void SetNeedClear(bool needClear);
     void ClearNonexistent();
 
+public:
     void Attach(IObserver* observer);
     void Detach(IObserver* observer);
     void Notify();
