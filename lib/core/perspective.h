@@ -18,7 +18,7 @@ public:
     Perspective& operator=(const Perspective& other) = default;
     virtual ~Perspective() = default;
 
-public: /* Projection */
+public: /* ICanBeMatrix -> Projection */
     glm::mat4 ToMatrix() const override;
 };
 

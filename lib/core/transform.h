@@ -1,11 +1,13 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include "icanbematrix.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 
-class Transform final {
+class Transform final : public ICanBeMatrix {
     static const glm::vec3 DEFAULT_POSITION;
     static const glm::vec3 DEFAULT_ROTATION;
     static const glm::quat DEFAULT_ORIENTATION;
@@ -66,7 +68,8 @@ public:
     glm::mat4 GetOrientationMatrix() const;
     glm::mat4 GetScaleMatrix() const;
 
-    glm::mat4 ToMatrix() const;
+public: /* ICanBeMatrix */
+    glm::mat4 ToMatrix() const override;
 };
 
 
