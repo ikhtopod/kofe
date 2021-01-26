@@ -200,20 +200,13 @@ void Shader::SetMat4(const std::string& uniformName, const glm::mat4& value) con
 }
 
 void Shader::Processing() {
-    const ScreenSize& screen = Everywhere::Instance().Get<Window>().GetScreen();
-
     const glm::mat4 VIEW_DUMMY = glm::translate(Space::MODEL, glm::vec3(.0f, .0f, -2.f));
-    const glm::mat4 PROJECTION_DUMMY =
-            glm::perspective(glm::radians(85.0f),
-                             static_cast<GLfloat>(screen.GetWidth()) /
-                             static_cast<GLfloat>(screen.GetHeight()),
-                             .1f, 2000.f);
 
     Use();
 
     SetMat4("mvp.model", Space::MODEL);
     SetMat4("mvp.view", VIEW_DUMMY);
-    SetMat4("mvp.projection", PROJECTION_DUMMY);
+    SetMat4("mvp.projection", Everywhere::Instance().Get<Projection>().ToMatrix());
 
     SetMat4("transform", GetGlobalTransform().ToMatrix());
 

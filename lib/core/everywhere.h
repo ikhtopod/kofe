@@ -11,6 +11,9 @@
 #include "materialstorage.h"
 #include "space.h"
 #include "deltatime.h"
+#include "projection.h"
+#include "orthographic.h"
+#include "perspective.h"
 
 #include <string>
 #include <unordered_map>

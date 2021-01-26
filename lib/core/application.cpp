@@ -20,6 +20,7 @@ Application::Application(const std::string& title) {
     try {
         Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
         Everywhere::Instance().Init<MaterialStorage>(new MaterialStorage {});
+        Everywhere::Instance().Init<Projection>(new Perspective {});
 
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<OpenGL>(new OpenGL {});
@@ -37,6 +38,7 @@ Application::~Application() {
     Everywhere::Instance().Free<OpenGL>();
     Everywhere::Instance().Free<Window>();
 
+    Everywhere::Instance().Free<Projection>();
     Everywhere::Instance().Free<MaterialStorage>();
     Everywhere::Instance().Free<DeltaTime>();
 
@@ -117,6 +119,7 @@ Space* Application::CreateDemoSpace() {
     tempMesh->SetMaterialId(materialId);
 
     std::shared_ptr<Object> tempObject { new Object {} };
+    tempObject->GetTransform().AddRotation({ -10, 20, 15 });
     tempObject->GetMeshes().Add(tempMesh);
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempObject);
