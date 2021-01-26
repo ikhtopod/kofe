@@ -9,7 +9,7 @@ public:
     virtual ~ICanBeMatrix() = default;
 
 public:
-    virtual glm::mat4 ToMatrix() const;
+    virtual glm::mat4 ToMatrix() const = 0;
 };
 
 #endif // ICANBEMATRIX_H
