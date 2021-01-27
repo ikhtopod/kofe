@@ -201,12 +201,10 @@ void Shader::SetMat4(const std::string& uniformName, const glm::mat4& value) con
 }
 
 void Shader::Processing() {
-    const glm::mat4 VIEW_DUMMY = glm::translate(glm::vec3(.0f, .0f, -2.f));
-
     Use();
 
-    SetMat4("mvp.model", Space::MODEL);
-    SetMat4("mvp.view", VIEW_DUMMY);
+    SetMat4("mvp.model", Everywhere::Instance().Get<Space>().ToMatrix());
+    SetMat4("mvp.view", Everywhere::Instance().Get<Camera>().ToMatrix());
     SetMat4("mvp.projection", Everywhere::Instance().Get<Projection>().ToMatrix());
 
     SetMat4("transform", GetGlobalTransform().ToMatrix());

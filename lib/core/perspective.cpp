@@ -11,8 +11,8 @@ glm::mat4 Perspective::ToMatrix() const {
     float width = Everywhere::Instance().Get<Window>().GetScreen().GetWidth();
     float height = Everywhere::Instance().Get<Window>().GetScreen().GetHeight();
 
-    float fov = glm::radians(85.0f);
+    float fov = Everywhere::Instance().Get<Camera>().GetFoV();
     float aspect = width / height;
 
-    return glm::perspective(fov, aspect, DEPTH_NEAR, DEPTH_FAR);
+    return glm::perspective(glm::radians(fov), aspect, DEPTH_NEAR, DEPTH_FAR);
 }

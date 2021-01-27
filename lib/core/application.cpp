@@ -18,15 +18,18 @@ Application::Application(const char* title) :
 
 Application::Application(const std::string& title) {
     try {
+        // Objects are created in strict order
         Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
         Everywhere::Instance().Init<MaterialStorage>(new MaterialStorage {});
         Everywhere::Instance().Init<Projection>(new Perspective {});
-
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<OpenGL>(new OpenGL {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
+
+        // Additional settings
+        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0, 0, -2 });
     } catch (...) {
         Application::~Application();
         throw;
@@ -34,12 +37,12 @@ Application::Application(const std::string& title) {
 }
 
 Application::~Application() {
+    // Objects are destroyed in reverse order
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Camera>();
     Everywhere::Instance().Free<Input>();
     Everywhere::Instance().Free<OpenGL>();
     Everywhere::Instance().Free<Window>();
-
     Everywhere::Instance().Free<Projection>();
     Everywhere::Instance().Free<MaterialStorage>();
     Everywhere::Instance().Free<DeltaTime>();

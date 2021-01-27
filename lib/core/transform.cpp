@@ -28,10 +28,6 @@ const glm::quat Transform::DEFAULT_ORIENTATION { Transform::DEFAULT_ROTATION };
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
 
-glm::vec3 QuaternionToVector_Degrees(const glm::quat& quaternion) {
-    return glm::degrees(glm::eulerAngles(quaternion));
-}
-
 Transform MatrixToTransform(const glm::mat4& matrix) {
     glm::vec3 scale;
     glm::quat orientation;
@@ -155,7 +151,7 @@ void Transform::AddOrientation(float angle, const glm::vec3& rotation) {
 }
 
 glm::vec3 Transform::GetRotation() const {
-    return glm::eulerAngles(m_orientation);
+    return glm::degrees(glm::eulerAngles(m_orientation));
 }
 
 void Transform::SetRotation(const glm::vec3& rotation) {

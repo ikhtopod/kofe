@@ -3,6 +3,7 @@
 
 #include "iprocess.h"
 #include "icanbeeverywhere.h"
+#include "icanbematrix.h"
 #include "collectionof.h"
 #include "scene.h"
 
@@ -12,9 +13,10 @@
 
 class Space final :
         public IProcess,
-        public ICanBeEverywhere
+        public ICanBeEverywhere,
+        public ICanBeMatrix
 {
-public:
+private:
     static const glm::mat4 MODEL;
 
 private:
@@ -35,6 +37,9 @@ public:
 
 public: /* IProcess */
     void Processing() override;
+
+public: /* ICanBeMatrix */
+    glm::mat4 ToMatrix() const override;
 };
 
 #endif // SPACE_H

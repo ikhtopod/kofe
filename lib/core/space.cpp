@@ -27,3 +27,7 @@ void Space::Processing() {
         }
     }
 }
+
+glm::mat4 Space::ToMatrix() const {
+    return Space::MODEL;
+}
