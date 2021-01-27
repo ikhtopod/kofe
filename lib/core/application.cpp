@@ -29,7 +29,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
 
         // Additional settings
-        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0, 0, -2 });
+        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0, 0, 2 });
     } catch (...) {
         Application::~Application();
         throw;
@@ -124,7 +124,7 @@ Space* Application::CreateDemoSpace() {
     tempMesh->SetMaterialId(materialId);
 
     std::shared_ptr<Object> tempObject { new Object {} };
-    tempObject->GetTransform().AddRotation({ -10, 20, 15 });
+    tempObject->GetTransform().AddRotation({ 0, 25, 0 });
     tempObject->GetMeshes().Add(tempMesh);
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempObject);
