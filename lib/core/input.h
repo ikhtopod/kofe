@@ -3,7 +3,7 @@
 
 #include "icanbeeverywhere.h"
 #include "iprocess.h"
-#include "observer.h"
+#include "inputobserver.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,7 +14,7 @@
 class Input final :
         public IProcess,
         public ICanBeEverywhere,
-        public Observable
+        public ObservableInput
 {
 private: /* Callbacks */
     static void FramebufferSizeCallback(GLFWwindow*, int width, int height);

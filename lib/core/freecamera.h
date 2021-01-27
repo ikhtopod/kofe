@@ -11,6 +11,9 @@ public:
 
 public: /* ICanBeMatrix */
     glm::mat4 ToMatrix() const override;
+
+public: /* IInputObserver */
+    void UpdateInput() override;
 };
 
 #endif // FREECAMERA_H

@@ -1,4 +1,4 @@
-#include "observer.h"
+#include "inputobserver.h"
 
 #include <algorithm>
 #include <iterator>
@@ -7,12 +7,12 @@
 #include <iostream>
 
 
-Observable::Observable() :
+ObservableInput::ObservableInput() :
     m_observers {},
     m_needClear { false },
     mtx {}
 {
-    auto pred = [] (Observable* o) -> void {
+    auto pred = [] (ObservableInput* o) -> void {
         while (o != nullptr) {
             if (o->NeedClear()) {
                 o->ClearNonexistent();
@@ -27,60 +27,73 @@ Observable::Observable() :
     t.detach();
 }
 
-Observable::~Observable() {
+ObservableInput::~ObservableInput() {
     m_observers.clear();
 }
 
-bool Observable::NeedClear() const {
+bool ObservableInput::NeedClear() const {
     return m_needClear;
 }
 
-void Observable::SetNeedClear(bool needClear) {
+void ObservableInput::SetNeedClear(bool needClear) {
     m_needClear = needClear;
 }
 
-void Observable::ClearNonexistent() {
+void ObservableInput::ClearNonexistent() {
     std::lock_guard<std::mutex> lg { mtx };
 
     if (m_observers.empty()) return;
 
     auto lastIt =
             std::remove_if(m_observers.begin(), m_observers.end(),
-                           [] (IObserver* observer) { return observer == nullptr; });
+                           [] (IInputObserver* observer) { return observer == nullptr; });
 
     m_observers.erase(lastIt, m_observers.end());
 }
 
-void Observable::Attach(IObserver* observer) {
+void ObservableInput::Attach(IInputObserver* observer) {
+    if (observer == nullptr) return;
+
     std::lock_guard<std::mutex> lg { mtx };
 
-    for (IObserver* o : m_observers) {
+    for (IInputObserver* o : m_observers) {
         if (observer == o) {
             return;
+        } else if (o == nullptr && !m_needClear) {
+            m_needClear = true;
         }
     }
 
     m_observers.push_back(observer);
 }
 
-void Observable::Detach(IObserver* observer) {
+void ObservableInput::Detach(IInputObserver* observer) {
     std::lock_guard<std::mutex> lg { mtx };
+
+    if (observer == nullptr) {
+        if (!m_needClear) {
+            m_needClear = true;
+        }
+        return;
+    }
 
     auto end = m_observers.end();
     for (auto it = m_observers.begin(); it != end; ++it) {
         if (observer == *it) {
             m_observers.erase(it);
             return;
+        } else if (*it == nullptr && !m_needClear) {
+            m_needClear = true;
         }
     }
 }
 
-void Observable::Notify() {
+void ObservableInput::Notify() {
     std::lock_guard<std::mutex> lg { mtx };
 
-    for (IObserver* observer : m_observers) {
+    for (IInputObserver* observer : m_observers) {
         if (observer != nullptr) {
-            observer->Update();
+            observer->UpdateInput();
         } else if (!m_needClear) {
             m_needClear = true;
         }

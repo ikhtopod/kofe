@@ -20,7 +20,7 @@ void Input::Init() {
 }
 
 Input::Input() :
-    Observable{}
+    ObservableInput{}
 {
     Init();
 }
