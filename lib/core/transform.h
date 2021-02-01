@@ -51,9 +51,9 @@ public:
 
     glm::quat GetOrientation() const;
     void SetOrientation(const glm::quat& orientation);
-    void SetOrientation(float angle, const glm::vec3& rotation);
+    void SetOrientation(float angle, const glm::vec3& axis);
     void AddOrientation(const glm::quat& orientation);
-    void AddOrientation(float angle, const glm::vec3& rotation);
+    void AddOrientation(float angle, const glm::vec3& axis);
 
     glm::vec3 GetRotation() const;
     void SetRotation(const glm::vec3& rotation);
