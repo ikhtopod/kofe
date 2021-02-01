@@ -5,6 +5,7 @@
 #include "icanbematrix.h"
 #include "inputobserver.h"
 #include "localtransformation.h"
+#include "axis.h"
 
 
 class Camera :
@@ -16,8 +17,12 @@ class Camera :
 private:
     static const float DEFAULT_FOV;
 
+public:
+    static const float MOVEMENT_SPEED;
+
 private:
     float m_fov;
+    Axis m_axis;
 
 public:
     Camera(const Camera&) = delete;

@@ -5,8 +5,12 @@
 
 const float Camera::DEFAULT_FOV { 85.0f };
 
+const float Camera::MOVEMENT_SPEED { 2.25f };
+
+
 Camera::Camera() :
-    m_fov { DEFAULT_FOV }
+    m_fov { DEFAULT_FOV },
+    m_axis {}
 {
     Everywhere::Instance().Get<Input>().Attach(this);
 }
