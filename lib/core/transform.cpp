@@ -24,7 +24,7 @@ void swap(Transform& lhs, Transform& rhs) {
 
 const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
 const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
-const glm::quat Transform::DEFAULT_ORIENTATION {};
+const glm::quat Transform::DEFAULT_ORIENTATION { 1.0f, DEFAULT_ROTATION };
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
 
@@ -143,11 +143,11 @@ void Transform::SetOrientation(float angle, const glm::vec3& axis) {
 }
 
 void Transform::AddOrientation(const glm::quat& orientation) {
-    m_orientation *= orientation;
+    m_orientation = glm::normalize(orientation * m_orientation);
 }
 
 void Transform::AddOrientation(float angle, const glm::vec3& axis) {
-    m_orientation *= glm::angleAxis(glm::radians(angle), glm::normalize(axis));
+    AddOrientation(glm::angleAxis(glm::radians(angle), glm::normalize(axis)));
 }
 
 glm::vec3 Transform::GetRotation() const {
@@ -159,7 +159,7 @@ void Transform::SetRotation(const glm::vec3& rotation) {
 }
 
 void Transform::AddRotation(const glm::vec3& rotation) {
-    m_orientation *= glm::quat(glm::radians(rotation));
+    m_orientation = glm::normalize(glm::quat(glm::radians(rotation)) * m_orientation);
 }
 
 glm::vec3 Transform::GetScale() const {
