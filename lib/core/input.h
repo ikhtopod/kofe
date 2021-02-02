@@ -23,13 +23,14 @@ private:
 private: /* Callbacks */
     static void FramebufferSizeCallback(GLFWwindow*, int width, int height);
     static void ScrollCallback(GLFWwindow*, double x, double y);
-    static void MousePositionCallback(GLFWwindow*, double x, double y);
+    static void MousePositionCallback(GLFWwindow* window, double x, double y);
 
 private:
     GLFWwindow* context;
 
     glm::vec2 m_mousePosition;
     glm::vec2 m_scrollValue;
+    bool m_wasChangedMousePosition;
 
 private:
     void Init();
@@ -46,6 +47,8 @@ private:
     void SetScrollValue(const glm::vec2& scrollValue);
     void SetScrollValue(glm::vec2&& scrollValue) noexcept;
 
+    void SetWasChangedMousePosition(bool wasChanged);
+
 public:
     Input(const Input&) = delete;
     Input(Input&&) noexcept = delete;
@@ -58,6 +61,7 @@ public:
 public:
     glm::vec2 GetMousePosition() const;
     glm::vec2 GetScrollValue() const;
+    bool WasChangedMousePosition() const;
 
     bool MouseButtonIsReleased(int key) const;
     bool MouseButtonIsPressed(int key) const;

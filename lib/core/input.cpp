@@ -1,6 +1,9 @@
 #include "input.h"
 
 #include "everywhere.h"
+#include "util.h"
+
+#include <cmath>
 
 
 Input* Input::GetThisInput() {
@@ -21,12 +24,19 @@ void Input::ScrollCallback(GLFWwindow*, double x, double y) {
     thisInput->SetScrollValue( { static_cast<float>(x), static_cast<float>(y) } );
 }
 
-void Input::MousePositionCallback(GLFWwindow*, double x, double y) {
+void Input::MousePositionCallback(GLFWwindow* window, double x, double y) {
     Input* thisInput = Input::GetThisInput();
 
     if (thisInput == nullptr) return;
 
+    const ScreenSize screen = Everywhere::Instance().Get<Window>().GetScreen();
+    x = util::Repeat<double>(x, 0.0, static_cast<double>(screen.GetWidth()));
+    y = util::Repeat<double>(y, 0.0, static_cast<double>(screen.GetHeight()));
+    glfwSetCursorPos(window, x, y);
+
     thisInput->SetMousePosition( { static_cast<float>(x), static_cast<float>(y) } );
+
+    thisInput->SetWasChangedMousePosition(true);
 }
 
 void Input::AssignCallbacks() {
@@ -41,14 +51,15 @@ void Input::Init() {
     UpdateContext();
 
     Input::AssignCallbacks();
-    glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 Input::Input() :
     ObservableInput {},
     context {},
     m_mousePosition {},
-    m_scrollValue {}
+    m_scrollValue {},
+    m_wasChangedMousePosition { false }
 {
     Init();
 }
@@ -79,12 +90,20 @@ void Input::SetScrollValue(glm::vec2&& scrollValue) noexcept {
     m_scrollValue.y = std::move(scrollValue.y);
 }
 
+void Input::SetWasChangedMousePosition(bool wasChanged) {
+    m_wasChangedMousePosition = wasChanged;
+}
+
 bool Input::MouseButtonIsReleased(int key) const {
     return glfwGetMouseButton(context, key) == GLFW_RELEASE;
 }
 
 bool Input::MouseButtonIsPressed(int key) const {
     return glfwGetMouseButton(context, key) == GLFW_PRESS;
+}
+
+bool Input::WasChangedMousePosition() const {
+    return m_wasChangedMousePosition;
 }
 
 bool Input::KeyIsReleased(int key) const {
@@ -107,7 +126,9 @@ void Input::UpdateContext() {
 
 void Input::Processing() {
     UpdateContext();
-    Notify();
     KeyEvents();
+
+    SetWasChangedMousePosition(false); // need before glfwPollEvents()
     glfwPollEvents();
+    Notify();
 }

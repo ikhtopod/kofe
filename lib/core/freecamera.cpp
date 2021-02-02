@@ -36,5 +36,7 @@ void FreeCamera::UpdateInput() {
         GetTransform().AddPosition(VELOCITY * Axis::UP);
 
     // Mouse
+    if (!input.WasChangedMousePosition()) return;
+
     glm::vec2 mousePosition = input.GetMousePosition();
 }
