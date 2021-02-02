@@ -3,7 +3,7 @@
 #include "everywhere.h"
 
 
-const float Camera::DEFAULT_FOV { 85.0f };
+const float Camera::DEFAULT_FOV { 45.0f };
 
 const float Camera::MOVEMENT_SPEED { 2.25f };
 
