@@ -9,9 +9,6 @@ public:
     FreeCamera();
     virtual ~FreeCamera() = default;
 
-public: /* ICanBeMatrix */
-    glm::mat4 ToMatrix() const override;
-
 public: /* IInputObserver */
     void UpdateInput() override;
 };
