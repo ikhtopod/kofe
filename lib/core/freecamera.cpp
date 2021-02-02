@@ -2,14 +2,13 @@
 
 #include "everywhere.h"
 #include "axis.h"
+#include "util.h"
 
 #include <glm/glm.hpp>
-#include <iostream>
+#include <algorithm>
 
 
-FreeCamera::FreeCamera() : Camera {} {
-    UpdateCameraVectors();
-}
+FreeCamera::FreeCamera() : Camera {} {}
 
 void FreeCamera::UpdateInput() {
     Input& input = Everywhere::Instance().Get<Input>();
@@ -36,5 +35,19 @@ void FreeCamera::UpdateInput() {
 
     [[maybe_unused]] glm::vec2 mousePosition = input.GetMousePosition();
 
+
+    glm::vec3 rotation = GetTransform().GetRotation();
+
+    rotation.x += (m_lastMousePosition.y - mousePosition.y) * DEFAULT_MOUSE_SENSITIVITY_X;
+    rotation.y += (mousePosition.x - m_lastMousePosition.x) * DEFAULT_MOUSE_SENSITIVITY_Y;
+
+    rotation.x = std::clamp<float>(rotation.x, MIN_PITCH, MAX_PITCH);
+    rotation.y = util::Repeat(rotation.y, MIN_YAW, MAX_YAW);
+
+    GetTransform().SetRotation(rotation);
+
+
     UpdateCameraVectors();
+
+    m_lastMousePosition = mousePosition;
 }

@@ -26,6 +26,10 @@ Camera::Camera() :
     m_lastMousePosition {}
 {
     Everywhere::Instance().Get<Input>().Attach(this);
+
+    //GetTransform().SetRotation({ DEFAULT_PITCH, DEFAULT_YAW, DEFAULT_ROLL });
+
+    UpdateCameraVectors();
 }
 
 Camera::~Camera() {
