@@ -155,11 +155,11 @@ glm::vec3 Transform::GetRotation() const {
 }
 
 void Transform::SetRotation(const glm::vec3& rotation) {
-    m_orientation = glm::quat(rotation);
+    m_orientation = glm::quat(glm::radians(rotation));
 }
 
 void Transform::AddRotation(const glm::vec3& rotation) {
-    m_orientation *= glm::quat(rotation);
+    m_orientation *= glm::quat(glm::radians(rotation));
 }
 
 glm::vec3 Transform::GetScale() const {
