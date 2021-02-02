@@ -33,7 +33,7 @@ void FreeCamera::UpdateInput() {
     // Mouse
     if (!input.WasChangedMousePosition()) return;
 
-    [[maybe_unused]] glm::vec2 mousePosition = input.GetMousePosition();
+    glm::vec2 mousePosition = input.GetMousePosition();
 
 
     glm::vec3 rotation = GetTransform().GetRotation();
@@ -45,7 +45,6 @@ void FreeCamera::UpdateInput() {
     rotation.y = util::Repeat(rotation.y, MIN_YAW, MAX_YAW);
 
     GetTransform().SetRotation(rotation);
-
 
     UpdateCameraVectors();
 

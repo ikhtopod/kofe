@@ -7,11 +7,11 @@ const float Camera::DEFAULT_FOV { 45.0f };
 
 const float Camera::DEFAULT_MOVEMENT_SPEED { 2.25f };
 
-const float Camera::DEFAULT_PITCH { -30.0f };
+const float Camera::DEFAULT_PITCH { 0.0f };
 const float Camera::MAX_PITCH { 89.0f };
-const float Camera::MIN_PITCH { -MAX_PITCH };
+const float Camera::MIN_PITCH { -89.0f };
 
-const float Camera::DEFAULT_YAW { 230.0f };
+const float Camera::DEFAULT_YAW { 0.0f };
 const float Camera::MIN_YAW { 0.0f };
 const float Camera::MAX_YAW { 360.0f };
 
@@ -26,8 +26,7 @@ Camera::Camera() :
     m_lastMousePosition {}
 {
     Everywhere::Instance().Get<Input>().Attach(this);
-
-    //GetTransform().SetRotation({ DEFAULT_PITCH, DEFAULT_YAW, DEFAULT_ROLL });
+    m_lastMousePosition = Everywhere::Instance().Get<Input>().GetMousePosition();
 
     UpdateCameraVectors();
 }
