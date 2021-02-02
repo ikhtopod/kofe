@@ -24,15 +24,10 @@ void Input::ScrollCallback(GLFWwindow*, double x, double y) {
     thisInput->SetScrollValue( { static_cast<float>(x), static_cast<float>(y) } );
 }
 
-void Input::MousePositionCallback(GLFWwindow* window, double x, double y) {
+void Input::MousePositionCallback(GLFWwindow*, double x, double y) {
     Input* thisInput = Input::GetThisInput();
 
     if (thisInput == nullptr) return;
-
-    const ScreenSize screen = Everywhere::Instance().Get<Window>().GetScreen();
-    x = util::Repeat<double>(x, 0.0, static_cast<double>(screen.GetWidth()));
-    y = util::Repeat<double>(y, 0.0, static_cast<double>(screen.GetHeight()));
-    glfwSetCursorPos(window, x, y);
 
     thisInput->SetMousePosition( { static_cast<float>(x), static_cast<float>(y) } );
 
@@ -47,11 +42,19 @@ void Input::AssignCallbacks() {
     glfwSetCursorPosCallback(context, Input::MousePositionCallback);
 }
 
+void Input::FirstMousePosition() {
+    double x {}, y {};
+    glfwGetCursorPos(context, &x, &y);
+    SetMousePosition({ static_cast<float>(x), static_cast<float>(y) });
+}
+
 void Input::Init() {
     UpdateContext();
 
     Input::AssignCallbacks();
     glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    FirstMousePosition();
 }
 
 Input::Input() :

@@ -23,7 +23,7 @@ private:
 private: /* Callbacks */
     static void FramebufferSizeCallback(GLFWwindow*, int width, int height);
     static void ScrollCallback(GLFWwindow*, double x, double y);
-    static void MousePositionCallback(GLFWwindow* window, double x, double y);
+    static void MousePositionCallback(GLFWwindow*, double x, double y);
 
 private:
     GLFWwindow* context;
@@ -33,6 +33,7 @@ private:
     bool m_wasChangedMousePosition;
 
 private:
+    void FirstMousePosition();
     void Init();
 
 private:
