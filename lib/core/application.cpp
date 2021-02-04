@@ -27,9 +27,6 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
-
-        // Additional settings
-        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0, 0, -4 });
     } catch (...) {
         Application::~Application();
         throw;

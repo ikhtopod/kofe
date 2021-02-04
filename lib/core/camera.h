@@ -11,8 +11,7 @@
 class Camera :
         public ICanBeEverywhere,
         public ICanBeMatrix,
-        public IInputObserver,
-        public LocalTransformation
+        public IInputObserver
 {
 private:
     static const float DEFAULT_FOV;
@@ -39,6 +38,11 @@ private:
 protected:
     Axis m_axis;
     glm::vec2 m_lastMousePosition;
+
+    glm::vec3 Position {};
+    glm::quat Orientation {};
+    float RightAngle {};
+    float UpAngle {};
 
 public:
     Camera(const Camera&) = delete;

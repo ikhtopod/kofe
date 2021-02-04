@@ -14,44 +14,37 @@ void FreeCamera::UpdateInput() {
     Input& input = Everywhere::Instance().Get<Input>();
     DeltaTime& delta = Everywhere::Instance().Get<DeltaTime>();
 
-    const float VELOCITY = DEFAULT_MOVEMENT_SPEED * delta.GetDelta();
+    const float velocity = DEFAULT_MOVEMENT_SPEED * delta.GetDelta();
+
+    glm::quat quatFront = Orientation * glm::quat(0, 0, 0, -1) * glm::conjugate(Orientation);
+    glm::vec3 Front = { quatFront.x, quatFront.y, quatFront.z };
+    glm::vec3 Right = glm::normalize(glm::cross(Front, glm::vec3(0, 1, 0)));
+    glm::vec3 Up = glm::normalize(glm::cross(Right, Front));
 
     // Keyboard
     if (input.KeyIsPressed(GLFW_KEY_W))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetFront());
+        Position += Front * velocity;
     if (input.KeyIsPressed(GLFW_KEY_S))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetFront());
+        Position -= Front * velocity;
     if (input.KeyIsPressed(GLFW_KEY_A))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetRight());
+        Position -= Right * velocity;
     if (input.KeyIsPressed(GLFW_KEY_D))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetRight());
+        Position += Right * velocity;
     if (input.KeyIsPressed(GLFW_KEY_Q))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetUp());
+        Position -= Up * velocity;
     if (input.KeyIsPressed(GLFW_KEY_E))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetUp());
-
-    UpdateCameraVectors();
+        Position += Up * velocity;
 
     // Mouse
     if (!input.WasChangedMousePosition()) return;
 
     glm::vec2 mousePosition = input.GetMousePosition();
 
+    RightAngle += (mousePosition.x - m_lastMousePosition.x) * DEFAULT_MOUSE_SENSITIVITY_X;
+    UpAngle += (m_lastMousePosition.y - mousePosition.y) * DEFAULT_MOUSE_SENSITIVITY_Y;
 
-    glm::vec3 rotation = GetTransform().GetRotation();
-
-    rotation.x = mousePosition.y * DEFAULT_MOUSE_SENSITIVITY_X;
-    rotation.y = mousePosition.x * DEFAULT_MOUSE_SENSITIVITY_Y;
-
-    glm::quat pitch = glm::angleAxis(glm::radians(rotation.x), Axis::FRONT);
-    glm::quat yaw = glm::angleAxis(glm::radians(rotation.y), Axis::UP);
-
-    GetTransform().SetOrientation(yaw * pitch);
-
-    //rotation.x = util::Repeat(rotation.x, MIN_PITCH, MAX_PITCH);
-    //rotation.y = std::clamp<float>(rotation.y, MIN_YAW, MAX_YAW);
-
-    //GetTransform().SetRotation(rotation);
+    RightAngle = util::Repeat(RightAngle, MIN_YAW, MAX_YAW);
+    UpAngle = std::clamp<float>(UpAngle, MIN_PITCH, MAX_PITCH);
 
     UpdateCameraVectors();
 

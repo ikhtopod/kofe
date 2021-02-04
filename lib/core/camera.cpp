@@ -30,6 +30,11 @@ Camera::Camera() :
     Everywhere::Instance().Get<Input>().Attach(this);
     m_lastMousePosition = Everywhere::Instance().Get<Input>().GetMousePosition();
 
+    Position = glm::vec3 { 0, 0, 0 };
+    Orientation = glm::quat();
+    RightAngle = 0.f;
+    UpAngle = 0.f;
+
     UpdateCameraVectors();
 }
 
@@ -38,11 +43,10 @@ Camera::~Camera() {
 }
 
 void Camera::UpdateCameraVectors() {
-    const glm::quat INVERSE_ORIENTATION = glm::inverse(GetTransform().GetOrientation());
+    glm::quat Yaw = glm::angleAxis(glm::radians(-RightAngle), glm::vec3(0, 1, 0));
+    glm::quat Pitch = glm::angleAxis(glm::radians(UpAngle), glm::vec3(1, 0, 0));
 
-    m_axis.SetFront(glm::rotate(INVERSE_ORIENTATION, Axis::FRONT));
-    m_axis.SetRight(glm::rotate(INVERSE_ORIENTATION, -Axis::RIGHT));
-    m_axis.SetUp(glm::rotate(INVERSE_ORIENTATION, -Axis::UP));
+    Orientation = Yaw * Pitch;
 }
 
 float Camera::GetFoV() const {
@@ -50,6 +54,9 @@ float Camera::GetFoV() const {
 }
 
 glm::mat4 Camera::ToMatrix() const {
-    return GetTransform().GetOrientationMatrix() *
-            GetTransform().GetPositionMatrix();
+    glm::quat reverseOrient = glm::conjugate(Orientation);
+    glm::mat4 rot = glm::mat4_cast(reverseOrient);
+    glm::mat4 translation = glm::translate(glm::mat4(1.0), -Position);
+
+    return rot * translation;
 }
