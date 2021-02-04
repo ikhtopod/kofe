@@ -23,7 +23,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<MaterialStorage>(new MaterialStorage {});
         Everywhere::Instance().Init<Projection>(new Perspective {});
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
-        Everywhere::Instance().Init<OpenGL>(new OpenGL {});
+        Everywhere::Instance().Init<Graphics>(new OpenGL {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
@@ -41,7 +41,7 @@ Application::~Application() {
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Camera>();
     Everywhere::Instance().Free<Input>();
-    Everywhere::Instance().Free<OpenGL>();
+    Everywhere::Instance().Free<Graphics>();
     Everywhere::Instance().Free<Window>();
     Everywhere::Instance().Free<Projection>();
     Everywhere::Instance().Free<MaterialStorage>();
@@ -54,7 +54,7 @@ Application::~Application() {
 void Application::MainLoop() {
     while (Everywhere::Instance().Get<Window>().CanProcess()) {
         Everywhere::Instance().Get<DeltaTime>().Update();
-        Everywhere::Instance().Get<OpenGL>().Processing();
+        Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
         Everywhere::Instance().Get<Space>().Processing();

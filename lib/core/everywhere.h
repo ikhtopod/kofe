@@ -8,7 +8,10 @@
 
 #include "deltatime.h"
 #include "window.h"
+
+#include "graphics.h"
 #include "opengl.h"
+
 #include "input.h"
 
 #include "camera.h"

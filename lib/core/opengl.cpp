@@ -39,7 +39,7 @@ void OpenGL::UpdateViewportSize() const {
     glViewport(0, 0, screen.GetWidth(), screen.GetHeight());
 }
 
-void OpenGL::Flush() {
+void OpenGL::Flush() const {
     glFlush();
 }
 

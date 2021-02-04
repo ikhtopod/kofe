@@ -1,20 +1,15 @@
 #ifndef OPENGL_H
 #define OPENGL_H
 
-#include "iprocess.h"
-#include "icanbeeverywhere.h"
+#include "graphics.h"
 
 #include <cstdint>
 #include <string>
 
 
-class OpenGL final :
-        public IProcess,
-        public ICanBeEverywhere
-{
+class OpenGL final : public Graphics {
 private:
     void InitOpenGL();
-    void Init();
 
 public:
     OpenGL(const OpenGL&) = delete;
@@ -25,10 +20,13 @@ public:
     OpenGL();
     ~OpenGL() = default;
 
-    void UpdateViewportSize() const;
+    void UpdateViewportSize() const override;
 
-public:
-    static void Flush();
+protected: /* Graphics */
+    void Init() override;
+
+public: /* Graphics */
+    void Flush() const override;
 
 public: /* IProcess */
     void Processing() override;
