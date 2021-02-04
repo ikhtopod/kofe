@@ -24,7 +24,7 @@ void swap(Transform& lhs, Transform& rhs) {
 
 const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
 const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
-const glm::quat Transform::DEFAULT_ORIENTATION {0,0,0,-1};
+const glm::quat Transform::DEFAULT_ORIENTATION {};
 const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
 

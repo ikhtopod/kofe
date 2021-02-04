@@ -11,7 +11,8 @@
 class Camera :
         public ICanBeEverywhere,
         public ICanBeMatrix,
-        public IInputObserver
+        public IInputObserver,
+        public LocalTransformation
 {
 private:
     static const float DEFAULT_FOV;
@@ -29,20 +30,18 @@ protected:
 
     static const float DEFAULT_ROLL;
 
-    static const float DEFAULT_MOUSE_SENSITIVITY_X;
-    static const float DEFAULT_MOUSE_SENSITIVITY_Y;
+    static const float DEFAULT_MOUSE_SENSITIVITY_YAW;
+    static const float DEFAULT_MOUSE_SENSITIVITY_PITCH;
 
 private:
     float m_fov;
 
 protected:
-    Axis m_axis;
     glm::vec2 m_lastMousePosition;
+    Axis m_axis;
 
-    glm::vec3 Position {};
-    glm::quat Orientation {};
-    float RightAngle {};
-    float UpAngle {};
+    float m_yaw;
+    float m_pitch;
 
 public:
     Camera(const Camera&) = delete;
