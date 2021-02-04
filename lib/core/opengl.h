@@ -20,12 +20,11 @@ public:
     OpenGL();
     ~OpenGL() = default;
 
-    void UpdateViewportSize() const override;
-
 protected: /* Graphics */
     void Init() override;
 
 public: /* Graphics */
+    void UpdateViewportSize() const override;
     void Flush() const override;
 
 public: /* IProcess */
