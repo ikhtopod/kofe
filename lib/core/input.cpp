@@ -4,6 +4,7 @@
 #include "util.h"
 
 #include <cmath>
+#include <thread>
 
 
 Input* Input::GetThisInput() {
@@ -52,6 +53,10 @@ void Input::Init() {
     UpdateContext();
 
     Input::AssignCallbacks();
+
+    glfwSetCursorPos(context, 1, 1);
+    glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetCursorPos(context, 0, 0);
     glfwSetInputMode(context, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     FirstMousePosition();
