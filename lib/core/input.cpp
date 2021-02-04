@@ -4,7 +4,6 @@
 #include "util.h"
 
 #include <cmath>
-#include <thread>
 
 
 Input* Input::GetThisInput() {
