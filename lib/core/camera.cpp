@@ -43,10 +43,11 @@ Camera::~Camera() {
 }
 
 void Camera::UpdateCameraVectors() {
-    glm::quat Yaw = glm::angleAxis(glm::radians(-RightAngle), glm::vec3(0, 1, 0));
-    glm::quat Pitch = glm::angleAxis(glm::radians(UpAngle), glm::vec3(1, 0, 0));
+    glm::quat quatFront = Orientation * glm::quat(0, 0, 0, -1) * glm::conjugate(Orientation);
 
-    Orientation = Yaw * Pitch;
+    m_axis.SetFront({ quatFront.x, quatFront.y, quatFront.z });
+    m_axis.SetRight(glm::normalize(glm::cross(m_axis.GetFront(), Axis::UP)));
+    m_axis.SetUp(glm::normalize(glm::cross(m_axis.GetRight(), m_axis.GetFront())));
 }
 
 float Camera::GetFoV() const {

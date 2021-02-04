@@ -16,24 +16,19 @@ void FreeCamera::UpdateInput() {
 
     const float velocity = DEFAULT_MOVEMENT_SPEED * delta.GetDelta();
 
-    glm::quat quatFront = Orientation * glm::quat(0, 0, 0, -1) * glm::conjugate(Orientation);
-    glm::vec3 Front = { quatFront.x, quatFront.y, quatFront.z };
-    glm::vec3 Right = glm::normalize(glm::cross(Front, glm::vec3(0, 1, 0)));
-    glm::vec3 Up = glm::normalize(glm::cross(Right, Front));
-
     // Keyboard
     if (input.KeyIsPressed(GLFW_KEY_W))
-        Position += Front * velocity;
+        Position += m_axis.GetFront() * velocity;
     if (input.KeyIsPressed(GLFW_KEY_S))
-        Position -= Front * velocity;
+        Position -= m_axis.GetFront() * velocity;
     if (input.KeyIsPressed(GLFW_KEY_A))
-        Position -= Right * velocity;
+        Position -= m_axis.GetRight() * velocity;
     if (input.KeyIsPressed(GLFW_KEY_D))
-        Position += Right * velocity;
+        Position += m_axis.GetRight() * velocity;
     if (input.KeyIsPressed(GLFW_KEY_Q))
-        Position -= Up * velocity;
+        Position -= m_axis.GetUp() * velocity;
     if (input.KeyIsPressed(GLFW_KEY_E))
-        Position += Up * velocity;
+        Position += m_axis.GetUp() * velocity;
 
     // Mouse
     if (!input.WasChangedMousePosition()) return;
@@ -45,6 +40,11 @@ void FreeCamera::UpdateInput() {
 
     RightAngle = util::Repeat(RightAngle, MIN_YAW, MAX_YAW);
     UpAngle = std::clamp<float>(UpAngle, MIN_PITCH, MAX_PITCH);
+
+    glm::quat Yaw = glm::angleAxis(glm::radians(-RightAngle), glm::vec3(0, 1, 0));
+    glm::quat Pitch = glm::angleAxis(glm::radians(UpAngle), glm::vec3(1, 0, 0));
+
+    Orientation = Yaw * Pitch;
 
     UpdateCameraVectors();
 
