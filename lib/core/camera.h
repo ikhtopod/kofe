@@ -7,6 +7,8 @@
 #include "localtransformation.h"
 #include "axis.h"
 
+#include <glm/gtx/quaternion.hpp>
+
 
 class Camera :
         public ICanBeEverywhere,
@@ -14,10 +16,9 @@ class Camera :
         public IInputObserver,
         public LocalTransformation
 {
-private:
+protected:
     static const float DEFAULT_FOV;
 
-protected:
     static const float DEFAULT_MOVEMENT_SPEED;
 
     static const float DEFAULT_PITCH;
@@ -32,6 +33,8 @@ protected:
 
     static const float DEFAULT_MOUSE_SENSITIVITY_YAW;
     static const float DEFAULT_MOUSE_SENSITIVITY_PITCH;
+
+    static const glm::quat DEFAULT_CAMERA_ORIENTATION;
 
 private:
     float m_fov;
