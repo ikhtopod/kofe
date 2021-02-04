@@ -2,17 +2,19 @@
 
 #include "everywhere.h"
 
+#include <glm/gtx/quaternion.hpp>
+
 
 const float Camera::DEFAULT_FOV { 45.0f };
 
 const float Camera::DEFAULT_MOVEMENT_SPEED { 2.25f };
 
 const float Camera::DEFAULT_PITCH { 0.0f };
-const float Camera::MAX_PITCH { 89.0f };
 const float Camera::MIN_PITCH { -89.0f };
+const float Camera::MAX_PITCH { 89.0f };
 
 const float Camera::DEFAULT_YAW { 0.0f };
-const float Camera::MIN_YAW { 0.0f };
+const float Camera::MIN_YAW { -360.0f };
 const float Camera::MAX_YAW { 360.0f };
 
 const float Camera::DEFAULT_ROLL { 0.0f };
@@ -36,17 +38,11 @@ Camera::~Camera() {
 }
 
 void Camera::UpdateCameraVectors() {
-    glm::vec3 front {};
+    const glm::quat INVERSE_ORIENTATION = glm::inverse(GetTransform().GetOrientation());
 
-    glm::vec3 rotation = glm::radians(GetTransform().GetRotation());
-
-    front.x = std::cos(rotation.x) * std::cos(rotation.y);
-    front.y = std::sin(rotation.x);
-    front.z = std::sin(rotation.x) * std::cos(rotation.y);
-
-    m_axis.SetFront(glm::normalize(front));
-    m_axis.SetRight(glm::normalize(glm::cross(m_axis.GetFront(), Axis::UP)));
-    m_axis.SetUp(glm::normalize(glm::cross(m_axis.GetRight(), m_axis.GetFront())));
+    m_axis.SetFront(glm::rotate(INVERSE_ORIENTATION, Axis::FRONT));
+    m_axis.SetRight(glm::rotate(INVERSE_ORIENTATION, -Axis::RIGHT));
+    m_axis.SetUp(glm::rotate(INVERSE_ORIENTATION, -Axis::UP));
 }
 
 float Camera::GetFoV() const {
@@ -54,7 +50,6 @@ float Camera::GetFoV() const {
 }
 
 glm::mat4 Camera::ToMatrix() const {
-    return glm::lookAt(GetTransform().GetPosition(),
-                       GetTransform().GetPosition() + m_axis.GetFront(),
-                       m_axis.GetUp());
+    return GetTransform().GetOrientationMatrix() *
+            GetTransform().GetPositionMatrix();
 }

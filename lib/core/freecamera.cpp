@@ -30,6 +30,8 @@ void FreeCamera::UpdateInput() {
     if (input.KeyIsPressed(GLFW_KEY_E))
         GetTransform().AddPosition(VELOCITY * m_axis.GetUp());
 
+    UpdateCameraVectors();
+
     // Mouse
     if (!input.WasChangedMousePosition()) return;
 
@@ -38,13 +40,18 @@ void FreeCamera::UpdateInput() {
 
     glm::vec3 rotation = GetTransform().GetRotation();
 
-    rotation.x += (m_lastMousePosition.y - mousePosition.y) * DEFAULT_MOUSE_SENSITIVITY_X;
-    rotation.y += (mousePosition.x - m_lastMousePosition.x) * DEFAULT_MOUSE_SENSITIVITY_Y;
+    rotation.x = mousePosition.y * DEFAULT_MOUSE_SENSITIVITY_X;
+    rotation.y = mousePosition.x * DEFAULT_MOUSE_SENSITIVITY_Y;
 
-    rotation.x = std::clamp<float>(rotation.x, MIN_PITCH, MAX_PITCH);
-    rotation.y = util::Repeat(rotation.y, MIN_YAW, MAX_YAW);
+    glm::quat pitch = glm::angleAxis(glm::radians(rotation.x), Axis::FRONT);
+    glm::quat yaw = glm::angleAxis(glm::radians(rotation.y), Axis::UP);
 
-    GetTransform().SetRotation(rotation);
+    GetTransform().SetOrientation(yaw * pitch);
+
+    //rotation.x = util::Repeat(rotation.x, MIN_PITCH, MAX_PITCH);
+    //rotation.y = std::clamp<float>(rotation.y, MIN_YAW, MAX_YAW);
+
+    //GetTransform().SetRotation(rotation);
 
     UpdateCameraVectors();
 

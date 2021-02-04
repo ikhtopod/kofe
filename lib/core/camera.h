@@ -21,8 +21,8 @@ protected:
     static const float DEFAULT_MOVEMENT_SPEED;
 
     static const float DEFAULT_PITCH;
-    static const float MAX_PITCH;
     static const float MIN_PITCH;
+    static const float MAX_PITCH;
 
     static const float DEFAULT_YAW;
     static const float MIN_YAW;
