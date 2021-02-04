@@ -3,9 +3,6 @@
 
 #include "graphics.h"
 
-#include <cstdint>
-#include <string>
-
 
 class OpenGL final : public Graphics {
 private:
