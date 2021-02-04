@@ -32,6 +32,7 @@ Camera::Camera() :
 {
     Everywhere::Instance().Get<Input>().Attach(this);
     m_lastMousePosition = Everywhere::Instance().Get<Input>().GetMousePosition();
+    GetTransform().SetOrientation(glm::quat(0.0f, 0.0f, 0.0f, -1.0f));
 
     UpdateCameraVectors();
 }
