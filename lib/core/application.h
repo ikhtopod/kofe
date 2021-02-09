@@ -27,6 +27,7 @@ public:
 
 private: /* Temp Methods */
     Space* CreateDemoSpace();
+    void DemoMainLoop();
 };
 
 #endif // APPLICATION_H

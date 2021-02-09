@@ -31,7 +31,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
 
         // Additional settings
-        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0, 0, 3 });
+        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0.0f, 0.0f, 6.0f });
     } catch (...) {
         Application::~Application();
         throw;
@@ -58,6 +58,8 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<DeltaTime>().Update();
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
+
+        DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -124,10 +126,28 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Mesh> tempMeshObject { new Mesh { vertices, indices } };
     tempMeshObject->SetMaterialId(materialId);
+    tempMeshObject->GetTransform().AddPosition({ -1.0f, -1.0f, 0.0f });
+
+    std::shared_ptr<Mesh> tempMeshChildren { new Mesh { vertices, indices } };
+    tempMeshObject->SetMaterialId(materialId);
+    tempMeshChildren->GetTransform().SetScale({ .5f, .5f, .5f });
+    tempMeshChildren->GetTransform().AddPosition({ 2.0f, 2.0f, 0.0f });
+
+    tempMeshObject->Children().Add(tempMeshChildren);
+
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject);
+
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
 
     return tempSpace;
+}
+
+void Application::DemoMainLoop() {
+    auto object = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Front();
+    float angleRotation = 100.0f * Everywhere::Instance().Get<DeltaTime>().GetDelta();
+    object->GetTransform().AddRotation({ angleRotation / 2.0f, angleRotation, -angleRotation });
+    auto child = object->Children().Front();
+    child->GetTransform().AddRotation({ angleRotation, -angleRotation, angleRotation * 2.0f });
 }

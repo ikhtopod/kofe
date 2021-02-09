@@ -10,7 +10,7 @@ class Object :
         public IProcess,
         public Transformable
 {
-private:
+protected:
     CollectionOf<Object> m_children;
 
 public:
@@ -20,6 +20,9 @@ public:
 public:
     CollectionOf<Object>& Children();
     const CollectionOf<Object>& Children() const;
+
+public: /* IProcess */
+    void Processing() override;
 };
 
 #endif // OBJECT_H

@@ -73,6 +73,8 @@ void Mesh::Free() {
 }
 
 void Mesh::Processing() {
+    Object::Processing(); // update children
+
     auto& material = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
     material->SetGlobalTransform(GetGlobalTransform() + GetTransform());
     material->Processing();
