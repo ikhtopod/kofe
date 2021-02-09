@@ -97,9 +97,8 @@ Transform::Transform(glm::mat4&& matrix) noexcept :
 
 Transform& Transform::operator+=(const Transform& other) {
     glm::mat4 matrix =
-            GetPositionMatrix() * other.GetPositionMatrix() *
-            GetOrientationMatrix() * other.GetOrientationMatrix() *
-            GetScaleMatrix() * other.GetScaleMatrix();
+            GetPositionMatrix() * GetOrientationMatrix() * GetScaleMatrix() *
+            other.GetPositionMatrix() * other.GetOrientationMatrix() * other.GetScaleMatrix();
 
     Transform tmp = MatrixToTransform(matrix);
 
