@@ -2,6 +2,8 @@
 
 #include "app_exceptions.h"
 #include "everywhere.h"
+#include "vertex.h"
+#include "mesh.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -120,14 +122,10 @@ Space* Application::CreateDemoSpace() {
         3, 2, 11, 11, 15, 3,
     };
 
-    std::shared_ptr<Mesh> tempMesh { new Mesh { vertices, indices } };
-    tempMesh->SetMaterialId(materialId);
-
-    std::shared_ptr<Object> tempObject { new Object {} };
-    tempObject->GetTransform().AddRotation({ 0, 25, 0 });
-    tempObject->GetMeshes().Add(tempMesh);
+    std::shared_ptr<Mesh> tempMeshObject { new Mesh { vertices, indices } };
+    tempMeshObject->SetMaterialId(materialId);
     std::shared_ptr<Scene> tempScene { new Scene {} };
-    tempScene->GetObjects().Add(tempObject);
+    tempScene->GetObjects().Add(tempMeshObject);
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
 

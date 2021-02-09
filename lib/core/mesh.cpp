@@ -8,7 +8,7 @@
 Mesh::~Mesh() { Free(); }
 
 Mesh::Mesh(const std::vector<Vertex>& verices, const std::vector<GLuint>& indices) :
-    Transformable {},
+    Object {},
     vao {}, vbo {}, ebo {},
     m_verices { verices },
     m_indices { indices },
@@ -18,7 +18,7 @@ Mesh::Mesh(const std::vector<Vertex>& verices, const std::vector<GLuint>& indice
 }
 
 Mesh::Mesh(std::vector<Vertex>&& verices, std::vector<GLuint>&& indices) noexcept :
-    Transformable {},
+    Object {},
     vao {}, vbo {}, ebo {},
     m_verices { std::move(verices) },
     m_indices { std::move(indices) },

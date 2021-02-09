@@ -3,18 +3,11 @@
 
 Object::Object() :
     Transformable {},
-    m_meshes {} {}
+    m_children {} {}
 
 Object::~Object() {
-    m_meshes.Clear();
+    m_children.Clear();
 }
 
-CollectionOf<Mesh>& Object::GetMeshes() { return m_meshes; }
-const CollectionOf<Mesh>& Object::GetMeshes() const { return m_meshes; }
-
-void Object::Processing() {
-    for (auto& mesh : m_meshes.Get()) {
-        mesh->SetGlobalTransform(GetGlobalTransform() + GetTransform());
-        mesh->Processing();
-    }
-}
+CollectionOf<Object>& Object::Children() { return m_children; }
+const CollectionOf<Object>& Object::Children() const { return m_children; }

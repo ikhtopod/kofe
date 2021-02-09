@@ -4,7 +4,6 @@
 #include "iprocess.h"
 #include "transformable.h"
 #include "collectionof.h"
-#include "mesh.h"
 
 
 class Object :
@@ -12,18 +11,15 @@ class Object :
         public Transformable
 {
 private:
-    CollectionOf<Mesh> m_meshes;
+    CollectionOf<Object> m_children;
 
 public:
     Object();
     ~Object();
 
 public:
-    CollectionOf<Mesh>& GetMeshes();
-    const CollectionOf<Mesh>& GetMeshes() const;
-
-public: /* IProcess */
-    void Processing() override;
+    CollectionOf<Object>& Children();
+    const CollectionOf<Object>& Children() const;
 };
 
 #endif // OBJECT_H

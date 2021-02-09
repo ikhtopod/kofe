@@ -1,8 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "iprocess.h"
-#include "transformable.h"
+#include "object.h"
 #include "vertex.h"
 
 #include <glad/glad.h>
@@ -18,10 +17,7 @@ enum class AttribIndex : GLuint {
 };
 
 
-class Mesh :
-        public IProcess,
-        public Transformable
-{
+class Mesh : public Object {
 private:
     static const GLsizei BUFFER_SIZE { 1 };
 
