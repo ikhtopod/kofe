@@ -21,13 +21,6 @@ void swap(Transform& lhs, Transform& rhs) {
     swap(lhs.m_scale, rhs.m_scale);
 }
 
-
-const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
-const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
-const glm::quat Transform::DEFAULT_ORIENTATION { 1.0f, 0.0f, 0.0f, 0.0f };
-const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
-
-
 Transform MatrixToTransform(const glm::mat4& matrix) {
     glm::vec3 scale;
     glm::quat orientation;
@@ -39,6 +32,12 @@ Transform MatrixToTransform(const glm::mat4& matrix) {
 
     return { translation, orientation, scale };
 }
+
+
+const glm::vec3 Transform::DEFAULT_POSITION { 0.0f };
+const glm::vec3 Transform::DEFAULT_ROTATION { 0.0f };
+const glm::quat Transform::DEFAULT_ORIENTATION { 1.0f, 0.0f, 0.0f, 0.0f };
+const glm::vec3 Transform::DEFAULT_SCALE { 1.0f };
 
 Transform::Transform() :
     Transform { DEFAULT_POSITION,
@@ -96,15 +95,7 @@ Transform::Transform(glm::mat4&& matrix) noexcept :
     Transform { MatrixToTransform(matrix) } {}
 
 Transform& Transform::operator+=(const Transform& other) {
-    glm::mat4 matrix =
-            GetPositionMatrix() * GetOrientationMatrix() * GetScaleMatrix() *
-            other.GetPositionMatrix() * other.GetOrientationMatrix() * other.GetScaleMatrix();
-
-    Transform tmp = MatrixToTransform(matrix);
-
-    SetPosition(tmp.GetPosition());
-    SetOrientation(tmp.GetOrientation());
-    SetScale(tmp.GetScale());
+    *this = MatrixToTransform(ToMatrix() * other.ToMatrix());
 
     return *this;
 }
