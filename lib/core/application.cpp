@@ -2,7 +2,6 @@
 
 #include "app_exceptions.h"
 #include "everywhere.h"
-#include "vertex.h"
 #include "mesh.h"
 
 #include <glm/glm.hpp>
