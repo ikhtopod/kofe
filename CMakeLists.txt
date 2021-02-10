@@ -8,10 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_TARGET kofe)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_compile_options(-DDEBUG -DGLM_ENABLE_EXPERIMENTAL -Wall -Wextra -std=c++17)
+    add_compile_options(-DDEBUG -DGLM_ENABLE_EXPERIMENTAL -Wall -Wextra)
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi)
 else ()
-    add_compile_options(-DGLM_ENABLE_EXPERIMENTAL -Wall -Wextra -std=c++17 -O2 -flto)
+    add_compile_options(-DGLM_ENABLE_EXPERIMENTAL -Wall -Wextra -O2 -flto)
     add_link_options(-lGL -pthread -lX11 -lXrandr -lXi -Wl,--strip-all)
 endif ()
 
