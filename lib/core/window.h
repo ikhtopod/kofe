@@ -13,9 +13,8 @@
 
 
 class Window final :
-        public IProcess,
-        public ICanBeEverywhere
-{
+    public IProcess,
+    public ICanBeEverywhere {
 private:
     GLFWwindow* m_context;
     ScreenSize m_screen;

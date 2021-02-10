@@ -15,7 +15,9 @@ void swap(Window& lhs, Window& rhs) {
     swap(lhs.m_vSync, rhs.m_vSync);
 }
 
-bool Window::ContextIsValid() const { return m_context != nullptr; }
+bool Window::ContextIsValid() const {
+    return m_context != nullptr;
+}
 
 void Window::InitWindowHints() const {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -61,8 +63,7 @@ Window::Window(ScreenSize screen, std::string title) :
     m_context { nullptr },
     m_screen { screen },
     m_title { title },
-    m_vSync { true }
-{
+    m_vSync { true } {
     InitContext();
 }
 
@@ -70,8 +71,7 @@ Window::Window(Window&& other) noexcept :
     m_context { std::move(other.m_context) },
     m_screen { std::move(other.m_screen) },
     m_title { std::move(other.m_title) },
-    m_vSync { std::move(other.m_vSync) }
-{
+    m_vSync { std::move(other.m_vSync) } {
     other.m_context = nullptr;
 }
 
@@ -93,15 +93,25 @@ Window::~Window() {
         glfwDestroyWindow(m_context);
 }
 
-ScreenSize& Window::GetScreen() { return m_screen; }
+ScreenSize& Window::GetScreen() {
+    return m_screen;
+}
 
-GLFWwindow* Window::GetContext() { return m_context; }
+GLFWwindow* Window::GetContext() {
+    return m_context;
+}
 
-void Window::SetContext(GLFWwindow* context) { m_context = context; }
+void Window::SetContext(GLFWwindow* context) {
+    m_context = context;
+}
 
-std::string Window::GetTitle() const { return m_title; }
+std::string Window::GetTitle() const {
+    return m_title;
+}
 
-void Window::SetTitle(const std::string& title) { m_title = title; }
+void Window::SetTitle(const std::string& title) {
+    m_title = title;
+}
 
 bool Window::CanProcess() {
     return glfwWindowShouldClose(m_context) == GLFW_FALSE;

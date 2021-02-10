@@ -46,7 +46,7 @@ void Texture::InitTexture(const std::filesystem::path& texturePath) {
 
     GLenum format { GL_RGB };
     if (m_textureChannelComponents == TextureChannelComponents::RGBA ||
-            m_textureChannelComponents == TextureChannelComponents::GREY_ALPHA) {
+        m_textureChannelComponents == TextureChannelComponents::GREY_ALPHA) {
         format = GL_RGBA;
     }
 
@@ -64,8 +64,7 @@ Texture::Texture(const std::filesystem::path& texturePath) :
     m_width {},
     m_height {},
     m_channels {},
-    tex {}
-{
+    tex {} {
     InitTexture(texturePath);
 }
 

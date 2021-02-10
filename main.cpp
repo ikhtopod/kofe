@@ -8,7 +8,7 @@
 
 int main() {
     try {
-        Application{"Kofe"}.Run();
+        Application { "Kofe" }.Run();
     } catch (const ApplicationException& e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;

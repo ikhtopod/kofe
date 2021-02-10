@@ -11,7 +11,8 @@
 #include <cmath>
 
 
-Application::Application() : Application { ":notitle:" } {}
+Application::Application() :
+    Application { ":notitle:" } {}
 
 Application::Application(const char* title) :
     Application { std::string { title } } {}
@@ -76,8 +77,8 @@ void Application::Run() {
 Space* Application::CreateDemoSpace() {
     std::shared_ptr<Shader> tempShader {
         new Shader {
-            std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
-            std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
+                std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
+                std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
         }
     };
 
@@ -85,7 +86,7 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Texture> tempTexture {
         new Texture {
-            std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
+                std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
         }
     };
     std::shared_ptr<Material> tempMaterial { new Material {} };
@@ -111,7 +112,7 @@ Space* Application::CreateDemoSpace() {
         { { 0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
         { { 0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f } },
         { { 0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
-        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f } },
+        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f } }
     };
 
     std::vector<GLuint> indices {
@@ -120,7 +121,7 @@ Space* Application::CreateDemoSpace() {
         8, 9, 10, 10, 4, 8,
         11, 2, 12, 12, 13, 11,
         10, 14, 5, 5, 4, 10,
-        3, 2, 11, 11, 15, 3,
+        3, 2, 11, 11, 15, 3
     };
 
     std::shared_ptr<Mesh> tempMeshObject { new Mesh { vertices, indices } };
