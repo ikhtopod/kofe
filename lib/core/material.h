@@ -6,15 +6,22 @@
 #include "shader.h"
 #include "texture.h"
 #include "globaltransformation.h"
+#include "color.h"
+
+#include <string>
 
 
 class Material :
-        public IProcess,
-        public GlobalTransformation
-{
+    public IProcess,
+    public GlobalTransformation {
+private: /* Default values */
+    static const Color DEFAULT_COLOR;
+
 private:
     CollectionOf<Shader> m_shaders;
     CollectionOf<Texture> m_textures;
+
+    Color m_color;
 
 public:
     Material();
@@ -26,6 +33,9 @@ public:
 
     CollectionOf<Texture>& GetTextures();
     const CollectionOf<Texture>& GetTextures() const;
+
+private:
+    void UniformMaterialData() const;
 
 public: /* IProcess */
     void Processing() override;

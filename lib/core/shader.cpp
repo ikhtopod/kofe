@@ -14,17 +14,17 @@ Shader::Shader(const std::filesystem::path& vertexPath,
                const std::filesystem::path& fragmentPath) :
     GlobalTransformation {},
     m_program {},
-    m_uniformProcessingFunc {}
-{
-    m_uniformProcessingFunc = [] (Shader*) {};
+    m_uniformProcessingFunc {} {
+    m_uniformProcessingFunc = [](Shader*) {};
     CreateProgram(vertexPath, fragmentPath);
 }
 
-Shader::~Shader() { glDeleteProgram(m_program); }
+Shader::~Shader() {
+    glDeleteProgram(m_program);
+}
 
 void Shader::CreateProgram(const std::filesystem::path& vertexPath,
-                           const std::filesystem::path& fragmentPath)
-{
+                           const std::filesystem::path& fragmentPath) {
     GLuint* vertex { nullptr };
     GLuint* fragment { nullptr };
 

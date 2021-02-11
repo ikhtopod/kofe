@@ -12,9 +12,9 @@
 
 
 class Shader final :
-        public IProcess,
-        public GlobalTransformation
-{
+    public IProcess,
+    public GlobalTransformation {
+private:
     using UniformProcessing = std::function<void(Shader*)>;
 
     static const GLuint INFOLOG_SIZE { 512 };
