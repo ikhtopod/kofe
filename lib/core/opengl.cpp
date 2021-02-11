@@ -7,6 +7,9 @@
 #include "everywhere.h"
 
 
+const Color OpenGL::CLEAR_COLOR { 0.05f, 0.0f, 0.1f, 1.0f };
+
+
 void OpenGL::InitOpenGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -19,7 +22,8 @@ void OpenGL::InitOpenGL() {
 
     UpdateViewportSize();
 
-    glClearColor(.05f, .0f, .1f, 1.f);
+    glClearColor(CLEAR_COLOR.Red(), CLEAR_COLOR.Green(),
+                 CLEAR_COLOR.Blue(), CLEAR_COLOR.Alpha());
 }
 
 void OpenGL::Init() {

@@ -2,32 +2,60 @@
 
 #include <utility>
 #include <limits>
+#include <algorithm>
 
 
-const uint8_t Color::RED { 0 };
-const uint8_t Color::GREEN { 1 };
-const uint8_t Color::BLUE { 2 };
-const uint8_t Color::ALPHA { 3 };
+namespace {
+
+using color_type = Color::color_type;
+
+static constexpr color_type MIN_COLOR_VALUE { 0.0f };
+static constexpr color_type MAX_COLOR_VALUE { 1.0f };
+
+} // namespace
+
 
 void swap(Color& lhs, Color& rhs) {
     if (&lhs == &rhs) return;
 
     using std::swap;
 
-    swap(lhs.m_id, rhs.m_id);
+    swap(lhs.m_r, rhs.m_r);
+    swap(lhs.m_g, rhs.m_g);
+    swap(lhs.m_b, rhs.m_b);
+    swap(lhs.m_a, rhs.m_a);
 }
 
-Color::Color() : Color { 0 } {}
+
+const Color
+        Color::BLACK { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
+        Color::WHITE { ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE },
+        Color::RED { ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
+        Color::GREEN { ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE },
+        Color::BLUE { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE };
+
+
+Color::Color() :
+    Color { Color::BLACK } {}
 
 Color::Color(const Color& other) :
-    Color { other.m_id } {}
+    m_r { other.m_r },
+    m_g { other.m_g },
+    m_b { other.m_b },
+    m_a { other.m_a } {}
 
 Color::Color(Color&& other) noexcept :
-    Color { std::move(other.m_id) } {}
+    m_r { std::move(other.m_r) },
+    m_g { std::move(other.m_g) },
+    m_b { std::move(other.m_b) },
+    m_a { std::move(other.m_a) } {}
 
 Color& Color::operator=(const Color& other) {
     if (this != &other) {
-        m_id = other.m_id;
+        m_r = other.m_r;
+        m_g = other.m_g;
+        m_b = other.m_b;
+        m_a = other.m_a;
     }
 
     return *this;
@@ -35,63 +63,68 @@ Color& Color::operator=(const Color& other) {
 
 Color& Color::operator=(Color&& other) noexcept {
     if (this != &other) {
-        m_id = std::move(other.m_id);
+        m_r = std::move(other.m_r);
+        m_g = std::move(other.m_g);
+        m_b = std::move(other.m_b);
+        m_a = std::move(other.m_a);
     }
 
     return *this;
 }
 
-Color::Color(uint32_t id) :
-    m_id { id } {}
+Color::Color(const glm::vec3& rgb) :
+    Color { rgb.r, rgb.g, rgb.b } {}
 
-Color::Color(uint8_t r, uint8_t g, uint8_t b) :
-    Color {r, g, b, std::numeric_limits<uint8_t>::max()} {}
+Color::Color(const glm::vec3& rgb, color_type a) :
+    Color { rgb.r, rgb.g, rgb.b, a } {}
 
-Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+Color::Color(const glm::vec4& rgba) :
+    Color { rgba.r, rgba.g, rgba.b, rgba.a } {}
+
+Color::Color(color_type r, color_type g, color_type b) :
+    Color { r, g, b, ::MAX_COLOR_VALUE } {}
+
+Color::Color(color_type r, color_type g, color_type b, color_type a) {
     RGBA(r, g, b, a);
 }
 
-uint32_t Color::Id() const {
-    return m_id;
+float Color::Clamp(color_type value) {
+    return std::clamp<float>(value, ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE);
 }
 
-void Color::Id(uint32_t id) {
-    m_id = id;
+color_type Color::Red() const {
+    return m_r;
 }
 
-uint8_t Color::Red() const {
-    return (&m_chanel)[RED];
+color_type Color::Green() const {
+    return m_g;
 }
 
-uint8_t Color::Green() const {
-    return (&m_chanel)[GREEN];
+color_type Color::Blue() const {
+    return m_b;
 }
 
-uint8_t Color::Blue() const {
-    return (&m_chanel)[BLUE];
+color_type Color::Alpha() const {
+    return m_a;
 }
 
-uint8_t Color::Alpha() const {
-    return (&m_chanel)[ALPHA];
+void Color::Red(color_type r) {
+    m_r = Clamp(r);
 }
 
-void Color::Red(uint8_t r) {
-    (&m_chanel)[RED] = r;
+void Color::Green(color_type g) {
+    m_g = Clamp(g);
 }
 
-void Color::Green(uint8_t g) {
-    (&m_chanel)[GREEN] = g;
+void Color::Blue(color_type b) {
+    m_b = Clamp(b);
 }
 
-void Color::Blue(uint8_t b) {
-    (&m_chanel)[BLUE] = b;
+void Color::Alpha(color_type a) {
+    m_a = Clamp(a);
 }
 
-void Color::Alpha(uint8_t a) {
-    (&m_chanel)[ALPHA] = a;
-}
-
-void Color::RGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+void Color::RGBA(color_type r, color_type g, color_type b, color_type a) {
     Red(r);
     Green(g);
     Blue(b);

@@ -12,13 +12,11 @@ static const std::string OBJECT_COLOR { "material.objectColor" };
 }; // namespace
 
 
-const Color Material::DEFAULT_COLOR { 255, 255, 255, 255 };
-
 Material::Material() :
     GlobalTransformation {},
     m_shaders {},
     m_textures {},
-    m_color { DEFAULT_COLOR } {}
+    m_color { Color::WHITE } {}
 
 Material::~Material() {
     m_shaders.Clear();

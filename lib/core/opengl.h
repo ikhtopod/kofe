@@ -2,9 +2,13 @@
 #define OPENGL_H
 
 #include "graphics.h"
+#include "color.h"
 
 
 class OpenGL final : public Graphics {
+public:
+    static const Color CLEAR_COLOR;
+
 private:
     void InitOpenGL();
 

@@ -14,9 +14,6 @@
 class Material :
     public IProcess,
     public GlobalTransformation {
-private: /* Default values */
-    static const Color DEFAULT_COLOR;
-
 private:
     CollectionOf<Shader> m_shaders;
     CollectionOf<Texture> m_textures;

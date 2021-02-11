@@ -3,18 +3,16 @@
 
 #include <glm/glm.hpp>
 
-#include <cstdint>
-
 
 class Color final {
-private:
-    static const uint8_t RED, GREEN, BLUE, ALPHA;
+public:
+    using color_type = float;
+
+public: /* Standard colors */
+    static const Color BLACK, WHITE, RED, GREEN, BLUE;
 
 private:
-    union {
-        uint32_t m_id;
-        uint8_t m_chanel;
-    };
+    float m_r, m_g, m_b, m_a;
 
 public:
     Color();
@@ -25,28 +23,30 @@ public:
     ~Color() = default;
 
 public:
-    explicit Color(uint32_t id);
-    Color(uint8_t r, uint8_t g, uint8_t b);
-    Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    Color(const glm::vec3& rgb);
+    Color(const glm::vec3& rgb, color_type a);
+    Color(const glm::vec4& rgba);
+    Color(color_type r, color_type g, color_type b);
+    Color(color_type r, color_type g, color_type b, color_type a);
 
 public:
     friend void swap(Color&, Color&);
 
+private:
+    static float Clamp(color_type value);
+
 public:
-    uint32_t Id() const;
-    void Id(uint32_t id);
+    color_type Red() const;
+    color_type Green() const;
+    color_type Blue() const;
+    color_type Alpha() const;
 
-    uint8_t Red() const;
-    uint8_t Green() const;
-    uint8_t Blue() const;
-    uint8_t Alpha() const;
+    void Red(color_type r);
+    void Green(color_type g);
+    void Blue(color_type b);
+    void Alpha(color_type a);
 
-    void Red(uint8_t r);
-    void Green(uint8_t g);
-    void Blue(uint8_t b);
-    void Alpha(uint8_t a);
-
-    void RGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void RGBA(color_type r, color_type g, color_type b, color_type a);
 
 public:
     explicit operator glm::vec3() const;
