@@ -6,7 +6,7 @@
 namespace {
 namespace uniform_name {
 
-static const std::string OBJECT_COLOR { "material.objectColor" };
+static const std::string OBJECT_COLOR { "material.color" };
 
 }; // namespace uniform_name
 }; // namespace
@@ -14,9 +14,9 @@ static const std::string OBJECT_COLOR { "material.objectColor" };
 
 Material::Material() :
     GlobalTransformation {},
+    Colorable { Color::WHITE },
     m_shaders {},
-    m_textures {},
-    m_color { Color::WHITE } {}
+    m_textures {} {}
 
 Material::~Material() {
     m_shaders.Clear();
@@ -41,14 +41,6 @@ void Material::UniformMaterialData() const {
     for (auto& shader : m_shaders.Get()) {
         shader->SetVec4(::uniform_name::OBJECT_COLOR, static_cast<glm::vec4>(m_color));
     }
-}
-
-Color Material::GetColor() const {
-    return m_color;
-}
-
-void Material::SetColor(const Color& color) {
-    m_color = color;
 }
 
 void Material::Processing() {

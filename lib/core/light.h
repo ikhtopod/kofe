@@ -2,13 +2,12 @@
 #define LIGHT_H
 
 #include "object.h"
-#include "color.h"
+#include "colorable.h"
 
 
-class Light : public Object {
-protected:
-    Color m_color;
-
+class Light :
+    public Object,
+    public Colorable {
 public:
     Light(const Light& other) = delete;
     Light(Light&& other) noexcept = delete;

@@ -6,19 +6,18 @@
 #include "shader.h"
 #include "texture.h"
 #include "globaltransformation.h"
-#include "color.h"
+#include "colorable.h"
 
 #include <string>
 
 
 class Material :
     public IProcess,
-    public GlobalTransformation {
+    public GlobalTransformation,
+    public Colorable {
 private:
     CollectionOf<Shader> m_shaders;
     CollectionOf<Texture> m_textures;
-
-    Color m_color;
 
 public:
     Material();
@@ -33,10 +32,6 @@ public:
 
 private:
     void UniformMaterialData() const;
-
-public:
-    Color GetColor() const;
-    void SetColor(const Color& color);
 
 public: /* IProcess */
     void Processing() override;

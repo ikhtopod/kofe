@@ -1,7 +1,7 @@
 #version 460 core
 
 struct Material {
-    vec4 objectColor;
+    vec4 color;
 };
 
 uniform sampler2D textureObject;
@@ -12,5 +12,5 @@ in vec2 textureCoordinates;
 out vec4 FragColor;
 
 void main() {
-    FragColor = material.objectColor * texture(textureObject, textureCoordinates);
+    FragColor = material.color * texture(textureObject, textureCoordinates);
 }
