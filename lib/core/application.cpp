@@ -76,12 +76,7 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    std::shared_ptr<Shader> tempShader {
-        new Shader {
-                std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
-                std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
-        }
-    };
+    std::shared_ptr<Shader> tempShader { new Shader {} };
 
     tempShader->SetUniformProcessingFunc([](Shader*) {});
 

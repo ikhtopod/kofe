@@ -169,17 +169,13 @@ std::shared_ptr<Mesh> CreateSphere() {
     std::shared_ptr<Shader> tempShader {
         new Shader {
                 std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
-                std::filesystem::path { R"frag(./resources/shaders/default.frag)frag" },
+                std::filesystem::path { R"frag(./resources/shaders/default-light.frag)frag" },
         }
     };
 
     tempShader->SetUniformProcessingFunc([](Shader*) {});
 
-    std::shared_ptr<Texture> tempTexture {
-        new Texture {
-                std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
-        }
-    };
+    std::shared_ptr<Texture> tempTexture { new Texture {} };
 
     std::shared_ptr<Material> tempMaterial { new Material {} };
     tempMaterial->GetShaders().Add(tempShader);
