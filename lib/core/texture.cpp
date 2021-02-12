@@ -8,6 +8,10 @@ const GLsizei Texture::BUFFER_SIZE { 1 };
 const GLint Texture::MIPMAP_LEVEL { 0 };
 const GLint Texture::BORDER { 0 }; // always zero (legacy)
 
+const std::filesystem::path Texture::DEFAULT_TEXTURE_PATH {
+    R"png(./resources/textures/default_texture.png)png"
+};
+
 void Texture::InitTextureWrapParameters() const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -56,6 +60,9 @@ void Texture::InitTexture(const std::filesystem::path& texturePath) {
     stbi_image_free(data);
     Unbind();
 }
+
+Texture::Texture() :
+    Texture { DEFAULT_TEXTURE_PATH } {}
 
 Texture::Texture(const std::filesystem::path& texturePath) :
     m_textureChannelComponents { TextureChannelComponents::RGBA },

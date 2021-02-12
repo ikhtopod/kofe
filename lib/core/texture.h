@@ -21,11 +21,14 @@ enum class TextureChannelComponents : int {
 
 
 class Texture final : public IProcess {
+private:
     static const glm::vec4 TEXTURE_BORDER_COLOR;
 
     static const GLsizei BUFFER_SIZE;
     static const GLint MIPMAP_LEVEL;
     static const GLint BORDER;
+
+    static const std::filesystem::path DEFAULT_TEXTURE_PATH;
 
 private:
     const TextureChannelComponents m_textureChannelComponents;
@@ -44,7 +47,7 @@ private:
     void InitTexture(const std::filesystem::path& texturePath);
 
 public:
-    Texture() = delete;
+    Texture();
     Texture(const Texture&) = delete;
     Texture(Texture&&) = delete;
     Texture& operator=(const Texture&) = delete;
