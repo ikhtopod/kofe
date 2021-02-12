@@ -24,8 +24,8 @@ public:
     explicit Colorable(Color&& color);
 
 public:
-    Color GetColor() const;
-    void SetColor(const Color& color);
+    virtual Color GetColor() const;
+    virtual void SetColor(const Color& color);
 };
 
 
