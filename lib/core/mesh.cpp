@@ -104,4 +104,5 @@ void swap(Mesh& lhs, Mesh& rhs) {
     swap(lhs.ebo, rhs.ebo);
     swap(lhs.m_verices, rhs.m_verices);
     swap(lhs.m_indices, rhs.m_indices);
+    swap(lhs.m_materialId, rhs.m_materialId);
 }
