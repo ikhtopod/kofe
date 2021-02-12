@@ -43,6 +43,14 @@ void Material::UniformMaterialData() const {
     }
 }
 
+Color Material::GetColor() const {
+    return m_color;
+}
+
+void Material::SetColor(const Color& color) {
+    m_color = color;
+}
+
 void Material::Processing() {
     for (auto& shader : m_shaders.Get()) {
         shader->SetGlobalTransform(this->GetGlobalTransform());

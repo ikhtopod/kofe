@@ -34,6 +34,10 @@ public:
 private:
     void UniformMaterialData() const;
 
+public:
+    Color GetColor() const;
+    void SetColor(const Color& color);
+
 public: /* IProcess */
     void Processing() override;
 };
