@@ -10,6 +10,17 @@
 #include <string>
 
 
+const std::filesystem::path Shader::DEFAULT_VERTEX_PATH {
+    R"vert(./resources/shaders/default.vert)vert"
+};
+
+const std::filesystem::path Shader::DEFAULT_FRAGMENT_PATH {
+    R"frag(./resources/shaders/default.frag)frag"
+};
+
+Shader::Shader() :
+    Shader { DEFAULT_VERTEX_PATH, DEFAULT_FRAGMENT_PATH } {}
+
 Shader::Shader(const std::filesystem::path& vertexPath,
                const std::filesystem::path& fragmentPath) :
     GlobalTransformation {},

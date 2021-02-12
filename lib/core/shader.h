@@ -17,7 +17,10 @@ class Shader final :
 private:
     using UniformProcessing = std::function<void(Shader*)>;
 
-    static const GLuint INFOLOG_SIZE { 512 };
+    static const std::filesystem::path DEFAULT_VERTEX_PATH;
+    static const std::filesystem::path DEFAULT_FRAGMENT_PATH;
+
+    static constexpr GLuint INFOLOG_SIZE { 512 };
     static constexpr GLint LOCATION_ERROR_FLAG { -1 };
 
 private:
@@ -25,7 +28,7 @@ private:
     UniformProcessing m_uniformProcessingFunc;
 
 public:
-    Shader() = delete;
+    Shader();
     Shader(const Shader&) = delete;
     Shader(Shader&&) noexcept = delete;
     Shader& operator=(const Shader&) = delete;
