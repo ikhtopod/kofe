@@ -3,6 +3,7 @@
 #include "app_exceptions.h"
 #include "everywhere.h"
 #include "mesh.h"
+#include "pointlight.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -89,6 +90,7 @@ Space* Application::CreateDemoSpace() {
                 std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
         }
     };
+
     std::shared_ptr<Material> tempMaterial { new Material {} };
     tempMaterial->GetShaders().Add(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
@@ -129,7 +131,7 @@ Space* Application::CreateDemoSpace() {
     tempMeshObject->GetTransform().AddPosition({ -1.0f, -1.0f, 0.0f });
 
     std::shared_ptr<Mesh> tempMeshChildren { new Mesh { vertices, indices } };
-    tempMeshObject->SetMaterialId(materialId);
+    tempMeshObject->SetMaterialId(tempMeshObject->GetMaterialId());
     tempMeshChildren->GetTransform().SetScale({ .5f, .5f, .5f });
     tempMeshChildren->GetTransform().AddPosition({ 2.0f, 2.0f, 0.0f });
 
@@ -137,6 +139,10 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject);
+
+    std::shared_ptr<PointLight> tempPointLight { new PointLight {} };
+    tempPointLight->SetColor({ 0.8f, 0.307634f, 0.016358f });
+    tempScene->GetObjects().Add(tempPointLight);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
