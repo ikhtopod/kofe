@@ -45,6 +45,7 @@ void Material::UniformMaterialData() const {
 
 void Material::Processing() {
     for (auto& shader : m_shaders.Get()) {
+        shader->Use();
         shader->SetGlobalTransform(this->GetGlobalTransform());
         UniformMaterialData();
         shader->Processing();
