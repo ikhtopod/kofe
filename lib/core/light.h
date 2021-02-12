@@ -19,8 +19,7 @@ public:
     virtual ~Light() = default;
 
 public:
-    Color GetColor() const;
-    void SetColor(const Color& color);
+    void SetColor(const Color& color) override;
 
 public: /* IProcess */
     void Processing() override;
