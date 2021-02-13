@@ -5,7 +5,6 @@
 #include "vertex.h"
 
 #include <glad/glad.h>
-#include <glm/glm.hpp>
 
 #include <cstddef>
 #include <vector>
@@ -13,14 +12,12 @@
 
 enum class AttribIndex : GLuint {
     POSITION,
+    NORMAL,
     TEXTURE,
 };
 
 
 class Mesh : public Object {
-private:
-    static const GLsizei BUFFER_SIZE { 1 };
-
 public:
     friend void swap(Mesh&, Mesh&);
 
@@ -46,7 +43,7 @@ public:
 public:
     Mesh(const std::vector<Vertex>& verices, const std::vector<GLuint>& indices);
     Mesh(std::vector<Vertex>&& verices, std::vector<GLuint>&& indices) noexcept;
-    ~Mesh();
+    virtual ~Mesh();
 
 public:
     size_t GetMaterialId() const;

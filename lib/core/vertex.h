@@ -1,15 +1,13 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
-
-#include <utility>
 
 
 struct Vertex final {
 public:
     glm::vec3 position;
+    glm::vec3 normal;
     glm::vec2 texture;
 
 public:
@@ -23,7 +21,8 @@ public:
     Vertex& operator=(Vertex&& other) noexcept;
     ~Vertex() = default;
 
-    Vertex(glm::vec3 pos, glm::vec2 tex);
+public:
+    Vertex(glm::vec3 pos, glm::vec3 nrm, glm::vec2 tex);
 
     bool operator==(const Vertex& other) const;
 };

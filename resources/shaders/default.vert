@@ -7,17 +7,21 @@ struct MVP {
 };
 
 const uint ATTRIB_POSITION = 0;
-const uint ATTRIB_TEXTURE = 1;
+const uint ATTRIB_NORMAL = 1;
+const uint ATTRIB_TEXTURE = 2;
 
 layout (location = ATTRIB_POSITION) in vec3 aPos;
+layout (location = ATTRIB_NORMAL) in vec3 aNormal;
 layout (location = ATTRIB_TEXTURE) in vec2 aTexture;
 
 uniform MVP mvp;
 uniform mat4 transform;
 
 out vec2 textureCoordinates;
+out vec3 Normal;
 
 void main() {
     gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPos.xyz, 1.f);
+    Normal = aNormal;
     textureCoordinates = aTexture;
 }
