@@ -24,6 +24,7 @@ out vec2 textureCoordinates;
 void main() {
     gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPos.xyz, 1.0f);
     FragPos = vec3(mvp.model * transform * vec4(aPos.xyz, 1.0f));
-    Normal = aNormal;
+    // Adjust aNormal to the transformed aPos
+    Normal = mat3(transpose(inverse(mvp.model * transform))) * aNormal;
     textureCoordinates = aTexture;
 }
