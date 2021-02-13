@@ -10,7 +10,6 @@ struct Light {
 };
 
 const int MAX_POINT_LIGHTS = 6;
-const int GLOW_VALUE = 32;
 
 uniform sampler2D textureObject;
 
@@ -39,10 +38,11 @@ void main() {
         vec3 diffuse = max(dot(norm, lightDirection), 0.0f) * pointLight.color.xyz;
 
         float specularStrength = 0.5f;
+        float specularShininess = 32.0f;
         vec3 viewDirection = normalize(cameraPosition - FragPos);
         // Reflection vector along the normal axis
         vec3 reflectDirection = reflect(-lightDirection, norm);
-        float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), GLOW_VALUE);
+        float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), specularShininess);
         vec3 specular = specularStrength * spec * pointLight.color.xyz;
 
         result += ambient + diffuse + specular;
