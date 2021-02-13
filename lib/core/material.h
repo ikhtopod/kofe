@@ -31,8 +31,11 @@ public:
     const CollectionOf<Texture>& GetTextures() const;
 
 private:
-    void UniformMaterialData() const;
-    void UniformLightData() const;
+    void UniformMaterialData(std::shared_ptr<Shader>& shader);
+    void UniformLightData(std::shared_ptr<Shader>& shader);
+    void UniformCameraData(std::shared_ptr<Shader>& shader);
+
+    void AdditionalUniformData();
 
 public: /* IProcess */
     void Processing() override;

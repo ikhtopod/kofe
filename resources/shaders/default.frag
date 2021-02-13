@@ -10,10 +10,13 @@ struct Light {
 };
 
 const int MAX_POINT_LIGHTS = 6;
+const int GLOW_VALUE = 32;
 
 uniform sampler2D textureObject;
+
 uniform Material material;
 uniform Light pointLights[MAX_POINT_LIGHTS];
+uniform vec3 cameraPosition;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -24,13 +27,28 @@ out vec4 FragColor;
 void main() {
     vec3 norm = normalize(Normal);
 
-    float ambientStrength = 0.1f;
-    vec3 ambient = ambientStrength * pointLights[0].color.xyz;
+    vec3 result = vec3(0.0f);
 
-    vec3 lightDirection = normalize(pointLights[0].position - FragPos);
-    vec3 diffuse = max(dot(norm, lightDirection), 0.0f) * pointLights[0].color.xyz;
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+        Light pointLight = pointLights[i];
 
-    vec3 result = (ambient + diffuse) * material.color.xyz;
+        float ambientStrength = 0.1f;
+        vec3 ambient = ambientStrength * pointLight.color.xyz;
+
+        vec3 lightDirection = normalize(pointLight.position - FragPos);
+        vec3 diffuse = max(dot(norm, lightDirection), 0.0f) * pointLight.color.xyz;
+
+        float specularStrength = 0.5f;
+        vec3 viewDirection = normalize(cameraPosition - FragPos);
+        // Reflection vector along the normal axis
+        vec3 reflectDirection = reflect(-lightDirection, norm);
+        float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), GLOW_VALUE);
+        vec3 specular = specularStrength * spec * pointLight.color.xyz;
+
+        result += ambient + diffuse + specular;
+    }
+
+    result *= material.color.xyz;
 
     FragColor = vec4(result, 1.0f) * texture(textureObject, textureCoordinates);
 }
