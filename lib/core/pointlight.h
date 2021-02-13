@@ -7,7 +7,7 @@
 class PointLight : public Light {
 public:
     PointLight();
-    virtual ~PointLight() = default;
+    virtual ~PointLight();
 };
 
 #endif // POINTLIGHT_H

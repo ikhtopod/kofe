@@ -32,6 +32,7 @@ public:
 
 private:
     void UniformMaterialData() const;
+    void UniformLightData() const;
 
 public: /* IProcess */
     void Processing() override;

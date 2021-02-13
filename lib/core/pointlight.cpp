@@ -3,6 +3,8 @@
 #include "everywhere.h"
 #include "mesh.h"
 
+#include <algorithm>
+
 
 namespace {
 
@@ -146,4 +148,14 @@ std::shared_ptr<Mesh> CreateSphere() {
 PointLight::PointLight() :
     Light {} {
     m_children.Add(std::shared_ptr<Object>(::CreateSphere()));
+
+    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
+    pointLights.push_back(this);
+}
+
+PointLight::~PointLight() {
+    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
+    pointLights.erase(
+            std::remove(pointLights.begin(), pointLights.end(), this),
+            pointLights.end());
 }

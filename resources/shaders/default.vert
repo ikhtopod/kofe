@@ -17,11 +17,13 @@ layout (location = ATTRIB_TEXTURE) in vec2 aTexture;
 uniform MVP mvp;
 uniform mat4 transform;
 
+out vec3 FragPos;
 out vec3 Normal;
 out vec2 textureCoordinates;
 
 void main() {
-    gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPos.xyz, 1.f);
+    gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPos.xyz, 1.0f);
+    FragPos = vec3(mvp.model * transform * vec4(aPos.xyz, 1.0f));
     Normal = aNormal;
     textureCoordinates = aTexture;
 }

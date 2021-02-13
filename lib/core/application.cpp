@@ -24,6 +24,7 @@ Application::Application(const std::string& title) {
         // Objects are created in strict order
         Everywhere::Instance().Init<DeltaTime>(new DeltaTime {});
         Everywhere::Instance().Init<MaterialStorage>(new MaterialStorage {});
+        Everywhere::Instance().Init<LightStorage>(new LightStorage {});
         Everywhere::Instance().Init<Projection>(new Perspective {});
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<Graphics>(new OpenGL {});
@@ -47,6 +48,7 @@ Application::~Application() {
     Everywhere::Instance().Free<Graphics>();
     Everywhere::Instance().Free<Window>();
     Everywhere::Instance().Free<Projection>();
+    Everywhere::Instance().Free<LightStorage>();
     Everywhere::Instance().Free<MaterialStorage>();
     Everywhere::Instance().Free<DeltaTime>();
 

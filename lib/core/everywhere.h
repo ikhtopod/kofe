@@ -18,6 +18,10 @@
 #include "freecamera.h"
 #include "targetcamera.h"
 
+#include "lightstorage.h"
+#include "light.h"
+#include "pointlight.h"
+
 #include "materialstorage.h"
 #include "space.h"
 #include "projection.h"

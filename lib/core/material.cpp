@@ -1,6 +1,8 @@
 #include "material.h"
 
 #include "app_exceptions.h"
+#include "everywhere.h"
+#include <algorithm>
 
 
 namespace {
@@ -43,11 +45,30 @@ void Material::UniformMaterialData() const {
     }
 }
 
+void Material::UniformLightData() const {
+    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
+
+    size_t end = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS, pointLights.size());
+
+    for (auto& shader : m_shaders.Get()) {
+        for (size_t i = 0; i < end; ++i) {
+            std::string posName { "pointLights[" + std::to_string(i) + "].position" };
+            shader->SetVec3(posName,
+                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+
+            std::string colorName { "pointLights[" + std::to_string(i) + "].color" };
+            shader->SetVec4(colorName,
+                            static_cast<glm::vec4>(pointLights[i]->GetColor()));
+        }
+    }
+}
+
 void Material::Processing() {
     for (auto& shader : m_shaders.Get()) {
         shader->Use();
         shader->SetGlobalTransform(this->GetGlobalTransform());
         UniformMaterialData();
+        UniformLightData();
         shader->Processing();
     }
 
