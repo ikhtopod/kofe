@@ -53,20 +53,20 @@ public:
 
     void CheckLocationError(GLint location, const std::string& uniformName) const;
 
-    void SetBool(const std::string& uniformName, bool value) const;
-    void SetInt(const std::string& uniformName, GLint value) const;
-    void SetUInt(const std::string& uniformName, GLuint value) const;
-    void SetFloat(const std::string& uniformName, GLfloat value) const;
-    void SetDouble(const std::string& uniformName, GLdouble value) const;
+    void SetBool(const std::string& uniformName, bool value, bool isArray = false) const;
+    void SetInt(const std::string& uniformName, GLint value, bool isArray = false) const;
+    void SetUInt(const std::string& uniformName, GLuint value, bool isArray = false) const;
+    void SetFloat(const std::string& uniformName, GLfloat value, bool isArray = false) const;
+    void SetDouble(const std::string& uniformName, GLdouble value, bool isArray = false) const;
 
-    void SetVec1(const std::string& uniformName, const glm::vec1& value) const;
-    void SetVec2(const std::string& uniformName, const glm::vec2& value) const;
-    void SetVec3(const std::string& uniformName, const glm::vec3& value) const;
-    void SetVec4(const std::string& uniformName, const glm::vec4& value) const;
+    void SetVec1(const std::string& uniformName, const glm::vec1& value, bool isArray = false) const;
+    void SetVec2(const std::string& uniformName, const glm::vec2& value, bool isArray = false) const;
+    void SetVec3(const std::string& uniformName, const glm::vec3& value, bool isArray = false) const;
+    void SetVec4(const std::string& uniformName, const glm::vec4& value, bool isArray = false) const;
 
-    void SetMat2(const std::string& uniformName, const glm::mat2& value) const;
-    void SetMat3(const std::string& uniformName, const glm::mat3& value) const;
-    void SetMat4(const std::string& uniformName, const glm::mat4& value) const;
+    void SetMat2(const std::string& uniformName, const glm::mat2& value, bool isArray = false) const;
+    void SetMat3(const std::string& uniformName, const glm::mat3& value, bool isArray = false) const;
+    void SetMat4(const std::string& uniformName, const glm::mat4& value, bool isArray = false) const;
 
 public: /* IProcess */
     void Processing() override;

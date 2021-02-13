@@ -54,11 +54,13 @@ void Material::UniformLightData() const {
         for (size_t i = 0; i < end; ++i) {
             std::string posName { "pointLights[" + std::to_string(i) + "].position" };
             shader->SetVec3(posName,
-                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()),
+                            true);
 
             std::string colorName { "pointLights[" + std::to_string(i) + "].color" };
             shader->SetVec4(colorName,
-                            static_cast<glm::vec4>(pointLights[i]->GetColor()));
+                            static_cast<glm::vec4>(pointLights[i]->GetColor()),
+                            true);
         }
     }
 }
