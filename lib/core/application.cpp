@@ -163,6 +163,7 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<PointLight> tempPointLight_02 { new PointLight {} };
     tempPointLight_02->SetColor({ 0.600858f, 0.8f, 0.70773f });
+    //tempPointLight_02->GetTransform().SetPosition({ 2.0f, 0.5f, -0.1f });
     tempPointLight_01->Children().Add(tempPointLight_02);
 
     Space* tempSpace = new Space {};
@@ -180,7 +181,8 @@ void Application::DemoMainLoop() {
 
     auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().At(1);
     light->GetTransform().AddRotation({ angleRotation, angleRotation, angleRotation });
-    auto& lightChild = light->Children().Front();
+    auto& lightChild = light->Children().At(1);
     float addPos = static_cast<float>(std::sin(glfwGetTime()));
+    light->GetTransform().SetPosition({ -addPos, -addPos, -addPos });
     lightChild->GetTransform().SetPosition({ addPos, addPos, addPos });
 }
