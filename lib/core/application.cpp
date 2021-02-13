@@ -157,9 +157,13 @@ Space* Application::CreateDemoSpace() {
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject);
 
-    std::shared_ptr<PointLight> tempPointLight { new PointLight {} };
-    tempPointLight->SetColor({ 0.8f, 0.307634f, 0.016358f });
-    tempScene->GetObjects().Add(tempPointLight);
+    std::shared_ptr<PointLight> tempPointLight_01 { new PointLight {} };
+    tempPointLight_01->SetColor({ 0.8f, 0.307634f, 0.016358f });
+    tempScene->GetObjects().Add(tempPointLight_01);
+
+    std::shared_ptr<PointLight> tempPointLight_02 { new PointLight {} };
+    tempPointLight_02->SetColor({ 0.600858f, 0.8f, 0.70773f });
+    tempPointLight_01->Children().Add(tempPointLight_02);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
@@ -168,9 +172,15 @@ Space* Application::CreateDemoSpace() {
 }
 
 void Application::DemoMainLoop() {
-    auto object = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Front();
+    auto& object = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Front();
     float angleRotation = 100.0f * Everywhere::Instance().Get<DeltaTime>().GetDelta();
     object->GetTransform().AddRotation({ angleRotation / 2.0f, angleRotation, -angleRotation });
-    auto child = object->Children().Front();
+    auto& child = object->Children().Front();
     child->GetTransform().AddRotation({ angleRotation, -angleRotation, angleRotation * 2.0f });
+
+    auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().At(1);
+    light->GetTransform().AddRotation({ angleRotation, angleRotation, angleRotation });
+    auto& lightChild = light->Children().Front();
+    float addPos = static_cast<float>(std::sin(glfwGetTime()));
+    lightChild->GetTransform().SetPosition({ addPos, addPos, addPos });
 }
