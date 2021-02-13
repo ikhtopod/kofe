@@ -136,7 +136,7 @@ void Shader::SetUniformProcessingFunc(const Shader::UniformProcessing& func) {
 }
 
 void Shader::SetBool(const std::string& uniformName, bool value, bool isArray) const {
-    SetUInt(uniformName, static_cast<GLuint>(value));
+    SetUInt(uniformName, static_cast<GLuint>(value), isArray);
 }
 
 void Shader::CheckLocationError(GLint location, const std::string& uniformName) const {
