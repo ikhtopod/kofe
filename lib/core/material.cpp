@@ -60,19 +60,17 @@ void Material::UniformCameraData(std::shared_ptr<Shader>& shader) {
     shader->SetVec3("cameraPosition", cameraPosition, false);
 }
 
-void Material::AdditionalUniformData() {
-    for (std::shared_ptr<Shader>& shader : m_shaders.Get()) {
-        UniformMaterialData(shader);
-        UniformLightData(shader);
-        UniformCameraData(shader);
-    }
+void Material::AdditionalUniformData(std::shared_ptr<Shader>& shader) {
+    UniformMaterialData(shader);
+    UniformLightData(shader);
+    UniformCameraData(shader);
 }
 
 void Material::Processing() {
     for (auto& shader : m_shaders.Get()) {
         shader->Use();
         shader->SetGlobalTransform(this->GetGlobalTransform());
-        AdditionalUniformData();
+        AdditionalUniformData(shader);
         shader->Processing();
     }
 

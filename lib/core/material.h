@@ -35,7 +35,7 @@ private:
     void UniformLightData(std::shared_ptr<Shader>& shader);
     void UniformCameraData(std::shared_ptr<Shader>& shader);
 
-    void AdditionalUniformData();
+    void AdditionalUniformData(std::shared_ptr<Shader>& shader);
 
 public: /* IProcess */
     void Processing() override;
