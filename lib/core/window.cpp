@@ -121,7 +121,7 @@ void Window::SwapBuffers() {
     if (m_vSync) {
         glfwSwapBuffers(m_context);
     } else {
-        Everywhere::Instance().Get<OpenGL>().Flush();
+        Everywhere::Instance().Get<Graphics>().Flush();
     }
 }
 

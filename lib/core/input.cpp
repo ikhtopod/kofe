@@ -13,7 +13,7 @@ Input* Input::GetThisInput() {
 
 void Input::FramebufferSizeCallback(GLFWwindow*, int width, int height) {
     Everywhere::Instance().Get<Window>().GetScreen().Update(width, height);
-    Everywhere::Instance().Get<OpenGL>().UpdateViewportSize();
+    Everywhere::Instance().Get<Graphics>().UpdateViewportSize();
 }
 
 void Input::ScrollCallback(GLFWwindow*, double x, double y) {
@@ -21,7 +21,7 @@ void Input::ScrollCallback(GLFWwindow*, double x, double y) {
 
     if (thisInput == nullptr) return;
 
-    thisInput->SetScrollValue( { static_cast<float>(x), static_cast<float>(y) } );
+    thisInput->SetScrollValue({ static_cast<float>(x), static_cast<float>(y) });
 }
 
 void Input::MousePositionCallback(GLFWwindow*, double x, double y) {
@@ -29,7 +29,7 @@ void Input::MousePositionCallback(GLFWwindow*, double x, double y) {
 
     if (thisInput == nullptr) return;
 
-    thisInput->SetMousePosition( { static_cast<float>(x), static_cast<float>(y) } );
+    thisInput->SetMousePosition({ static_cast<float>(x), static_cast<float>(y) });
 
     thisInput->SetWasChangedMousePosition(true);
 }
@@ -66,8 +66,7 @@ Input::Input() :
     context {},
     m_mousePosition {},
     m_scrollValue {},
-    m_wasChangedMousePosition { false }
-{
+    m_wasChangedMousePosition { false } {
     Init();
 }
 

@@ -13,10 +13,9 @@
 
 
 class Input final :
-        public IProcess,
-        public ICanBeEverywhere,
-        public ObservableInput
-{
+    public IProcess,
+    public ICanBeEverywhere,
+    public ObservableInput {
 private:
     static Input* GetThisInput();
 
