@@ -24,13 +24,20 @@ void Material::InitShaders() {
         size_t end = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS, pointLights.size());
 
         for (size_t i = 0; i < end; ++i) {
-            std::string posName { "pointLights[" + std::to_string(i) + "].position" };
-            shader->SetVec3(posName,
-                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+            const std::string pointLightsName { "pointLights[" + std::to_string(i) + "]." };
 
-            std::string colorName { "pointLights[" + std::to_string(i) + "].color" };
-            shader->SetVec3(colorName,
-                            static_cast<glm::vec3>(pointLights[i]->GetColor()));
+            const std::string positionName { pointLightsName + "position" };
+            const std::string ambientName { pointLightsName + "ambient" };
+            const std::string diffusetName { pointLightsName + "diffuse" };
+            const std::string specularName { pointLightsName + "specular" };
+
+            shader->SetVec3(positionName,
+                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+            shader->SetVec3(ambientName,
+                            static_cast<glm::vec3>(pointLights[i]->GetColor()) * glm::vec3 { .2f });
+            shader->SetVec3(diffusetName,
+                            static_cast<glm::vec3>(pointLights[i]->GetColor()) * glm::vec3 { .5f });
+            shader->SetVec3(specularName, glm::vec3 { 1.0f });
         }
     };
 

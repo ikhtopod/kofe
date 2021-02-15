@@ -9,7 +9,9 @@ struct Material {
 
 struct Light {
     vec3 position;
-    vec3 color;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
 };
 
 const int MAX_POINT_LIGHTS = 6;
@@ -34,17 +36,17 @@ void main() {
     for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
         Light pointLight = pointLights[i];
 
-        vec3 ambient = pointLight.color * material.ambient;
+        vec3 ambient = pointLight.ambient * material.ambient;
 
         vec3 lightDirection = normalize(pointLight.position - FragPos);
         float diff = max(dot(NORM, lightDirection), 0.0f);
-        vec3 diffuse = pointLight.color * (diff * material.diffuse);
+        vec3 diffuse = pointLight.diffuse * (diff * material.diffuse);
 
         vec3 viewDirection = normalize(cameraPosition - FragPos);
         // Reflection vector along the normal axis
         vec3 reflectDirection = reflect(-lightDirection, NORM);
         float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
-        vec3 specular = pointLight.color * (spec * material.specular);
+        vec3 specular = pointLight.specular * (spec * material.specular);
 
         result += ambient + diffuse + specular;
     }
