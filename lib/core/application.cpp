@@ -179,7 +179,7 @@ void Application::DemoMainLoop() {
 
     auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().At(1);
     light->GetTransform().AddRotation({ angleRotation, angleRotation, angleRotation });
-    auto& lightChild = light->Children().At(1);
+    auto& lightChild = light->Children().Front();
     float addPos = static_cast<float>(std::sin(glfwGetTime()));
     light->GetTransform().SetPosition({ -addPos, -addPos, -addPos });
     lightChild->GetTransform().SetPosition({ addPos, addPos, addPos });

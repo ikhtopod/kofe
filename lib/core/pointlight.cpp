@@ -118,7 +118,7 @@ static std::vector<GLuint> indices {
     49, 3, 1, 51, 7, 4
 };
 
-std::shared_ptr<Mesh> CreateSphere() {
+Mesh* CreateSphere() {
     std::shared_ptr<Shader> tempShader {
         new Shader {
                 std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
@@ -135,7 +135,7 @@ std::shared_ptr<Mesh> CreateSphere() {
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
-    std::shared_ptr<Mesh> mesh { new Mesh(::VERTICES, ::indices) };
+    Mesh* mesh = new Mesh(::VERTICES, ::indices);
     mesh->SetMaterialId(materialId);
 
     return mesh;
@@ -146,7 +146,7 @@ std::shared_ptr<Mesh> CreateSphere() {
 
 PointLight::PointLight() :
     Light {} {
-    m_children.Add(std::shared_ptr<Object>(::CreateSphere()));
+    m_childMesh.reset(::CreateSphere());
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
     pointLights.push_back(this);

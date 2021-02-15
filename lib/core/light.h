@@ -3,6 +3,9 @@
 
 #include "object.h"
 #include "colorable.h"
+#include "mesh.h"
+
+#include <memory>
 
 
 class Light :
@@ -13,6 +16,9 @@ public:
     Light(Light&& other) noexcept = delete;
     Light& operator=(const Light& other) = delete;
     Light& operator=(Light&& other) noexcept = delete;
+
+protected:
+    std::shared_ptr<Mesh> m_childMesh;
 
 public:
     Light();
