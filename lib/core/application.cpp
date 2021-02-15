@@ -80,8 +80,6 @@ void Application::Run() {
 Space* Application::CreateDemoSpace() {
     std::shared_ptr<Shader> tempShader { new Shader {} };
 
-    tempShader->SetUniformProcessingFunc([](Shader*) {});
-
     std::shared_ptr<Texture> tempTexture {
         new Texture {
                 std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
