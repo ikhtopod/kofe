@@ -15,14 +15,11 @@ void Light::Processing() {
 void Light::SetColor(const Color& color) {
     Colorable::SetColor(color);
 
-    for (auto& child : m_children.Get()) {
-        std::shared_ptr<Mesh> meshChild { std::dynamic_pointer_cast<Mesh>(child) };
-
-        if (meshChild) {
-            std::shared_ptr<Material>& childMaterial =
-                    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(
-                            meshChild->GetMaterialId());
-            childMaterial->SetColor(color);
-        }
+    std::shared_ptr<Mesh> meshChild { std::dynamic_pointer_cast<Mesh>(m_children.Front()) };
+    if (meshChild) {
+        const size_t ID = meshChild->GetMaterialId();
+        std::shared_ptr<Material>& childMaterial =
+                Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(ID);
+        childMaterial->SetColor(color);
     }
 }
