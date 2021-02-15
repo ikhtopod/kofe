@@ -15,13 +15,13 @@ class Material :
     public IProcess,
     public GlobalTransformation,
     public Colorable {
-private:
+protected:
     CollectionOf<Shader> m_shaders;
     CollectionOf<Texture> m_textures;
 
 public:
     Material();
-    ~Material();
+    virtual ~Material();
 
 public:
     CollectionOf<Shader>& GetShaders();
@@ -30,12 +30,8 @@ public:
     CollectionOf<Texture>& GetTextures();
     const CollectionOf<Texture>& GetTextures() const;
 
-private:
-    void UniformMaterialData(std::shared_ptr<Shader>& shader);
-    void UniformLightData(std::shared_ptr<Shader>& shader);
-    void UniformCameraData(std::shared_ptr<Shader>& shader);
-
-    void AdditionalUniformData(std::shared_ptr<Shader>& shader);
+protected:
+    virtual void InitShaders();
 
 public: /* IProcess */
     void Processing() override;
