@@ -62,7 +62,7 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
-        DemoMainLoop();
+        //DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -82,7 +82,7 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Texture> tempTexture {
         new Texture {
-                std::filesystem::path { R"png(./resources/textures/texture_01.png)png" },
+                std::filesystem::path { R"png(./resources/textures/texture_box_01.png)png" },
         }
     };
 

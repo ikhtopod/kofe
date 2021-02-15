@@ -10,7 +10,7 @@ const uint ATTRIB_POSITION = 0;
 const uint ATTRIB_NORMAL = 1;
 const uint ATTRIB_TEXTURE = 2;
 
-layout (location = ATTRIB_POSITION) in vec3 aPos;
+layout (location = ATTRIB_POSITION) in vec3 aPosition;
 layout (location = ATTRIB_NORMAL) in vec3 aNormal;
 layout (location = ATTRIB_TEXTURE) in vec2 aTexture;
 
@@ -22,9 +22,9 @@ out vec3 Normal;
 out vec2 textureCoordinates;
 
 void main() {
-    gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPos.xyz, 1.0f);
-    FragPos = vec3(mvp.model * transform * vec4(aPos.xyz, 1.0f));
-    // Adjust aNormal to the transformed aPos
+    gl_Position = mvp.projection * mvp.view * mvp.model * transform * vec4(aPosition.xyz, 1.0f);
+    FragPos = vec3(mvp.model * transform * vec4(aPosition.xyz, 1.0f));
+    // Adjust aNormal to the transformed aPosition
     Normal = mat3(transpose(inverse(mvp.model * transform))) * aNormal;
     textureCoordinates = aTexture;
 }
