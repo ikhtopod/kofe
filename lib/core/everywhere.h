@@ -46,6 +46,20 @@ private:
 private:
     std::unordered_map<std::string, ICanBeEverywhere*> m_units;
 
+    template<typename U>
+    U& FindBase() {
+        for (auto& unit : m_units) {
+            using Base = typename std::remove_pointer<decltype(unit.second)>::type;
+            using Derived = typename std::remove_pointer<U>::type;
+
+            if (std::is_base_of<Base, Derived>::value) {
+                return *dynamic_cast<U*>(unit.second);
+            }
+        }
+
+        throw EverywhereException { "Unit \"" + ClassName<U>() + "\" is not exists" };
+    }
+
 public:
     Everywhere();
     virtual ~Everywhere();
@@ -63,6 +77,24 @@ public:
     const U& Get() const {
         if (!m_units.count(ClassName<U>())) {
             throw EverywhereException { "Unit \"" + ClassName<U>() + "\" is not exists" };
+        }
+
+        return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
+    }
+
+    template<typename U>
+    U& FindSimilarClass() {
+        if (!m_units.count(ClassName<U>())) {
+            return FindBase<U>();
+        }
+
+        return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
+    }
+
+    template<typename U>
+    const U& FindSimilarClass() const {
+        if (!m_units.count(ClassName<U>())) {
+            return FindBase<U>();
         }
 
         return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
