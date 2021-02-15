@@ -5,7 +5,7 @@
 
 Light::Light() :
     Object {},
-    Colorable {},
+    m_color {},
     m_childMesh {} {}
 
 void Light::Processing() {
@@ -15,8 +15,12 @@ void Light::Processing() {
     m_childMesh->Processing();
 }
 
+Color Light::GetColor() const {
+    return m_color;
+}
+
 void Light::SetColor(const Color& color) {
-    Colorable::SetColor(color);
+    m_color = color;
 
     if (m_childMesh) {
         const size_t ID = m_childMesh->GetMaterialId();

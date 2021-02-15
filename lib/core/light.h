@@ -2,15 +2,13 @@
 #define LIGHT_H
 
 #include "object.h"
-#include "colorable.h"
 #include "mesh.h"
+#include "color.h"
 
 #include <memory>
 
 
-class Light :
-    public Object,
-    public Colorable {
+class Light : public Object {
 public:
     Light(const Light& other) = delete;
     Light(Light&& other) noexcept = delete;
@@ -18,6 +16,7 @@ public:
     Light& operator=(Light&& other) noexcept = delete;
 
 protected:
+    Color m_color;
     std::shared_ptr<Mesh> m_childMesh;
 
 public:
@@ -25,7 +24,8 @@ public:
     virtual ~Light() = default;
 
 public:
-    void SetColor(const Color& color) override;
+    Color GetColor() const;
+    void SetColor(const Color& color);
 
 public: /* IProcess */
     void Processing() override;

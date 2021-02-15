@@ -59,9 +59,9 @@ void Material::InitShaders() {
 
 Material::Material() :
     GlobalTransformation {},
-    Colorable { Color::WHITE },
     m_shaders {},
-    m_textures {} {}
+    m_textures {},
+    m_color { Color::WHITE } {}
 
 Material::~Material() {
     m_shaders.Clear();
@@ -80,6 +80,14 @@ CollectionOf<Texture>& Material::GetTextures() {
 }
 const CollectionOf<Texture>& Material::GetTextures() const {
     return m_textures;
+}
+
+Color Material::GetColor() const {
+    return m_color;
+}
+
+void Material::SetColor(const Color& color) {
+    m_color = color;
 }
 
 void Material::Processing() {
