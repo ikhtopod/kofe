@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <filesystem>
+#include <vector>
 
 
 class Shader final :
@@ -16,6 +17,7 @@ class Shader final :
     public GlobalTransformation {
 private:
     using UniformProcessing = std::function<void(Shader*)>;
+    using UniformProcessingVector = std::vector<UniformProcessing>;
 
     static const std::filesystem::path DEFAULT_VERTEX_PATH;
     static const std::filesystem::path DEFAULT_FRAGMENT_PATH;
@@ -25,7 +27,7 @@ private:
 
 private:
     GLuint m_program;
-    UniformProcessing m_uniformProcessingFunc;
+    UniformProcessingVector m_uniformProcessingFunctions;
 
 public:
     Shader();
@@ -49,24 +51,25 @@ private:
 public:
     void Use() const;
 
-    void SetUniformProcessingFunc(const UniformProcessing& func);
+    UniformProcessingVector& UniformProcessingFunctions();
+    const UniformProcessingVector& UniformProcessingFunctions() const;
 
     void CheckLocationError(GLint location, const std::string& uniformName) const;
 
-    void SetBool(const std::string& uniformName, bool value, bool checkError = true) const;
-    void SetInt(const std::string& uniformName, GLint value, bool checkError = true) const;
-    void SetUInt(const std::string& uniformName, GLuint value, bool checkError = true) const;
-    void SetFloat(const std::string& uniformName, GLfloat value, bool checkError = true) const;
-    void SetDouble(const std::string& uniformName, GLdouble value, bool checkError = true) const;
+    void SetBool(const std::string& uniformName, bool value) const;
+    void SetInt(const std::string& uniformName, GLint value) const;
+    void SetUInt(const std::string& uniformName, GLuint value) const;
+    void SetFloat(const std::string& uniformName, GLfloat value) const;
+    void SetDouble(const std::string& uniformName, GLdouble value) const;
 
-    void SetVec1(const std::string& uniformName, const glm::vec1& value, bool checkError = true) const;
-    void SetVec2(const std::string& uniformName, const glm::vec2& value, bool checkError = true) const;
-    void SetVec3(const std::string& uniformName, const glm::vec3& value, bool checkError = true) const;
-    void SetVec4(const std::string& uniformName, const glm::vec4& value, bool checkError = true) const;
+    void SetVec1(const std::string& uniformName, const glm::vec1& value) const;
+    void SetVec2(const std::string& uniformName, const glm::vec2& value) const;
+    void SetVec3(const std::string& uniformName, const glm::vec3& value) const;
+    void SetVec4(const std::string& uniformName, const glm::vec4& value) const;
 
-    void SetMat2(const std::string& uniformName, const glm::mat2& value, bool checkError = true) const;
-    void SetMat3(const std::string& uniformName, const glm::mat3& value, bool checkError = true) const;
-    void SetMat4(const std::string& uniformName, const glm::mat4& value, bool checkError = true) const;
+    void SetMat2(const std::string& uniformName, const glm::mat2& value) const;
+    void SetMat3(const std::string& uniformName, const glm::mat3& value) const;
+    void SetMat4(const std::string& uniformName, const glm::mat4& value) const;
 
 public: /* IProcess */
     void Processing() override;

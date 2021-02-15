@@ -25,13 +25,13 @@ Shader::Shader(const std::filesystem::path& vertexPath,
                const std::filesystem::path& fragmentPath) :
     GlobalTransformation {},
     m_program {},
-    m_uniformProcessingFunc {} {
-    m_uniformProcessingFunc = [](Shader*) {};
+    m_uniformProcessingFunctions {} {
     CreateProgram(vertexPath, fragmentPath);
 }
 
 Shader::~Shader() {
     glDeleteProgram(m_program);
+    m_uniformProcessingFunctions.clear();
 }
 
 void Shader::CreateProgram(const std::filesystem::path& vertexPath,
@@ -131,12 +131,16 @@ void Shader::Use() const {
     glUseProgram(m_program);
 }
 
-void Shader::SetUniformProcessingFunc(const Shader::UniformProcessing& func) {
-    m_uniformProcessingFunc = func;
+Shader::UniformProcessingVector& Shader::UniformProcessingFunctions() {
+    return m_uniformProcessingFunctions;
 }
 
-void Shader::SetBool(const std::string& uniformName, bool value, bool checkError) const {
-    SetUInt(uniformName, static_cast<GLuint>(value), checkError);
+const Shader::UniformProcessingVector& Shader::UniformProcessingFunctions() const {
+    return m_uniformProcessingFunctions;
+}
+
+void Shader::SetBool(const std::string& uniformName, bool value) const {
+    SetUInt(uniformName, static_cast<GLuint>(value));
 }
 
 void Shader::CheckLocationError(GLint location, const std::string& uniformName) const {
@@ -145,69 +149,69 @@ void Shader::CheckLocationError(GLint location, const std::string& uniformName) 
     }
 }
 
-void Shader::SetInt(const std::string& uniformName, GLint value, bool checkError) const {
+void Shader::SetInt(const std::string& uniformName, GLint value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform1i(location, value);
 }
 
-void Shader::SetUInt(const std::string& uniformName, GLuint value, bool checkError) const {
+void Shader::SetUInt(const std::string& uniformName, GLuint value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform1ui(location, value);
 }
 
-void Shader::SetFloat(const std::string& uniformName, GLfloat value, bool checkError) const {
+void Shader::SetFloat(const std::string& uniformName, GLfloat value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform1f(location, value);
 }
 
-void Shader::SetDouble(const std::string& uniformName, GLdouble value, bool checkError) const {
+void Shader::SetDouble(const std::string& uniformName, GLdouble value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform1d(location, value);
 }
 
-void Shader::SetVec1(const std::string& uniformName, const glm::vec1& value, bool checkError) const {
+void Shader::SetVec1(const std::string& uniformName, const glm::vec1& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform1fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec2(const std::string& uniformName, const glm::vec2& value, bool checkError) const {
+void Shader::SetVec2(const std::string& uniformName, const glm::vec2& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform2fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec3(const std::string& uniformName, const glm::vec3& value, bool checkError) const {
+void Shader::SetVec3(const std::string& uniformName, const glm::vec3& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform3fv(location, 1, &value[0]);
 }
 
-void Shader::SetVec4(const std::string& uniformName, const glm::vec4& value, bool checkError) const {
+void Shader::SetVec4(const std::string& uniformName, const glm::vec4& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniform4fv(location, 1, &value[0]);
 }
 
-void Shader::SetMat2(const std::string& uniformName, const glm::mat2& value, bool checkError) const {
+void Shader::SetMat2(const std::string& uniformName, const glm::mat2& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::SetMat3(const std::string& uniformName, const glm::mat3& value, bool checkError) const {
+void Shader::SetMat3(const std::string& uniformName, const glm::mat3& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::SetMat4(const std::string& uniformName, const glm::mat4& value, bool checkError) const {
+void Shader::SetMat4(const std::string& uniformName, const glm::mat4& value) const {
     GLint location = glGetUniformLocation(m_program, uniformName.c_str());
-    if (checkError) CheckLocationError(location, uniformName);
+    CheckLocationError(location, uniformName);
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
@@ -220,5 +224,7 @@ void Shader::Processing() {
 
     SetMat4("transform", GetGlobalTransform().ToMatrix());
 
-    m_uniformProcessingFunc(this);
+    for (auto& uniformProcessingFunction : m_uniformProcessingFunctions) {
+        uniformProcessingFunction(this);
+    }
 }
