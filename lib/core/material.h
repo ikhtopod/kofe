@@ -6,9 +6,8 @@
 #include "shader.h"
 #include "texture.h"
 #include "globaltransformation.h"
-#include "color.h"
 
-#include <string>
+#include <memory>
 
 
 class Material :
@@ -17,7 +16,6 @@ class Material :
 protected:
     std::shared_ptr<Shader> m_shader;
     CollectionOf<Texture> m_textures;
-    Color m_color;
 
 public:
     Material();
@@ -31,11 +29,8 @@ public:
     CollectionOf<Texture>& GetTextures();
     const CollectionOf<Texture>& GetTextures() const;
 
-    Color GetColor() const;
-    void SetColor(const Color& color);
-
 protected:
-    virtual void InitShader();
+    virtual void DoInitShader() = 0;
 
 public: /* IProcess */
     void Processing() override;

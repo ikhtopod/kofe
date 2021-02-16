@@ -4,6 +4,7 @@
 #include "everywhere.h"
 #include "mesh.h"
 #include "pointlight.h"
+#include "defaultmaterial.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -86,7 +87,7 @@ Space* Application::CreateDemoSpace() {
         }
     };
 
-    std::shared_ptr<Material> tempMaterial { new Material {} };
+    std::shared_ptr<DefaultMaterial> tempMaterial { new DefaultMaterial {} };
     tempMaterial->SetShader(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
 

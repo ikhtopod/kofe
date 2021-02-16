@@ -1,6 +1,7 @@
 #include "light.h"
 
 #include "everywhere.h"
+#include "lightmaterial.h"
 
 
 Light::Light() :
@@ -24,8 +25,12 @@ void Light::SetColor(const Color& color) {
 
     if (m_childMesh) {
         const size_t ID = m_childMesh->GetMaterialId();
-        std::shared_ptr<Material>& childMaterial =
-                Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(ID);
-        childMaterial->SetColor(color);
+        std::shared_ptr<LightMaterial> childLightMaterial =
+                std::dynamic_pointer_cast<LightMaterial>(
+                        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(ID));
+
+        if (childLightMaterial) {
+            childLightMaterial->SetColor(color);
+        }
     }
 }

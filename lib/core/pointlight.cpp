@@ -2,7 +2,7 @@
 
 #include "everywhere.h"
 #include "mesh.h"
-#include "pointlightmaterial.h"
+#include "lightmaterial.h"
 
 #include <algorithm>
 
@@ -128,7 +128,7 @@ Mesh* CreateSphere() {
 
     std::shared_ptr<Texture> tempTexture { new Texture {} };
 
-    std::shared_ptr<PointLightMaterial> tempMaterial { new PointLightMaterial {} };
+    std::shared_ptr<LightMaterial> tempMaterial { new LightMaterial {} };
     tempMaterial->SetShader(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
 
