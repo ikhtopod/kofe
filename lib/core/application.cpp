@@ -34,7 +34,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
 
         // Additional settings
-        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0.0f, 0.0f, 6.0f });
+        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0.0f, 0.0f, 3.0f });
     } catch (...) {
         Application::~Application();
         throw;
@@ -91,8 +91,16 @@ Space* Application::CreateDemoSpace() {
                       tempDiffuseTexture->NextTextureUnit() }
     };
 
+    std::shared_ptr<Texture> tempEmissionTexture {
+        new Texture { std::filesystem::path {
+                              R"png(./resources/textures/texture_box_01_emission.png)png" },
+                      tempSpecularTexture->NextTextureUnit() }
+    };
+
     std::shared_ptr<TextureMaterial> tempMaterial {
-        new TextureMaterial { tempDiffuseTexture, tempSpecularTexture }
+        new TextureMaterial { tempDiffuseTexture,
+                              tempSpecularTexture,
+                              tempEmissionTexture }
     };
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);

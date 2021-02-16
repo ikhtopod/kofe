@@ -15,11 +15,7 @@ static const std::filesystem::path TEXTURE_FRAGMENT_PATH {
     R"frag(./resources/shaders/texture-shader.frag)frag"
 };
 
-static const std::filesystem::path DEFAULT_DEFFUSE_PATH {
-    R"png(./resources/textures/default_texture.png)png"
-};
-
-static const std::filesystem::path DEFAULT_SPECULAR_PATH {
+static const std::filesystem::path DEFAULT_TETURE_PATH {
     R"png(./resources/textures/default_texture.png)png"
 };
 
@@ -33,6 +29,7 @@ void TextureMaterial::DoInitShader() {
         if (this == nullptr) return;
         shader->SetInt("material.diffuse", GetDiffuse()->GetTextureUnit() - GL_TEXTURE0);
         shader->SetInt("material.specular", GetSpecular()->GetTextureUnit() - GL_TEXTURE0);
+        shader->SetInt("material.emission", GetEmission()->GetTextureUnit() - GL_TEXTURE0);
         shader->SetFloat("material.shininess", GetShininess());
     };
 
@@ -79,23 +76,27 @@ void TextureMaterial::DoInitShader() {
 
 TextureMaterial::TextureMaterial() :
     TextureMaterial {
-        std::shared_ptr<Texture> { new Texture { ::DEFAULT_DEFFUSE_PATH, GL_TEXTURE0 } },
-        std::shared_ptr<Texture> { new Texture { ::DEFAULT_SPECULAR_PATH, GL_TEXTURE1 } },
+        std::shared_ptr<Texture> { new Texture { ::DEFAULT_TETURE_PATH, GL_TEXTURE0 } },
+        std::shared_ptr<Texture> { new Texture { ::DEFAULT_TETURE_PATH, GL_TEXTURE1 } },
+        std::shared_ptr<Texture> { new Texture { ::DEFAULT_TETURE_PATH, GL_TEXTURE2 } },
         ::DEFAULT_SHININESS
     } {}
 
 
 TextureMaterial::TextureMaterial(const std::shared_ptr<Texture>& diffuse,
-                                 const std::shared_ptr<Texture>& specular) :
-    TextureMaterial { diffuse, specular, ::DEFAULT_SHININESS } {}
+                                 const std::shared_ptr<Texture>& specular,
+                                 const std::shared_ptr<Texture>& emission) :
+    TextureMaterial { diffuse, specular, emission, ::DEFAULT_SHININESS } {}
 
 TextureMaterial::TextureMaterial(const std::shared_ptr<Texture>& diffuse,
                                  const std::shared_ptr<Texture>& specular,
+                                 const std::shared_ptr<Texture>& emission,
                                  float shininess) :
     Material { std::shared_ptr<Shader> {
             new Shader { TEXTURE_VERTEX_PATH, TEXTURE_FRAGMENT_PATH } } },
     m_diffuse { diffuse },
     m_specular { specular },
+    m_emission { emission },
     m_shininess { shininess } {}
 
 
@@ -104,6 +105,7 @@ void TextureMaterial::Processing() {
 
     m_diffuse->Processing();
     m_specular->Processing();
+    m_emission->Processing();
 }
 
 
@@ -113,6 +115,10 @@ std::shared_ptr<Texture> TextureMaterial::GetDiffuse() const {
 
 std::shared_ptr<Texture> TextureMaterial::GetSpecular() const {
     return m_specular;
+}
+
+std::shared_ptr<Texture> TextureMaterial::GetEmission() const {
+    return m_emission;
 }
 
 float TextureMaterial::GetShininess() const {
@@ -125,6 +131,10 @@ void TextureMaterial::SetDiffuse(const std::shared_ptr<Texture>& diffuse) {
 
 void TextureMaterial::SetSpecular(const std::shared_ptr<Texture>& specular) {
     m_specular = specular;
+}
+
+void TextureMaterial::SetEmission(const std::shared_ptr<Texture>& emission) {
+    m_emission = emission;
 }
 
 void TextureMaterial::SetShininess(float shininess) {
