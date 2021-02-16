@@ -8,9 +8,11 @@ struct MVP {
 
 const uint ATTRIB_POSITION = 0;
 const uint ATTRIB_NORMAL = 1;
+const uint ATTRIB_TEXTURE = 2;
 
 layout (location = ATTRIB_POSITION) in vec3 aPosition;
 layout (location = ATTRIB_NORMAL) in vec3 aNormal;
+layout (location = ATTRIB_TEXTURE) in vec2 aTexture;
 
 uniform MVP mvp;
 uniform mat4 transform;
