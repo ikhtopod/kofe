@@ -3,14 +3,18 @@
 #include "app_exceptions.h"
 
 
-const glm::vec4 Texture::TEXTURE_BORDER_COLOR { .0f, .0f, .0f, 1.f };
-const GLsizei Texture::BUFFER_SIZE { 1 };
-const GLint Texture::MIPMAP_LEVEL { 0 };
-const GLint Texture::BORDER { 0 }; // always zero (legacy)
+namespace {
 
-const std::filesystem::path Texture::DEFAULT_TEXTURE_PATH {
+static const glm::vec4 TEXTURE_BORDER_COLOR { .0f, .0f, .0f, 1.f };
+static const GLsizei BUFFER_SIZE { 1 };
+static const GLint MIPMAP_LEVEL { 0 };
+static const GLint BORDER { 0 }; // always zero (legacy)
+
+static const std::filesystem::path DEFAULT_TEXTURE_PATH {
     R"png(./resources/textures/default_texture.png)png"
 };
+
+} // namespace
 
 void Texture::InitTextureWrapParameters() const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -64,9 +68,15 @@ void Texture::InitTexture(const std::filesystem::path& texturePath) {
 Texture::Texture() :
     Texture { DEFAULT_TEXTURE_PATH } {}
 
+Texture::Texture(GLenum textureUnit) :
+    Texture { DEFAULT_TEXTURE_PATH, textureUnit } {}
+
 Texture::Texture(const std::filesystem::path& texturePath) :
+    Texture { texturePath, GL_TEXTURE0 } {}
+
+Texture::Texture(const std::filesystem::path& texturePath, GLenum textureUnit) :
     m_textureChannelComponents { TextureChannelComponents::RGBA },
-    m_textureUnit { GL_TEXTURE0 },
+    m_textureUnit { textureUnit },
     m_flipVertical { false },
     m_width {},
     m_height {},
@@ -81,6 +91,10 @@ Texture::~Texture() {
 
 void Texture::Unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+GLenum Texture::GetTextureUnit() const {
+    return m_textureUnit;
 }
 
 void Texture::InvertVertical() {

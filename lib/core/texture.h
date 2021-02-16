@@ -22,15 +22,6 @@ enum class TextureChannelComponents : int {
 
 class Texture final : public IProcess {
 private:
-    static const glm::vec4 TEXTURE_BORDER_COLOR;
-
-    static const GLsizei BUFFER_SIZE;
-    static const GLint MIPMAP_LEVEL;
-    static const GLint BORDER;
-
-    static const std::filesystem::path DEFAULT_TEXTURE_PATH;
-
-private:
     const TextureChannelComponents m_textureChannelComponents;
     const GLenum m_textureUnit; // GL_TEXTURE0 - always activated by default
     bool m_flipVertical;
@@ -47,23 +38,30 @@ private:
     void InitTexture(const std::filesystem::path& texturePath);
 
 public:
-    Texture();
     Texture(const Texture&) = delete;
     Texture(Texture&&) = delete;
     Texture& operator=(const Texture&) = delete;
     Texture& operator=(Texture&&) = delete;
-    ~Texture();
 
+public:
+    Texture();
+    virtual ~Texture();
+
+    explicit Texture(GLenum textureUnit);
     explicit Texture(const std::filesystem::path& texturePath);
+    explicit Texture(const std::filesystem::path& texturePath, GLenum textureUnit);
 
 private:
     void Unbind() const;
 
-public: /* IProcess */
-    void Processing() override;
+public:
+    GLenum GetTextureUnit() const;
 
     void InvertVertical();
     GLenum NextTextureUnit() const;
+
+public: /* IProcess */
+    void Processing() override;
 };
 
 #endif // TEXTURE_H
