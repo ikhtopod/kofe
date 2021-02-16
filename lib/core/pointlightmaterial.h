@@ -6,7 +6,7 @@
 
 class PointLightMaterial : public Material {
 protected: /* Material */
-    void InitShaders() override;
+    void InitShader() override;
 };
 
 #endif // POINTLIGHTMATERIAL_H

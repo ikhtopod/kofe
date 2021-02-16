@@ -87,7 +87,7 @@ Space* Application::CreateDemoSpace() {
     };
 
     std::shared_ptr<Material> tempMaterial { new Material {} };
-    tempMaterial->GetShaders().Add(tempShader);
+    tempMaterial->SetShader(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);

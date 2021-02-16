@@ -15,7 +15,7 @@ class Material :
     public IProcess,
     public GlobalTransformation {
 protected:
-    CollectionOf<Shader> m_shaders;
+    std::shared_ptr<Shader> m_shader;
     CollectionOf<Texture> m_textures;
     Color m_color;
 
@@ -24,8 +24,9 @@ public:
     virtual ~Material();
 
 public:
-    CollectionOf<Shader>& GetShaders();
-    const CollectionOf<Shader>& GetShaders() const;
+    std::shared_ptr<Shader> GetShader();
+    const std::shared_ptr<Shader> GetShader() const;
+    void SetShader(const std::shared_ptr<Shader>& shader);
 
     CollectionOf<Texture>& GetTextures();
     const CollectionOf<Texture>& GetTextures() const;
@@ -34,7 +35,7 @@ public:
     void SetColor(const Color& color);
 
 protected:
-    virtual void InitShaders();
+    virtual void InitShader();
 
 public: /* IProcess */
     void Processing() override;

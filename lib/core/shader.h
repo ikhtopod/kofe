@@ -15,12 +15,13 @@
 class Shader final :
     public IProcess,
     public GlobalTransformation {
+public:
+    static const std::filesystem::path DEFAULT_VERTEX_PATH;
+    static const std::filesystem::path DEFAULT_FRAGMENT_PATH;
+
 private:
     using UniformProcessing = std::function<void(Shader*)>;
     using UniformProcessingVector = std::vector<UniformProcessing>;
-
-    static const std::filesystem::path DEFAULT_VERTEX_PATH;
-    static const std::filesystem::path DEFAULT_FRAGMENT_PATH;
 
     static constexpr GLuint INFOLOG_SIZE { 512 };
     static constexpr GLint LOCATION_ERROR_FLAG { -1 };

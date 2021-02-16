@@ -129,7 +129,7 @@ Mesh* CreateSphere() {
     std::shared_ptr<Texture> tempTexture { new Texture {} };
 
     std::shared_ptr<PointLightMaterial> tempMaterial { new PointLightMaterial {} };
-    tempMaterial->GetShaders().Add(tempShader);
+    tempMaterial->SetShader(tempShader);
     tempMaterial->GetTextures().Add(tempTexture);
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);

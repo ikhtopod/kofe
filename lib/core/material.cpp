@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-void Material::InitShaders() {
+void Material::InitShader() {
     auto UniformMaterialFunc = [this](Shader* shader) {
         if (this == nullptr) return;
 
@@ -50,29 +50,30 @@ void Material::InitShaders() {
         shader->SetVec3("cameraPosition", cameraPosition);
     };
 
-    for (auto& shader : m_shaders.Get()) {
-        shader->UniformProcessingFunctions().push_back(UniformMaterialFunc);
-        shader->UniformProcessingFunctions().push_back(UniformLightFunc);
-        shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
-    }
+    m_shader->UniformProcessingFunctions().push_back(UniformMaterialFunc);
+    m_shader->UniformProcessingFunctions().push_back(UniformLightFunc);
+    m_shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
 }
 
 Material::Material() :
     GlobalTransformation {},
-    m_shaders {},
+    m_shader { new Shader {} },
     m_textures {},
     m_color { Color::WHITE } {}
 
 Material::~Material() {
-    m_shaders.Clear();
     m_textures.Clear();
 }
 
-CollectionOf<Shader>& Material::GetShaders() {
-    return m_shaders;
+std::shared_ptr<Shader> Material::GetShader() {
+    return m_shader;
 }
-const CollectionOf<Shader>& Material::GetShaders() const {
-    return m_shaders;
+const std::shared_ptr<Shader> Material::GetShader() const {
+    return m_shader;
+}
+
+void Material::SetShader(const std::shared_ptr<Shader>& shader) {
+    m_shader = shader;
 }
 
 CollectionOf<Texture>& Material::GetTextures() {
@@ -91,14 +92,12 @@ void Material::SetColor(const Color& color) {
 }
 
 void Material::Processing() {
-    for (auto& shader : m_shaders.Get()) {
-        if (shader->UniformProcessingFunctions().size() == 0) {
-            InitShaders();
-        }
-
-        shader->SetGlobalTransform(this->GetGlobalTransform());
-        shader->Processing();
+    if (m_shader->UniformProcessingFunctions().size() == 0) {
+        InitShader();
     }
+
+    m_shader->SetGlobalTransform(this->GetGlobalTransform());
+    m_shader->Processing();
 
     for (auto& texture : m_textures.Get()) {
         texture->Processing();

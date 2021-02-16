@@ -1,14 +1,12 @@
 #include "pointlightmaterial.h"
 
 
-void PointLightMaterial::InitShaders() {
+void PointLightMaterial::InitShader() {
     auto UniformCameraFunc = [this](Shader* shader) {
         if (this == nullptr) return;
 
         shader->SetVec4("color", static_cast<glm::vec4>(GetColor()));
     };
 
-    for (auto& shader : m_shaders.Get()) {
-        shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
-    }
+    m_shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
 }
