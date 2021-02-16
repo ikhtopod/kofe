@@ -23,11 +23,11 @@ public:
     ~Color() = default;
 
 public:
-    Color(const glm::vec3& rgb);
-    Color(const glm::vec3& rgb, color_type a);
-    Color(const glm::vec4& rgba);
-    Color(color_type r, color_type g, color_type b);
-    Color(color_type r, color_type g, color_type b, color_type a);
+    explicit Color(const glm::vec3& rgb);
+    explicit Color(const glm::vec3& rgb, color_type a);
+    explicit Color(const glm::vec4& rgba);
+    explicit Color(color_type r, color_type g, color_type b);
+    explicit Color(color_type r, color_type g, color_type b, color_type a);
 
 public:
     friend void swap(Color&, Color&);

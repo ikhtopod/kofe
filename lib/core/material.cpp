@@ -2,30 +2,23 @@
 
 
 Material::Material() :
-    GlobalTransformation {},
-    m_shader { new Shader {} },
-    m_textures {} {}
+    Material { std::shared_ptr<Shader> { new Shader {} } } {}
 
-Material::~Material() {
-    m_textures.Clear();
-}
+
+Material::Material(const std::shared_ptr<Shader>& shader) :
+    GlobalTransformation {},
+    m_shader { shader } {}
 
 std::shared_ptr<Shader> Material::GetShader() {
     return m_shader;
 }
+
 const std::shared_ptr<Shader> Material::GetShader() const {
     return m_shader;
 }
 
 void Material::SetShader(const std::shared_ptr<Shader>& shader) {
     m_shader = shader;
-}
-
-CollectionOf<Texture>& Material::GetTextures() {
-    return m_textures;
-}
-const CollectionOf<Texture>& Material::GetTextures() const {
-    return m_textures;
 }
 
 void Material::Processing() {
@@ -35,8 +28,4 @@ void Material::Processing() {
 
     m_shader->SetGlobalTransform(this->GetGlobalTransform());
     m_shader->Processing();
-
-    for (auto& texture : m_textures.Get()) {
-        texture->Processing();
-    }
 }

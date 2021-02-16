@@ -4,7 +4,7 @@
 #include "everywhere.h"
 #include "mesh.h"
 #include "pointlight.h"
-#include "defaultmaterial.h"
+#include "phongmaterial.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -79,17 +79,8 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    std::shared_ptr<Shader> tempShader { new Shader {} };
-
-    std::shared_ptr<Texture> tempTexture {
-        new Texture {
-                std::filesystem::path { R"png(./resources/textures/texture_box_01.png)png" },
-        }
-    };
-
-    std::shared_ptr<DefaultMaterial> tempMaterial { new DefaultMaterial {} };
-    tempMaterial->SetShader(tempShader);
-    tempMaterial->GetTextures().Add(tempTexture);
+    std::shared_ptr<PhongMaterial> tempMaterial { new PhongMaterial {} };
+    tempMaterial->SetAmbientAndDiffuse(Color { .7f, .6f, .8f });
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
@@ -157,11 +148,11 @@ Space* Application::CreateDemoSpace() {
     tempScene->GetObjects().Add(tempMeshObject);
 
     std::shared_ptr<PointLight> tempPointLight_01 { new PointLight {} };
-    tempPointLight_01->SetColor({ 0.8f, 0.307634f, 0.016358f });
+    tempPointLight_01->SetColor(Color { 0.8f, 0.307634f, 0.016358f });
     tempScene->GetObjects().Add(tempPointLight_01);
 
     std::shared_ptr<PointLight> tempPointLight_02 { new PointLight {} };
-    tempPointLight_02->SetColor({ 0.600858f, 0.8f, 0.70773f });
+    tempPointLight_02->SetColor(Color { 0.600858f, 0.8f, 0.70773f });
     //tempPointLight_02->GetTransform().SetPosition({ 2.0f, 0.5f, -0.1f });
     tempPointLight_01->Children().Add(tempPointLight_02);
 

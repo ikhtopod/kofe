@@ -5,9 +5,13 @@
 
 
 Light::Light() :
+    Light { Color::BLACK } {}
+
+Light::Light(const Color& color) :
     Object {},
-    m_color {},
+    m_color { color },
     m_childMesh {} {}
+
 
 void Light::Processing() {
     Object::Processing();

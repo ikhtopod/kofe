@@ -65,7 +65,7 @@ static const std::vector<Vertex> VERTICES {
 
 };
 
-static std::vector<GLuint> indices {
+static const std::vector<GLuint> INDICES {
     0, 1, 2, 4, 6, 3,
     8, 10, 7, 3, 2, 1,
     7, 5, 4, 8, 11, 9,
@@ -119,33 +119,39 @@ static std::vector<GLuint> indices {
 };
 
 Mesh* CreateSphere() {
-    std::shared_ptr<Shader> tempShader {
-        new Shader {
-                std::filesystem::path { R"vert(./resources/shaders/default.vert)vert" },
-                std::filesystem::path { R"frag(./resources/shaders/default-light.frag)frag" },
-        }
-    };
-
-    std::shared_ptr<Texture> tempTexture { new Texture {} };
-
     std::shared_ptr<LightMaterial> tempMaterial { new LightMaterial {} };
-    tempMaterial->SetShader(tempShader);
-    tempMaterial->GetTextures().Add(tempTexture);
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
-    Mesh* mesh = new Mesh(::VERTICES, ::indices);
+    Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
     mesh->SetMaterialId(materialId);
 
     return mesh;
 }
 
+static const float DEFAULT_AMBIENT { 0.2f };
+static const float DEFAULT_DEFFUSE { 0.5f };
+static const float DEFAULT_SPECULAR { 1.0f };
+
 } // namespace
 
 
 PointLight::PointLight() :
-    Light {} {
+    PointLight { DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
+
+PointLight::PointLight(const Color& color) :
+    PointLight { color, DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
+
+PointLight::PointLight(float ambient, float diffuse, float specular) :
+    PointLight { Color::BLACK, ambient, diffuse, specular } {}
+
+PointLight::PointLight(const Color& color, float ambient,
+                       float diffuse, float specular) :
+    Light { color },
+    m_ambient { ambient },
+    m_diffuse { diffuse },
+    m_specular { specular } {
     m_childMesh.reset(::CreateSphere());
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
@@ -157,4 +163,40 @@ PointLight::~PointLight() {
     pointLights.erase(
             std::remove(pointLights.begin(), pointLights.end(), this),
             pointLights.end());
+}
+
+float PointLight::GetAmbient() const {
+    return m_ambient;
+}
+
+float PointLight::GetDiffuse() const {
+    return m_diffuse;
+}
+
+float PointLight::GetSpecular() const {
+    return m_specular;
+}
+
+Color PointLight::GetAmbientColor() const {
+    return Color { static_cast<glm::vec3>(m_color) * m_ambient };
+}
+
+Color PointLight::GetDiffuseColor() const {
+    return Color { static_cast<glm::vec3>(m_color) * m_diffuse };
+}
+
+Color PointLight::GetSpecularColor() const {
+    return Color { static_cast<glm::vec3>(m_color) * m_specular };
+}
+
+void PointLight::SetAmbient(float ambient) {
+    m_ambient = ambient;
+}
+
+void PointLight::SetDiffuse(float diffuse) {
+    m_diffuse = diffuse;
+}
+
+void PointLight::SetSpecular(float specular) {
+    m_specular = specular;
 }

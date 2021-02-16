@@ -4,7 +4,6 @@
 #include "iprocess.h"
 #include "collectionof.h"
 #include "shader.h"
-#include "texture.h"
 #include "globaltransformation.h"
 
 #include <memory>
@@ -15,19 +14,23 @@ class Material :
     public GlobalTransformation {
 protected:
     std::shared_ptr<Shader> m_shader;
-    CollectionOf<Texture> m_textures;
+
+public:
+    Material(const Material&) = delete;
+    Material(Material&&) noexcept = delete;
+    Material& operator=(const Material&) = delete;
+    Material& operator=(Material&&) noexcept = delete;
 
 public:
     Material();
-    virtual ~Material();
+    virtual ~Material() = default;
+
+    explicit Material(const std::shared_ptr<Shader>& shader);
 
 public:
     std::shared_ptr<Shader> GetShader();
     const std::shared_ptr<Shader> GetShader() const;
     void SetShader(const std::shared_ptr<Shader>& shader);
-
-    CollectionOf<Texture>& GetTextures();
-    const CollectionOf<Texture>& GetTextures() const;
 
 protected:
     virtual void DoInitShader() = 0;

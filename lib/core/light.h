@@ -23,6 +23,8 @@ public:
     Light();
     virtual ~Light() = default;
 
+    explicit Light(const Color& color);
+
 public:
     Color GetColor() const;
     void SetColor(const Color& color);
