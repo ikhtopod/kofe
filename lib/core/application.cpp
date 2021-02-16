@@ -4,7 +4,7 @@
 #include "everywhere.h"
 #include "mesh.h"
 #include "pointlight.h"
-#include "phongmaterial.h"
+#include "texturematerial.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -79,8 +79,21 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    std::shared_ptr<PhongMaterial> tempMaterial { new PhongMaterial {} };
-    tempMaterial->SetAmbientAndDiffuse(Color { .7f, .6f, .8f });
+    std::shared_ptr<Texture> tempDiffuseTexture {
+        new Texture {
+                std::filesystem::path {
+                        R"png(./resources/textures/texture_box_01.png)png" } }
+    };
+
+    std::shared_ptr<Texture> tempSpecularTexture {
+        new Texture { std::filesystem::path {
+                              R"png(./resources/textures/texture_box_01_specular.png)png" },
+                      tempDiffuseTexture->NextTextureUnit() }
+    };
+
+    std::shared_ptr<TextureMaterial> tempMaterial {
+        new TextureMaterial { tempDiffuseTexture, tempSpecularTexture }
+    };
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
