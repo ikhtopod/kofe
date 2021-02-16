@@ -31,8 +31,9 @@ static constexpr float DEFAULT_SHININESS { 32.0f };
 void TextureMaterial::DoInitShader() {
     auto UniformMaterialFunc = [this]([[maybe_unused]] Shader* shader) {
         if (this == nullptr) return;
-
-        shader->SetFloat("material.shininess", m_shininess);
+        shader->SetInt("material.diffuse", GetDiffuse()->GetTextureUnit() - GL_TEXTURE0);
+        shader->SetInt("material.specular", GetSpecular()->GetTextureUnit() - GL_TEXTURE0);
+        shader->SetFloat("material.shininess", GetShininess());
     };
 
     auto UniformLightFunc = [this](Shader* shader) {
@@ -103,4 +104,29 @@ void TextureMaterial::Processing() {
 
     m_diffuse->Processing();
     m_specular->Processing();
+}
+
+
+std::shared_ptr<Texture> TextureMaterial::GetDiffuse() const {
+    return m_diffuse;
+}
+
+std::shared_ptr<Texture> TextureMaterial::GetSpecular() const {
+    return m_specular;
+}
+
+float TextureMaterial::GetShininess() const {
+    return m_shininess;
+}
+
+void TextureMaterial::SetDiffuse(const std::shared_ptr<Texture>& diffuse) {
+    m_diffuse = diffuse;
+}
+
+void TextureMaterial::SetSpecular(const std::shared_ptr<Texture>& specular) {
+    m_specular = specular;
+}
+
+void TextureMaterial::SetShininess(float shininess) {
+    m_shininess = shininess;
 }

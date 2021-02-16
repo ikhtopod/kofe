@@ -31,6 +31,14 @@ public:
                              float shininess);
 
 public:
+    std::shared_ptr<Texture> GetDiffuse() const;
+    std::shared_ptr<Texture> GetSpecular() const;
+    float GetShininess() const;
+
+    void SetDiffuse(const std::shared_ptr<Texture>& diffuse);
+    void SetSpecular(const std::shared_ptr<Texture>& specular);
+    void SetShininess(float shininess);
+
 protected: /* Material */
     void DoInitShader() override;
 
