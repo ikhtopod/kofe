@@ -8,11 +8,12 @@ add_library(${PROJECT_CORE_TARGET} STATIC
     ${PROJECT_CORE_SOURCE_FILES})
 
 target_include_directories(${PROJECT_CORE_TARGET}
-    PUBLIC
+    PRIVATE
     ${THIRDPARTY_DIRECTORY}/glfw/include
     ${THIRDPARTY_DIRECTORY}/glm
+    ${PROJECT_LIB_DIRECTORY}/headers/core/everywhere
+    PUBLIC
     ${PROJECT_LIB_DIRECTORY}/headers
-    PRIVATE
     ${PROJECT_LIB_DIRECTORY}/headers/core)
 
 target_link_libraries(${PROJECT_CORE_TARGET}

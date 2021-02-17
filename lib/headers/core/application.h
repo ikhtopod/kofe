@@ -1,7 +1,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "space.h"
+#include "app_exceptions.h"
+#include "space/space.h"
 
 #include <string>
 

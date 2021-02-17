@@ -1,10 +1,9 @@
 #include "application.h"
 
-#include "app_exceptions.h"
 #include "everywhere.h"
-#include "mesh.h"
-#include "pointlight.h"
-#include "texturematerial.h"
+#include "mesh/mesh.h"
+#include "light/pointlight.h"
+#include "material/texturematerial.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
