@@ -16,6 +16,15 @@ enum class AttribIndex : GLuint {
     TEXTURE,
 };
 
+enum class MeshDrawingMode : GLenum {
+    POINTS = GL_POINTS,
+    LINES = GL_LINES,
+    LINE_LOOP = GL_LINE_LOOP,
+    LINE_STRIP = GL_LINE_STRIP,
+    TRIANGLES = GL_TRIANGLES,
+    TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+    TRIANGLE_FAN = GL_TRIANGLE_FAN
+};
 
 class Mesh : public Object {
 public:
@@ -28,6 +37,7 @@ private:
     std::vector<GLuint> m_indices;
 
     size_t m_materialId;
+    MeshDrawingMode m_drawingMode;
 
 private:
     void Init();
@@ -49,9 +59,14 @@ public:
     size_t GetMaterialId() const;
     void SetMaterialId(size_t materialId);
 
+    MeshDrawingMode GetDrawingMode() const;
+    void SetDrawingMode(MeshDrawingMode drawingMode);
+    void SetDrawingMode(GLenum drawingMode);
+
 public: /* IProcess */
     void Processing() override;
 };
+
 
 void swap(Mesh& lhs, Mesh& rhs);
 
