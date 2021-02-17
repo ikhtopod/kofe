@@ -17,6 +17,10 @@ public:
     virtual ~ParentTransformation() = default;
 
 public:
+    explicit ParentTransformation(const Transform& transform);
+    explicit ParentTransformation(Transform&& transform) noexcept;
+
+public:
     virtual Transform& GetParentTransform();
     virtual const Transform& GetParentTransform() const;
     virtual void SetParentTransform(const Transform& parentTransform);

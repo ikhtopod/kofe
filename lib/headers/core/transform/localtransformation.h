@@ -17,6 +17,10 @@ public:
     virtual ~LocalTransformation() = default;
 
 public:
+    explicit LocalTransformation(const Transform& transform);
+    explicit LocalTransformation(Transform&& transform) noexcept;
+
+public:
     virtual Transform& GetTransform();
     virtual const Transform& GetTransform() const;
     virtual void SetTransform(const Transform& transform);

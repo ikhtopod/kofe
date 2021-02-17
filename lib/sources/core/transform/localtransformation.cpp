@@ -37,6 +37,12 @@ LocalTransformation& LocalTransformation::operator=(LocalTransformation&& other)
     return *this;
 }
 
+LocalTransformation::LocalTransformation(const Transform& transform) :
+    m_localTransform { transform } {}
+
+LocalTransformation::LocalTransformation(Transform&& transform) noexcept :
+    m_localTransform { std::move(transform) } {}
+
 Transform& LocalTransformation::GetTransform() {
     return m_localTransform;
 }

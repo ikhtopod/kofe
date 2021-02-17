@@ -37,6 +37,12 @@ ParentTransformation& ParentTransformation::operator=(ParentTransformation&& oth
     return *this;
 }
 
+ParentTransformation::ParentTransformation(const Transform& transform) :
+    m_parentTransform { transform } {}
+
+ParentTransformation::ParentTransformation(Transform&& transform) noexcept :
+    m_parentTransform { std::move(transform) } {}
+
 Transform& ParentTransformation::GetParentTransform() {
     return m_parentTransform;
 }
