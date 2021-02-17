@@ -33,14 +33,47 @@ void TextureMaterial::DoInitShader() {
         shader->SetFloat("material.shininess", GetShininess());
     };
 
-    auto UniformLightFunc = [this](Shader* shader) {
+    auto UniformDirectionalLightFunc = [this](Shader* shader) {
         if (this == nullptr) return;
 
-        auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
+        auto& directionalLights =
+                Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
 
-        size_t end = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS, pointLights.size());
+        const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_DIRECTIONAL_LIGHTS,
+                                                   directionalLights.size());
 
-        for (size_t i = 0; i < end; ++i) {
+        for (size_t i = 0; i < MAX_LIGHTS; ++i) {
+            const std::string directionalLightsName { "directionalLights[" + std::to_string(i) + "]." };
+
+            const std::string directionName { directionalLightsName + "direction" };
+            const std::string ambientName { directionalLightsName + "ambient" };
+            const std::string diffusetName { directionalLightsName + "diffuse" };
+            const std::string specularName { directionalLightsName + "specular" };
+
+            Transform lightTransform =
+                    directionalLights[i]->GetGlobalTransform() + directionalLights[i]->GetTransform();
+
+            shader->SetVec3(directionName,
+                            static_cast<glm::vec3>(lightTransform.GetRotation()));
+            shader->SetVec3(ambientName,
+                            static_cast<glm::vec3>(directionalLights[i]->GetAmbientColor()));
+            shader->SetVec3(diffusetName,
+                            static_cast<glm::vec3>(directionalLights[i]->GetDiffuseColor()));
+            shader->SetVec3(specularName,
+                            static_cast<glm::vec3>(directionalLights[i]->GetSpecularColor()));
+        }
+    };
+
+    auto UniformPointLightFunc = [this](Shader* shader) {
+        if (this == nullptr) return;
+
+        auto& pointLights =
+                Everywhere::Instance().Get<LightStorage>().GetPointLights();
+
+        const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
+                                                   pointLights.size());
+
+        for (size_t i = 0; i < MAX_LIGHTS; ++i) {
             const std::string pointLightsName { "pointLights[" + std::to_string(i) + "]." };
 
             const std::string positionName { pointLightsName + "position" };
@@ -48,8 +81,11 @@ void TextureMaterial::DoInitShader() {
             const std::string diffusetName { pointLightsName + "diffuse" };
             const std::string specularName { pointLightsName + "specular" };
 
+            Transform lightTransform =
+                    pointLights[i]->GetGlobalTransform() + pointLights[i]->GetTransform();
+
             shader->SetVec3(positionName,
-                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+                            static_cast<glm::vec3>(lightTransform.GetPosition()));
             shader->SetVec3(ambientName,
                             static_cast<glm::vec3>(pointLights[i]->GetAmbientColor()));
             shader->SetVec3(diffusetName,
@@ -69,7 +105,8 @@ void TextureMaterial::DoInitShader() {
     };
 
     m_shader->UniformProcessingFunctions().push_back(UniformMaterialFunc);
-    m_shader->UniformProcessingFunctions().push_back(UniformLightFunc);
+    m_shader->UniformProcessingFunctions().push_back(UniformDirectionalLightFunc);
+    m_shader->UniformProcessingFunctions().push_back(UniformPointLightFunc);
     m_shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
 }
 
