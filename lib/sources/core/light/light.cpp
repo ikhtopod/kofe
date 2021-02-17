@@ -5,7 +5,7 @@
 
 
 Light::Light() :
-    Light { Color::BLACK } {}
+    Light { Color::WHITE } {}
 
 Light::Light(const Color& color) :
     Object {},

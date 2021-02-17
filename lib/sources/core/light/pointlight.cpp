@@ -118,13 +118,15 @@ static const std::vector<GLuint> INDICES {
     49, 3, 1, 51, 7, 4
 };
 
-Mesh* CreateSphere() {
-    std::shared_ptr<LightMaterial> tempMaterial { new LightMaterial {} };
+Mesh* CreateSphere(const Color& color) {
+    std::shared_ptr<LightMaterial> tempMaterial { new LightMaterial { color } };
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
-    size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
+    size_t materialId =
+            Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
     Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
+    mesh->SetDrawingMode(MeshDrawingMode::LINE_LOOP);
     mesh->SetMaterialId(materialId);
 
     return mesh;
@@ -144,7 +146,7 @@ PointLight::PointLight(const Color& color) :
     PointLight { color, DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
 
 PointLight::PointLight(float ambient, float diffuse, float specular) :
-    PointLight { Color::BLACK, ambient, diffuse, specular } {}
+    PointLight { Color::WHITE, ambient, diffuse, specular } {}
 
 PointLight::PointLight(const Color& color, float ambient,
                        float diffuse, float specular) :
@@ -152,7 +154,7 @@ PointLight::PointLight(const Color& color, float ambient,
     m_ambient { ambient },
     m_diffuse { diffuse },
     m_specular { specular } {
-    m_childMesh.reset(::CreateSphere());
+    m_childMesh.reset(::CreateSphere(m_color));
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
     pointLights.push_back(this);
