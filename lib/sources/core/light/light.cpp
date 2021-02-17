@@ -16,7 +16,7 @@ Light::Light(const Color& color) :
 void Light::Processing() {
     Object::Processing();
 
-    m_childMesh->SetGlobalTransform(GetGlobalTransform() + GetTransform());
+    m_childMesh->SetParentTransform(GetParentTransform() + GetTransform());
     m_childMesh->Processing();
 }
 

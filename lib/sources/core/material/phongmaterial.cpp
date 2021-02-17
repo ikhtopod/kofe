@@ -49,7 +49,7 @@ void PhongMaterial::DoInitShader() {
             const std::string specularName { directionalLightsName + "specular" };
 
             Transform lightTransform =
-                    directionalLights[i]->GetGlobalTransform() + directionalLights[i]->GetTransform();
+                    directionalLights[i]->GetParentTransform() + directionalLights[i]->GetTransform();
 
             shader->SetVec3(directionName,
                             static_cast<glm::vec3>(lightTransform.GetRotation()));
@@ -80,7 +80,7 @@ void PhongMaterial::DoInitShader() {
             const std::string specularName { pointLightsName + "specular" };
 
             Transform lightTransform =
-                    pointLights[i]->GetGlobalTransform() + pointLights[i]->GetTransform();
+                    pointLights[i]->GetParentTransform() + pointLights[i]->GetTransform();
 
             shader->SetVec3(positionName,
                             static_cast<glm::vec3>(lightTransform.GetPosition()));

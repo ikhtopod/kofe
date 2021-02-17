@@ -3,4 +3,4 @@
 
 Transformable::Transformable() :
     LocalTransformation {},
-    GlobalTransformation {} {}
+    ParentTransformation {} {}

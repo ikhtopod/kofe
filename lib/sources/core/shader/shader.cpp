@@ -27,7 +27,7 @@ Shader::Shader() :
 
 Shader::Shader(const std::filesystem::path& vertexPath,
                const std::filesystem::path& fragmentPath) :
-    GlobalTransformation {},
+    ParentTransformation {},
     m_program {},
     m_uniformProcessingFunctions {} {
     CreateProgram(vertexPath, fragmentPath);
@@ -226,7 +226,7 @@ void Shader::Processing() {
     SetMat4("mvp.view", Everywhere::Instance().Get<Camera>().ToMatrix());
     SetMat4("mvp.projection", Everywhere::Instance().Get<Projection>().ToMatrix());
 
-    SetMat4("transform", GetGlobalTransform().ToMatrix());
+    SetMat4("transform", GetParentTransform().ToMatrix());
 
     for (auto& uniformProcessingFunction : m_uniformProcessingFunctions) {
         uniformProcessingFunction(this);

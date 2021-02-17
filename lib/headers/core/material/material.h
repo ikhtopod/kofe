@@ -4,14 +4,14 @@
 #include "interface/iprocess.h"
 #include "misc/collectionof.h"
 #include "shader/shader.h"
-#include "transform/globaltransformation.h"
+#include "transform/parenttransformation.h"
 
 #include <memory>
 
 
 class Material :
     public IProcess,
-    public GlobalTransformation {
+    public ParentTransformation {
 protected:
     std::shared_ptr<Shader> m_shader;
 

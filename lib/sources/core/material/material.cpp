@@ -6,7 +6,7 @@ Material::Material() :
 
 
 Material::Material(const std::shared_ptr<Shader>& shader) :
-    GlobalTransformation {},
+    ParentTransformation {},
     m_shader { shader } {}
 
 std::shared_ptr<Shader> Material::GetShader() {
@@ -26,6 +26,6 @@ void Material::Processing() {
         DoInitShader();
     }
 
-    m_shader->SetGlobalTransform(this->GetGlobalTransform());
+    m_shader->SetParentTransform(this->GetParentTransform());
     m_shader->Processing();
 }

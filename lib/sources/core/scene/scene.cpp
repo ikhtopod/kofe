@@ -24,7 +24,7 @@ const CollectionOf<Object>& Scene::GetObjects() const {
 void Scene::Processing() {
     for (auto& object : m_objects.Get()) {
         if (object) {
-            object->SetGlobalTransform(GetGlobalTransform() + GetTransform());
+            object->SetParentTransform(GetParentTransform() + GetTransform());
             object->Processing();
         }
     }

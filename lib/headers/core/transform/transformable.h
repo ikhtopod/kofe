@@ -2,12 +2,12 @@
 #define TRANSFORMABLE_H
 
 #include "localtransformation.h"
-#include "globaltransformation.h"
+#include "parenttransformation.h"
 
 
 class Transformable :
     public LocalTransformation,
-    public GlobalTransformation {
+    public ParentTransformation {
 public:
     Transformable();
     virtual ~Transformable() = default;

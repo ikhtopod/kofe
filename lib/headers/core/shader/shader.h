@@ -2,7 +2,7 @@
 #define SHADER_H
 
 #include "interface/iprocess.h"
-#include "transform/globaltransformation.h"
+#include "transform/parenttransformation.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -14,7 +14,7 @@
 
 class Shader final :
     public IProcess,
-    public GlobalTransformation {
+    public ParentTransformation {
 private:
     using UniformProcessing = std::function<void(Shader*)>;
     using UniformProcessingVector = std::vector<UniformProcessing>;
