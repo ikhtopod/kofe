@@ -50,11 +50,8 @@ void TextureMaterial::DoInitShader() {
             const std::string diffusetName { directionalLightsName + "diffuse" };
             const std::string specularName { directionalLightsName + "specular" };
 
-            Transform lightTransform =
-                    directionalLights[i]->GetParentTransform() + directionalLights[i]->GetTransform();
-
             shader->SetVec3(directionName,
-                            static_cast<glm::vec3>(lightTransform.GetRotation()));
+                            static_cast<glm::vec3>(directionalLights[i]->GetGlobalTransform().GetRotation()));
             shader->SetVec3(ambientName,
                             static_cast<glm::vec3>(directionalLights[i]->GetAmbientColor()));
             shader->SetVec3(diffusetName,
@@ -81,11 +78,8 @@ void TextureMaterial::DoInitShader() {
             const std::string diffusetName { pointLightsName + "diffuse" };
             const std::string specularName { pointLightsName + "specular" };
 
-            Transform lightTransform =
-                    pointLights[i]->GetParentTransform() + pointLights[i]->GetTransform();
-
             shader->SetVec3(positionName,
-                            static_cast<glm::vec3>(lightTransform.GetPosition()));
+                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
             shader->SetVec3(ambientName,
                             static_cast<glm::vec3>(pointLights[i]->GetAmbientColor()));
             shader->SetVec3(diffusetName,

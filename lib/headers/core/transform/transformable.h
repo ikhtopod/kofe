@@ -11,6 +11,10 @@ class Transformable :
 public:
     Transformable();
     virtual ~Transformable() = default;
+
+public:
+    virtual Transform GetGlobalTransform();
+    virtual const Transform GetGlobalTransform() const;
 };
 
 #endif // TRANSFORMABLE_H

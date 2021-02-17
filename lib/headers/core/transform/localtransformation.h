@@ -6,7 +6,7 @@
 
 class LocalTransformation {
 protected:
-    Transform m_transform;
+    Transform m_localTransform;
 
 public:
     virtual ~LocalTransformation() = default;

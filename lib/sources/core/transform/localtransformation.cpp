@@ -2,16 +2,16 @@
 
 
 LocalTransformation::LocalTransformation() :
-    m_transform {} {}
+    m_localTransform {} {}
 
 Transform& LocalTransformation::GetTransform() {
-    return m_transform;
+    return m_localTransform;
 }
 
 const Transform& LocalTransformation::GetTransform() const {
-    return m_transform;
+    return m_localTransform;
 }
 
 void LocalTransformation::SetTransform(const Transform& transform) {
-    m_transform = transform;
+    m_localTransform = transform;
 }
