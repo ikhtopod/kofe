@@ -1,7 +1,7 @@
 set(PROJECT_CORE_TARGET core)
 
 file(GLOB_RECURSE PROJECT_CORE_HEADER_FILES "./headers/core/*.h")
-file(GLOB_RECURSE PROJECT_CORE_SOURCE_FILES "./sources/core/*.cpp")
+file(GLOB_RECURSE PROJECT_CORE_SOURCE_FILES "./source/core/*.cpp")
 
 add_library(${PROJECT_CORE_TARGET} STATIC
     ${PROJECT_CORE_HEADER_FILES}
