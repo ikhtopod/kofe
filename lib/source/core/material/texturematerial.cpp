@@ -42,6 +42,8 @@ void TextureMaterial::DoInitShader() {
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_DIRECTIONAL_LIGHTS,
                                                    directionalLights.size());
 
+        shader->SetUInt("directionalLightArraySize", MAX_LIGHTS);
+
         for (size_t i = 0; i < MAX_LIGHTS; ++i) {
             const std::string directionalLightsName { "directionalLights[" + std::to_string(i) + "]." };
 
@@ -70,6 +72,8 @@ void TextureMaterial::DoInitShader() {
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
                                                    pointLights.size());
 
+        shader->SetUInt("pointLightArraySize", MAX_LIGHTS);
+
         for (size_t i = 0; i < MAX_LIGHTS; ++i) {
             const std::string pointLightsName { "pointLights[" + std::to_string(i) + "]." };
 
@@ -77,6 +81,9 @@ void TextureMaterial::DoInitShader() {
             const std::string ambientName { pointLightsName + "ambient" };
             const std::string diffusetName { pointLightsName + "diffuse" };
             const std::string specularName { pointLightsName + "specular" };
+            const std::string constantName { pointLightsName + "constant" };
+            const std::string linearName { pointLightsName + "linear" };
+            const std::string quadraticName { pointLightsName + "quadratic" };
 
             shader->SetVec3(positionName,
                             static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
@@ -86,6 +93,9 @@ void TextureMaterial::DoInitShader() {
                             static_cast<glm::vec3>(pointLights[i]->GetDiffuseColor()));
             shader->SetVec3(specularName,
                             static_cast<glm::vec3>(pointLights[i]->GetSpecularColor()));
+            shader->SetFloat(constantName, pointLights[i]->GetConstant());
+            shader->SetFloat(linearName, pointLights[i]->GetLinear());
+            shader->SetFloat(quadraticName, pointLights[i]->GetQuadratic());
         }
     };
 

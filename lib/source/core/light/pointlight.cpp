@@ -132,9 +132,13 @@ Mesh* CreateSphere(const Color& color) {
     return mesh;
 }
 
-static const float DEFAULT_AMBIENT { 0.2f };
-static const float DEFAULT_DEFFUSE { 0.5f };
-static const float DEFAULT_SPECULAR { 1.0f };
+static constexpr float DEFAULT_AMBIENT { 0.2f };
+static constexpr float DEFAULT_DEFFUSE { 0.5f };
+static constexpr float DEFAULT_SPECULAR { 1.0f };
+
+static constexpr float DEFAULT_CONSTANT { 1.0f };
+static constexpr float DEFAULT_LINEAR { 0.14f };
+static constexpr float DEFAULT_QUADRATIC { 0.07f };
 
 } // namespace
 
@@ -148,12 +152,24 @@ PointLight::PointLight(const Color& color) :
 PointLight::PointLight(float ambient, float diffuse, float specular) :
     PointLight { Color::WHITE, ambient, diffuse, specular } {}
 
-PointLight::PointLight(const Color& color, float ambient,
-                       float diffuse, float specular) :
+PointLight::PointLight(float ambient, float diffuse, float specular,
+                       float constant, float linear, float quadratic) :
+    PointLight { Color::WHITE,
+                 ambient, diffuse, specular,
+                 constant, linear, quadratic } {}
+
+PointLight::PointLight(const Color& color,
+                       float ambient, float diffuse, float specular) :
+    PointLight { color, ambient, diffuse, specular,
+                 DEFAULT_CONSTANT, DEFAULT_LINEAR, DEFAULT_QUADRATIC } {}
+
+PointLight::PointLight(const Color& color,
+                       float ambient, float diffuse, float specular,
+                       float constant, float linear, float quadratic) :
     Light { color },
-    m_ambient { ambient },
-    m_diffuse { diffuse },
-    m_specular { specular } {
+    m_ambient { ambient }, m_diffuse { diffuse },
+    m_specular { specular }, m_constant { constant },
+    m_linear { linear }, m_quadratic { quadratic } {
     m_childMesh.reset(::CreateSphere(m_color));
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
@@ -179,6 +195,18 @@ float PointLight::GetSpecular() const {
     return m_specular;
 }
 
+float PointLight::GetConstant() const {
+    return m_constant;
+}
+
+float PointLight::GetLinear() const {
+    return m_linear;
+}
+
+float PointLight::GetQuadratic() const {
+    return m_quadratic;
+}
+
 Color PointLight::GetAmbientColor() const {
     return Color { static_cast<glm::vec3>(m_color) * m_ambient };
 }
@@ -201,4 +229,28 @@ void PointLight::SetDiffuse(float diffuse) {
 
 void PointLight::SetSpecular(float specular) {
     m_specular = specular;
+}
+
+void PointLight::SetConstant(float constant) {
+    m_constant = constant;
+}
+
+void PointLight::SetLinear(float linear) {
+    m_linear = linear;
+}
+
+void PointLight::SetQuadratic(float quadratic) {
+    m_quadratic = quadratic;
+}
+
+void PointLight::SetADS(float ambient, float diffuse, float specular) {
+    SetAmbient(ambient);
+    SetDiffuse(diffuse);
+    SetSpecular(specular);
+}
+
+void PointLight::SetCLQ(float constant, float linear, float quadratic) {
+    SetConstant(constant);
+    SetLinear(linear);
+    SetQuadratic(quadratic);
 }

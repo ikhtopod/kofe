@@ -64,7 +64,7 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
-        DemoMainLoop();
+        //DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -172,16 +172,16 @@ Space* Application::CreateDemoSpace() {
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject);
 
-    auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
-    tempScene->GetObjects().Add(tempDirectionalLight_01);
+    //auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    //tempScene->GetObjects().Add(tempDirectionalLight_01);
 
     auto tempPointLight_01 = std::make_shared<PointLight>();
-    tempPointLight_01->SetColor(Color { 0.8f, 0.307634f, 0.016358f });
+    tempPointLight_01->SetColor(Color { 0.307634f, 0.6f, 0.016358f });
     tempPointLight_01->GetTransform().SetPosition({ -1.0f, -1.0f, -1.0f });
     tempScene->GetObjects().Add(tempPointLight_01);
 
     auto tempPointLight_02 = std::make_shared<PointLight>();
-    tempPointLight_02->SetColor(Color { 0.7f, 0.016358f, 0.307634f });
+    tempPointLight_02->SetColor(Color { 0.307634f, 0.016358f, 0.7f });
     tempPointLight_02->GetTransform().SetPosition({ -1.0f, -1.0f, -1.0f });
     tempPointLight_01->Children().Add(tempPointLight_02);
 

@@ -19,6 +19,9 @@ struct PointLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 const int MAX_DIRECTIONAL_LIGHTS = 4;
@@ -26,9 +29,13 @@ const int MAX_POINT_LIGHTS = 12;
 const int MAX_SPOT_LIGHTS = 6;
 
 uniform Material material;
+uniform vec3 cameraPosition;
+
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform vec3 cameraPosition;
+
+uniform uint directionalLightArraySize;
+uniform uint pointLightArraySize;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -39,7 +46,7 @@ out vec4 FragColor;
 void ApplyDirectionalLights(inout vec3 result) {
     const vec3 NORM = normalize(Normal);
     
-    for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++) {
+    for (uint i = 0; i < directionalLightArraySize; i++) {
         const DirectionalLight directionalLight = directionalLights[i];
 
         const vec3 ambient = directionalLight.ambient * texture(material.diffuse, TextureCoordinates).rgb;
@@ -61,20 +68,27 @@ void ApplyDirectionalLights(inout vec3 result) {
 void ApplyPointLights(inout vec3 result) {
     const vec3 NORM = normalize(Normal);
     
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+    for (uint i = 0; i < pointLightArraySize; i++) {
         const PointLight pointLight = pointLights[i];
 
-        const vec3 ambient = pointLight.ambient * texture(material.diffuse, TextureCoordinates).rgb;
+        vec3 ambient = pointLight.ambient * texture(material.diffuse, TextureCoordinates).rgb;
 
         const vec3 lightDirection = normalize(pointLight.position - FragPos);
         const float diff = max(dot(NORM, lightDirection), 0.0f);
-        const vec3 diffuse = pointLight.diffuse * diff * texture(material.diffuse, TextureCoordinates).rgb;
+        vec3 diffuse = pointLight.diffuse * diff * texture(material.diffuse, TextureCoordinates).rgb;
 
         const vec3 viewDirection = normalize(cameraPosition - FragPos);
         // Reflection vector along the normal axis
         const vec3 reflectDirection = reflect(-lightDirection, NORM);
         const float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
-        const vec3 specular = pointLight.specular * spec * texture(material.specular, TextureCoordinates).rgb;
+        vec3 specular = pointLight.specular * spec * texture(material.specular, TextureCoordinates).rgb;
+
+        const float DISTANCE = distance(pointLight.position, FragPos);
+        const float attenuation = 1.0f / (pointLight.constant + pointLight.linear * DISTANCE + pointLight.quadratic * pow(DISTANCE, 2));
+
+        ambient *= attenuation;
+        diffuse *= attenuation;
+        specular *= attenuation;
 
         result += ambient + diffuse + specular;
     }
