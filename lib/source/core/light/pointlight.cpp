@@ -5,6 +5,7 @@
 #include "material/lightmaterial.h"
 
 #include <algorithm>
+#include <cmath>
 
 
 namespace {
@@ -132,13 +133,12 @@ Mesh* CreateSphere(const Color& color) {
     return mesh;
 }
 
+static constexpr float DEFAULT_RADIUS { 1.0f };
+static constexpr float DEFAULT_CONSTANT { 1.0f };
+
 static constexpr float DEFAULT_AMBIENT { 0.2f };
 static constexpr float DEFAULT_DEFFUSE { 0.5f };
 static constexpr float DEFAULT_SPECULAR { 1.0f };
-
-static constexpr float DEFAULT_CONSTANT { 1.0f };
-static constexpr float DEFAULT_LINEAR { 0.14f };
-static constexpr float DEFAULT_QUADRATIC { 0.07f };
 
 } // namespace
 
@@ -149,27 +149,31 @@ PointLight::PointLight() :
 PointLight::PointLight(const Color& color) :
     PointLight { color, DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
 
+PointLight::PointLight(float radius) :
+    PointLight { radius, DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
+
+PointLight::PointLight(const Color& color, float radius) :
+    PointLight { color, radius,
+                 DEFAULT_AMBIENT, DEFAULT_DEFFUSE, DEFAULT_SPECULAR } {}
+
 PointLight::PointLight(float ambient, float diffuse, float specular) :
     PointLight { Color::WHITE, ambient, diffuse, specular } {}
 
-PointLight::PointLight(float ambient, float diffuse, float specular,
-                       float constant, float linear, float quadratic) :
-    PointLight { Color::WHITE,
-                 ambient, diffuse, specular,
-                 constant, linear, quadratic } {}
+PointLight::PointLight(float radius,
+                       float ambient, float diffuse, float specular) :
+    PointLight { Color::WHITE, radius, ambient, diffuse, specular } {}
 
 PointLight::PointLight(const Color& color,
                        float ambient, float diffuse, float specular) :
-    PointLight { color, ambient, diffuse, specular,
-                 DEFAULT_CONSTANT, DEFAULT_LINEAR, DEFAULT_QUADRATIC } {}
+    PointLight { color, DEFAULT_RADIUS, ambient, diffuse, specular } {}
 
-PointLight::PointLight(const Color& color,
-                       float ambient, float diffuse, float specular,
-                       float constant, float linear, float quadratic) :
+PointLight::PointLight(const Color& color, float radius,
+                       float ambient, float diffuse, float specular) :
     Light { color },
-    m_ambient { ambient }, m_diffuse { diffuse },
-    m_specular { specular }, m_constant { constant },
-    m_linear { linear }, m_quadratic { quadratic } {
+    m_radius { radius },
+    m_ambient { ambient }, m_diffuse { diffuse }, m_specular { specular },
+    m_constant { DEFAULT_CONSTANT }, m_linear {}, m_quadratic {} {
+    UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
@@ -181,6 +185,10 @@ PointLight::~PointLight() {
     pointLights.erase(
             std::remove(pointLights.begin(), pointLights.end(), this),
             pointLights.end());
+}
+
+float PointLight::GetRadius() const {
+    return m_radius;
 }
 
 float PointLight::GetAmbient() const {
@@ -219,6 +227,11 @@ Color PointLight::GetSpecularColor() const {
     return Color { static_cast<glm::vec3>(m_color) * m_specular };
 }
 
+void PointLight::SetRadius(float radius) {
+    m_radius = radius;
+    UpdateCLQByRadius();
+}
+
 void PointLight::SetAmbient(float ambient) {
     m_ambient = ambient;
 }
@@ -253,4 +266,8 @@ void PointLight::SetCLQ(float constant, float linear, float quadratic) {
     SetConstant(constant);
     SetLinear(linear);
     SetQuadratic(quadratic);
+}
+
+void PointLight::UpdateCLQByRadius() {
+    SetCLQ(GetConstant(), 2.0f / GetRadius(), 1.0f / std::pow(GetRadius(), 2.0f));
 }

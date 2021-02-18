@@ -6,9 +6,13 @@
 
 class PointLight : public Light {
 protected:
+    float m_radius;
+
     float m_ambient;
     float m_diffuse;
     float m_specular;
+
+private: /* the values depend on the m_radius */
     float m_constant;
     float m_linear;
     float m_quadratic;
@@ -24,22 +28,26 @@ public:
     virtual ~PointLight();
 
     explicit PointLight(const Color& color);
+    explicit PointLight(float radius);
+    explicit PointLight(const Color& color, float radius);
     explicit PointLight(float ambient, float diffuse, float specular);
 
-    explicit PointLight(float ambient, float diffuse, float specular,
-                        float constant, float linear, float quadratic);
+    explicit PointLight(float radius,
+                        float ambient, float diffuse, float specular);
 
     explicit PointLight(const Color& color,
                         float ambient, float diffuse, float specular);
 
-    explicit PointLight(const Color& color,
-                        float ambient, float diffuse, float specular,
-                        float constant, float linear, float quadratic);
+    explicit PointLight(const Color& color, float radius,
+                        float ambient, float diffuse, float specular);
 
 public:
+    float GetRadius() const;
+
     float GetAmbient() const;
     float GetDiffuse() const;
     float GetSpecular() const;
+
     float GetConstant() const;
     float GetLinear() const;
     float GetQuadratic() const;
@@ -48,15 +56,21 @@ public:
     Color GetDiffuseColor() const;
     Color GetSpecularColor() const;
 
+    void SetRadius(float radius);
+
     void SetAmbient(float ambient);
     void SetDiffuse(float diffuse);
     void SetSpecular(float specular);
+
+    void SetADS(float ambient, float diffuse, float specular);
+
+private:
     void SetConstant(float constant);
     void SetLinear(float linear);
     void SetQuadratic(float quadratic);
 
-    void SetADS(float ambient, float diffuse, float specular);
     void SetCLQ(float constant, float linear, float quadratic);
+    void UpdateCLQByRadius();
 };
 
 #endif // POINTLIGHT_H
