@@ -19,7 +19,9 @@ const CollectionOf<Object>& Object::Children() const {
 
 void Object::Processing() {
     for (auto& child : m_children.Get()) {
-        child->SetParentTransform(GetParentTransform() + GetTransform());
-        child->Processing();
+        if (child) {
+            child->SetParentTransform(GetParentTransform() + GetTransform());
+            child->Processing();
+        }
     }
 }
