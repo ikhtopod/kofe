@@ -126,7 +126,7 @@ Mesh* CreateSphere(const Color& color) {
             Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
     Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
-    mesh->SetDrawingMode(MeshDrawingMode::LINE_LOOP);
+    mesh->SetDrawingMode(MeshDrawingMode::POINTS);
     mesh->SetMaterialId(materialId);
 
     return mesh;
