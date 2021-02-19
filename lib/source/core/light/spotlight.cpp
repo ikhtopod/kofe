@@ -187,15 +187,15 @@ SpotLight::SpotLight(const Color& color, float radius, float cutoffAsDegrees,
     UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
 
-    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
-    pointLights.push_back(this);
+    auto& spotLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
+    spotLights.push_back(this);
 }
 
 SpotLight::~SpotLight() {
-    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
-    pointLights.erase(
-            std::remove(pointLights.begin(), pointLights.end(), this),
-            pointLights.end());
+    auto& spotLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
+    spotLights.erase(
+            std::remove(spotLights.begin(), spotLights.end(), this),
+            spotLights.end());
 }
 
 float SpotLight::GetRadius() const {
