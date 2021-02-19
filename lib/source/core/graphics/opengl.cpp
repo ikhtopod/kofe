@@ -7,13 +7,6 @@
 #include "everywhere.h"
 
 
-namespace {
-
-static const Color DEFAULT_CLEAR_COLOR { 0.05f, 0.0f, 0.1f, 1.0f };
-
-} // namespace
-
-
 void OpenGL::UpdateClearColor() {
     glClearColor(m_clearColor.Red(), m_clearColor.Green(),
                  m_clearColor.Blue(), m_clearColor.Alpha());
@@ -44,7 +37,7 @@ void OpenGL::Init() {
 
 OpenGL::OpenGL() :
     Graphics {},
-    m_clearColor { DEFAULT_CLEAR_COLOR } {
+    m_clearColor { Color::BLACK } {
     Init();
 }
 
