@@ -145,6 +145,8 @@ static constexpr float DEFAULT_AMBIENT { 0.2f };
 static constexpr float DEFAULT_DEFFUSE { 0.5f };
 static constexpr float DEFAULT_SPECULAR { 1.0f };
 
+static const glm::quat DEFAULT_AXIS_ORIENTATION { 0.0f, 0.0f, 0.0f, 1.0f };
+
 } // namespace
 
 
@@ -186,6 +188,7 @@ SpotLight::SpotLight(const Color& color, float radius, float cutoffAsDegrees,
     m_quadraticInfluence { DEFAULT_QUADRATIC_INFLUENCE } {
     UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
+    GetTransform().SetAxisOrientation(DEFAULT_AXIS_ORIENTATION);
 
     auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
     pointLights.push_back(this);
