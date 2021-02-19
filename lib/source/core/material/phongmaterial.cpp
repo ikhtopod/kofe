@@ -51,7 +51,7 @@ void PhongMaterial::DoInitShader() {
             const std::string specularName { directionalLightsName + "specular" };
 
             shader->SetVec3(directionName,
-                            static_cast<glm::vec3>(directionalLights[i]->GetGlobalTransform().GetRotation()));
+                            directionalLights[i]->GetGlobalTransform().GetAxis().GetFront());
             shader->SetVec3(ambientName,
                             static_cast<glm::vec3>(directionalLights[i]->GetAmbientColor()));
             shader->SetVec3(diffusetName,

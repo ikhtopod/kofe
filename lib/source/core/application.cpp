@@ -168,11 +168,8 @@ Space* Application::CreateDemoSpace() {
     tempScene->GetObjects().Add(tempMeshObject_01);
 
     auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
     tempScene->GetObjects().Add(tempDirectionalLight_01);
-
-    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 12.5f);
-    tempSpotLight_01->SetColor(Color::RED);
-    tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
