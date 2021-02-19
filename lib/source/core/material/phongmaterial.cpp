@@ -124,7 +124,7 @@ void PhongMaterial::DoInitShader() {
             shader->SetVec3(positionName,
                             static_cast<glm::vec3>(spotLights[i]->GetGlobalTransform().GetPosition()));
             shader->SetVec3(directionName,
-                            static_cast<glm::vec3>(spotLights[i]->GetGlobalTransform().GetRotation()));
+                            spotLights[i]->GetGlobalTransform().GetAxis().GetFront());
             shader->SetFloat(cutoffName, glm::cos(spotLights[i]->GetCutoffRadians()));
             shader->SetVec3(ambientName,
                             static_cast<glm::vec3>(spotLights[i]->GetAmbientColor()));

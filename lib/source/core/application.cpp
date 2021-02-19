@@ -162,6 +162,7 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Mesh> tempMeshObject_01 { new Mesh { vertices, indices } };
     tempMeshObject_01->SetMaterialId(materialId);
+    tempMeshObject_01->GetTransform().AddPosition({ 0.0f, 0.0f, -1.0f });
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject_01);
@@ -183,8 +184,9 @@ void Application::DemoMainLoop() {
     auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
     const float anglePerSec = 90.0f;
     const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
-    //light->GetTransform().AddRotation({ 0.0f, angleRotation, angleRotation });
+    light->GetTransform().AddRotation({ 0.0f, angleRotation, 0.0f });
 
-    std::cout << light->GetGlobalTransform() << std::endl
-              << std::string(30, '=') << std::endl;
+    std::cout << std::string(30, '=') << std::endl
+              << light->GetGlobalTransform()
+              << std::endl;
 }
