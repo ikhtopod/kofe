@@ -9,6 +9,7 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include <utility>
+#include <sstream>
 
 
 namespace {
@@ -106,6 +107,30 @@ Transform& Transform::operator+=(const Transform& other) {
 
 Transform operator+(Transform lhs, const Transform& rhs) {
     return lhs += rhs;
+}
+
+Transform::operator std::string() const {
+    std::stringstream result {};
+
+    const glm::vec3 pos = GetPosition();
+    const glm::vec3 rot = GetRotation();
+    const glm::quat orient = GetOrientation();
+    const glm::vec3 scale = GetScale();
+
+    result << "Position { x: " << pos.x << ", y: " << pos.y
+           << ", z: " << pos.z << " }\n";
+    result << "Rotation { x: " << rot.x << ", y: " << rot.y
+           << ", z: " << rot.z << " }\n";
+    result << "Orientation { x: " << orient.x << ", y: " << orient.y
+           << ", z: " << orient.z << ", w: " << orient.w << " }\n";
+    result << "Scale { x: " << scale.x << ", y: " << scale.y
+           << ", z: " << scale.z << " }";
+
+    return result.str();
+}
+
+std::ostream& operator<<(std::ostream& out, const Transform& rhs) {
+    return out << static_cast<std::string>(rhs);
 }
 
 void Transform::Reset() {

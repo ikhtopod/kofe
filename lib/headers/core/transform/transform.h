@@ -6,10 +6,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <string>
+
 
 class Transform final : public ICanBeMatrix {
 public:
     friend void swap(Transform& lhs, Transform& rhs);
+    friend std::ostream& operator<<(std::ostream&, const Transform&);
 
 private:
     glm::vec3 m_position;
@@ -36,6 +39,8 @@ public:
     Transform(glm::mat4&& matrix) noexcept;
 
     Transform& operator+=(const Transform& other);
+
+    explicit operator std::string() const;
 
 public:
     void Reset();
@@ -67,8 +72,8 @@ public: /* ICanBeMatrix */
     glm::mat4 ToMatrix() const override;
 };
 
-
 Transform operator+(Transform lhs, const Transform& rhs);
+std::ostream& operator<<(std::ostream& out, const Transform& rhs);
 
 void swap(Transform& lhs, Transform& rhs);
 
