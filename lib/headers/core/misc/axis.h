@@ -3,6 +3,9 @@
 
 #include <glm/glm.hpp>
 
+#include <ostream>
+#include <string>
+
 
 class Axis final {
 public:
@@ -32,6 +35,7 @@ private:
 
 public:
     friend void swap(Axis&, Axis&);
+    friend std::ostream& operator<<(std::ostream&, const Axis&);
 
 public:
     Axis();
@@ -49,6 +53,8 @@ public:
          glm::vec3&& up,
          glm::vec3&& front) noexcept;
 
+    explicit operator std::string() const;
+
 public:
     glm::vec3 GetRight() const;
     void SetRight(const glm::vec3& right);
@@ -60,6 +66,8 @@ public:
     void SetFront(const glm::vec3& front);
 };
 
+
+std::ostream& operator<<(std::ostream& out, const Axis& rhs);
 
 void swap(Axis& lhs, Axis& rhs);
 

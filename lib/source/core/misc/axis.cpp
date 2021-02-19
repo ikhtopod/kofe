@@ -1,6 +1,7 @@
 #include "misc/axis.h"
 
 #include <utility>
+#include <sstream>
 
 
 void swap(Axis& lhs, Axis& rhs) {
@@ -82,6 +83,27 @@ Axis::Axis(glm::vec3&& right,
 
 glm::vec3 Axis::GetRight() const {
     return m_right;
+}
+
+Axis::operator std::string() const {
+    std::stringstream result {};
+
+    const glm::vec3 right = GetRight();
+    const glm::vec3 up = GetUp();
+    const glm::vec3 front = GetFront();
+
+    result << "Right { x: " << right.x << ", y: " << right.y
+           << ", z: " << right.z << " }\n";
+    result << "Up { x: " << up.x << ", y: " << up.y
+           << ", z: " << up.z << " }\n";
+    result << "Front { x: " << front.x << ", y: " << front.y
+           << ", z: " << front.z << " }";
+
+    return result.str();
+}
+
+std::ostream& operator<<(std::ostream& out, const Axis& rhs) {
+    return out << static_cast<std::string>(rhs);
 }
 
 void Axis::SetRight(const glm::vec3& right) {
