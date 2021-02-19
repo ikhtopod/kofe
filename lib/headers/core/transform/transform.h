@@ -2,10 +2,12 @@
 #define TRANSFORM_H
 
 #include "interface/icanbematrix.h"
+#include "misc/axis.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <ostream>
 #include <string>
 
 
@@ -19,6 +21,22 @@ private:
     glm::quat m_orientation;
     glm::vec3 m_scale;
 
+    Axis m_axis;
+    glm::quat m_axisOrientation;
+
+private:
+    Transform(const glm::vec3& position,
+              const glm::quat& orientation,
+              const glm::vec3& scale,
+              const Axis& axis,
+              const glm::quat& axisOrientation);
+
+    Transform(glm::vec3&& position,
+              glm::quat&& orientation,
+              glm::vec3&& scale,
+              Axis&& axis,
+              glm::quat&& axisOrientation) noexcept;
+
 public:
     Transform();
     Transform(const Transform& other);
@@ -31,12 +49,7 @@ public:
               const glm::quat& orientation,
               const glm::vec3& scale);
 
-    Transform(glm::vec3&& position,
-              glm::quat&& orientation,
-              glm::vec3&& scale) noexcept;
-
     Transform(const glm::mat4& matrix);
-    Transform(glm::mat4&& matrix) noexcept;
 
     Transform& operator+=(const Transform& other);
 
@@ -62,6 +75,13 @@ public:
     glm::vec3 GetScale() const;
     void SetScale(const glm::vec3& scale);
     void AddScale(const glm::vec3& scale);
+
+    Axis GetAxis() const;
+    glm::quat GetAxisOrientation() const;
+    void SetAxisOrientation(const glm::quat& axisOrientation);
+
+private:
+    void UpdateAxisByAxisOrientation();
 
 public:
     glm::mat4 GetPositionMatrix() const;
