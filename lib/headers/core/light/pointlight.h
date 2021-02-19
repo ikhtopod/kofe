@@ -17,6 +17,10 @@ private: /* the values depend on the m_radius */
     float m_linear;
     float m_quadratic;
 
+private:
+    float m_linearInfluence;
+    float m_quadraticInfluence;
+
 public:
     PointLight(const PointLight& other) = delete;
     PointLight(PointLight&& other) noexcept = delete;
@@ -52,6 +56,9 @@ public:
     float GetLinear() const;
     float GetQuadratic() const;
 
+    float GetLinearInfluence() const;
+    float GetQuadraticInfluence() const;
+
     Color GetAmbientColor() const;
     Color GetDiffuseColor() const;
     Color GetSpecularColor() const;
@@ -63,6 +70,9 @@ public:
     void SetSpecular(float specular);
 
     void SetADS(float ambient, float diffuse, float specular);
+
+    void SetLinearInfluence(float linearInfluence);
+    void SetQuadraticInfluence(float quadraticInfluence);
 
 private:
     void SetConstant(float constant);

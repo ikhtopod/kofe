@@ -3,6 +3,7 @@
 #include "everywhere.h"
 #include "mesh/mesh.h"
 #include "material/lightmaterial.h"
+#include "misc/util.h"
 
 #include <algorithm>
 #include <cmath>
@@ -135,6 +136,8 @@ Mesh* CreateSphere(const Color& color) {
 
 static constexpr float DEFAULT_RADIUS { 1.0f };
 static constexpr float DEFAULT_CONSTANT { 1.0f };
+static constexpr float DEFAULT_LINEAR_INFLUENCE { 2.0f };
+static constexpr float DEFAULT_QUADRATIC_INFLUENCE { 1.0f };
 
 static constexpr float DEFAULT_AMBIENT { 0.2f };
 static constexpr float DEFAULT_DEFFUSE { 0.5f };
@@ -172,7 +175,9 @@ PointLight::PointLight(const Color& color, float radius,
     Light { color },
     m_radius { radius },
     m_ambient { ambient }, m_diffuse { diffuse }, m_specular { specular },
-    m_constant { DEFAULT_CONSTANT }, m_linear {}, m_quadratic {} {
+    m_constant { DEFAULT_CONSTANT }, m_linear {}, m_quadratic {},
+    m_linearInfluence { DEFAULT_LINEAR_INFLUENCE },
+    m_quadraticInfluence { DEFAULT_QUADRATIC_INFLUENCE } {
     UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
 
@@ -215,6 +220,14 @@ float PointLight::GetQuadratic() const {
     return m_quadratic;
 }
 
+float PointLight::GetLinearInfluence() const {
+    return m_linearInfluence;
+}
+
+float PointLight::GetQuadraticInfluence() const {
+    return m_quadraticInfluence;
+}
+
 Color PointLight::GetAmbientColor() const {
     return Color { static_cast<glm::vec3>(m_color) * m_ambient };
 }
@@ -228,7 +241,12 @@ Color PointLight::GetSpecularColor() const {
 }
 
 void PointLight::SetRadius(float radius) {
-    m_radius = radius;
+    if (util::IsEqual(radius, 0.0f)) {
+        m_radius = radius;
+    } else {
+        m_radius = std::numeric_limits<decltype(radius)>::min();
+    }
+
     UpdateCLQByRadius();
 }
 
@@ -256,6 +274,14 @@ void PointLight::SetQuadratic(float quadratic) {
     m_quadratic = quadratic;
 }
 
+void PointLight::SetLinearInfluence(float linearInfluence) {
+    m_linearInfluence = linearInfluence;
+}
+
+void PointLight::SetQuadraticInfluence(float quadraticInfluence) {
+    m_quadraticInfluence = quadraticInfluence;
+}
+
 void PointLight::SetADS(float ambient, float diffuse, float specular) {
     SetAmbient(ambient);
     SetDiffuse(diffuse);
@@ -269,5 +295,7 @@ void PointLight::SetCLQ(float constant, float linear, float quadratic) {
 }
 
 void PointLight::UpdateCLQByRadius() {
-    SetCLQ(GetConstant(), 2.0f / GetRadius(), 1.0f / std::pow(GetRadius(), 2.0f));
+    SetCLQ(GetConstant(),
+           GetLinearInfluence() / GetRadius(),
+           GetQuadraticInfluence() / std::pow(GetRadius(), 2.0f));
 }

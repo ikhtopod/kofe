@@ -86,11 +86,7 @@ void ApplyPointLights(inout vec3 result) {
         const float DISTANCE = distance(pointLight.position, FragPos);
         const float attenuation = 1.0f / (pointLight.constant + pointLight.linear * DISTANCE + pointLight.quadratic * pow(DISTANCE, 2));
 
-        ambient *= attenuation;
-        diffuse *= attenuation;
-        specular *= attenuation;
-
-        result += ambient + diffuse + specular;
+        result += attenuation * (ambient + diffuse + specular);
     }
 }
 
