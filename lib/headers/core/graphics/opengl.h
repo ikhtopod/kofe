@@ -6,10 +6,11 @@
 
 
 class OpenGL final : public Graphics {
-public:
-    static const Color CLEAR_COLOR;
+private:
+    Color m_clearColor;
 
 private:
+    void UpdateClearColor();
     void InitOpenGL();
 
 public:
@@ -18,8 +19,13 @@ public:
     OpenGL& operator=(const OpenGL&) = delete;
     OpenGL& operator=(OpenGL&&) noexcept = delete;
 
+public:
     OpenGL();
     ~OpenGL() = default;
+
+public:
+    Color GetClearColor() const;
+    void SetClearColor(const Color& clearColor);
 
 protected: /* Graphics */
     void Init() override;
