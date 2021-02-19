@@ -39,3 +39,27 @@ std::vector<SpotLight*>& LightStorage::GetSpotLights() {
 const std::vector<SpotLight*>& LightStorage::GetSpotLights() const {
     return m_spotLights;
 }
+
+const std::vector<DirectionalLight*>
+        LightStorage::GetNearestDirectionalLights(const glm::vec3& position) const {
+    return GetNearestLightSources<DirectionalLight>(
+            m_directionalLights,
+            position,
+            MAX_DIRECTIONAL_LIGHTS);
+}
+
+const std::vector<PointLight*>
+        LightStorage::GetNearestPointLight(const glm::vec3& position) const {
+    return GetNearestLightSources<PointLight>(
+            m_pointLights,
+            position,
+            MAX_POINT_LIGHTS);
+}
+
+const std::vector<SpotLight*>
+        LightStorage::GetNearestSpotLight(const glm::vec3& position) const {
+    return GetNearestLightSources<SpotLight>(
+            m_spotLights,
+            position,
+            MAX_SPOT_LIGHTS);
+}

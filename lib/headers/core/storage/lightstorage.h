@@ -40,6 +40,13 @@ public:
 
     std::vector<SpotLight*>& GetSpotLights();
     const std::vector<SpotLight*>& GetSpotLights() const;
+
+public:
+    const std::vector<DirectionalLight*> GetNearestDirectionalLights(const glm::vec3& position) const;
+    const std::vector<PointLight*> GetNearestPointLight(const glm::vec3& position) const;
+    const std::vector<SpotLight*> GetNearestSpotLight(const glm::vec3& position) const;
 };
+
+#include "lightstorage.inl"
 
 #endif // LIGHTSTORAGE_H
