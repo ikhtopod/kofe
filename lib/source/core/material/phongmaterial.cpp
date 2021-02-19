@@ -25,10 +25,10 @@ void PhongMaterial::DoInitShader() {
     auto UniformMaterialFunc = [this](Shader* shader) {
         if (this == nullptr) return;
 
-        shader->SetVec3("material.ambient", static_cast<glm::vec3>(m_ambient));
-        shader->SetVec3("material.diffuse", static_cast<glm::vec3>(m_diffuse));
-        shader->SetVec3("material.specular", static_cast<glm::vec3>(m_specular));
-        shader->SetFloat("material.shininess", 32.0f);
+        shader->SetVec3("material.ambient", static_cast<glm::vec3>(GetAmbient()));
+        shader->SetVec3("material.diffuse", static_cast<glm::vec3>(GetDiffuse()));
+        shader->SetVec3("material.specular", static_cast<glm::vec3>(GetSpecular()));
+        shader->SetFloat("material.shininess", GetShininess());
     };
 
     auto UniformDirectionalLightFunc = [this](Shader* shader) {
@@ -97,6 +97,47 @@ void PhongMaterial::DoInitShader() {
         }
     };
 
+    auto UniformSpotLightFunc = [this](Shader* shader) {
+        if (this == nullptr) return;
+
+        auto& spotLights =
+                Everywhere::Instance().Get<LightStorage>().GetSpotLights();
+
+        const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
+                                                   spotLights.size());
+
+        shader->SetUInt("spotLightArraySize", MAX_LIGHTS);
+
+        for (size_t i = 0; i < MAX_LIGHTS; ++i) {
+            const std::string spotLightsName { "spotLights[" + std::to_string(i) + "]." };
+
+            const std::string positionName { spotLightsName + "position" };
+            const std::string directionName { spotLightsName + "direction" };
+            const std::string cutoffName { spotLightsName + "cutoff" };
+            const std::string ambientName { spotLightsName + "ambient" };
+            const std::string diffusetName { spotLightsName + "diffuse" };
+            const std::string specularName { spotLightsName + "specular" };
+            const std::string constantName { spotLightsName + "constant" };
+            const std::string linearName { spotLightsName + "linear" };
+            const std::string quadraticName { spotLightsName + "quadratic" };
+
+            shader->SetVec3(positionName,
+                            static_cast<glm::vec3>(spotLights[i]->GetGlobalTransform().GetPosition()));
+            shader->SetVec3(directionName,
+                            static_cast<glm::vec3>(spotLights[i]->GetGlobalTransform().GetRotation()));
+            shader->SetFloat(cutoffName, glm::cos(spotLights[i]->GetCutoffRadians()));
+            shader->SetVec3(ambientName,
+                            static_cast<glm::vec3>(spotLights[i]->GetAmbientColor()));
+            shader->SetVec3(diffusetName,
+                            static_cast<glm::vec3>(spotLights[i]->GetDiffuseColor()));
+            shader->SetVec3(specularName,
+                            static_cast<glm::vec3>(spotLights[i]->GetSpecularColor()));
+            shader->SetFloat(constantName, spotLights[i]->GetConstant());
+            shader->SetFloat(linearName, spotLights[i]->GetLinear());
+            shader->SetFloat(quadraticName, spotLights[i]->GetQuadratic());
+        }
+    };
+
     auto UniformCameraFunc = [this](Shader* shader) {
         if (this == nullptr) return;
 
@@ -109,6 +150,7 @@ void PhongMaterial::DoInitShader() {
     m_shader->UniformProcessingFunctions().push_back(UniformMaterialFunc);
     m_shader->UniformProcessingFunctions().push_back(UniformDirectionalLightFunc);
     m_shader->UniformProcessingFunctions().push_back(UniformPointLightFunc);
+    m_shader->UniformProcessingFunctions().push_back(UniformSpotLightFunc);
     m_shader->UniformProcessingFunctions().push_back(UniformCameraFunc);
 }
 

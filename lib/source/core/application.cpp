@@ -2,8 +2,9 @@
 
 #include "everywhere.h"
 #include "mesh/mesh.h"
-#include "light/pointlight.h"
 #include "light/directionallight.h"
+#include "light/pointlight.h"
+#include "light/spotlight.h"
 #include "material/texturematerial.h"
 #include "material/phongmaterial.h"
 
@@ -12,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <cmath>
+#include <iostream>
 
 
 Application::Application() :
@@ -64,7 +66,7 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
-        //DemoMainLoop();
+        DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -158,32 +160,18 @@ Space* Application::CreateDemoSpace() {
         30, 31, 32, 33, 34, 35
     };
 
-    std::shared_ptr<Mesh> tempMeshObject { new Mesh { vertices, indices } };
-    tempMeshObject->SetMaterialId(materialId);
-    tempMeshObject->GetTransform().AddPosition({ -1.0f, -1.0f, 0.0f });
-
-    std::shared_ptr<Mesh> tempMeshChildren { new Mesh { vertices, indices } };
-    tempMeshObject->SetMaterialId(tempMeshObject->GetMaterialId());
-    tempMeshChildren->GetTransform().SetScale({ .5f, .5f, .5f });
-    tempMeshChildren->GetTransform().AddPosition({ 2.0f, 2.0f, 0.0f });
-
-    tempMeshObject->Children().Add(tempMeshChildren);
+    std::shared_ptr<Mesh> tempMeshObject_01 { new Mesh { vertices, indices } };
+    tempMeshObject_01->SetMaterialId(materialId);
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
-    tempScene->GetObjects().Add(tempMeshObject);
+    tempScene->GetObjects().Add(tempMeshObject_01);
 
     auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
     tempScene->GetObjects().Add(tempDirectionalLight_01);
 
-    auto tempPointLight_01 = std::make_shared<PointLight>(2.0f);
-    tempPointLight_01->SetColor(Color { 0.307634f, 0.6f, 0.016358f });
-    tempPointLight_01->GetTransform().SetPosition({ -1.0f, -1.0f, -1.0f });
-    tempScene->GetObjects().Add(tempPointLight_01);
-
-    auto tempPointLight_02 = std::make_shared<PointLight>(5.0f);
-    tempPointLight_02->SetColor(Color::RED);
-    tempPointLight_02->GetTransform().SetPosition({ -10.0f, -1.0f, -1.0f });
-    tempPointLight_01->Children().Add(tempPointLight_02);
+    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 12.5f);
+    tempSpotLight_01->SetColor(Color::RED);
+    tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
@@ -192,16 +180,11 @@ Space* Application::CreateDemoSpace() {
 }
 
 void Application::DemoMainLoop() {
-    auto& object = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Front();
-    float angleRotation = 100.0f * Everywhere::Instance().Get<DeltaTime>().GetDelta();
-    object->GetTransform().AddRotation({ angleRotation / 2.0f, angleRotation, -angleRotation });
-    auto& child = object->Children().Front();
-    child->GetTransform().AddRotation({ angleRotation, -angleRotation, angleRotation * 2.0f });
+    auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
+    const float anglePerSec = 90.0f;
+    const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
+    //light->GetTransform().AddRotation({ 0.0f, angleRotation, angleRotation });
 
-    auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().At(2);
-    light->GetTransform().AddRotation({ angleRotation, angleRotation, angleRotation });
-    auto& lightChild = light->Children().Front();
-    float addPos = static_cast<float>(std::sin(glfwGetTime()));
-    light->GetTransform().SetPosition({ -addPos, -addPos, -addPos });
-    lightChild->GetTransform().SetPosition({ addPos, addPos, addPos });
+    std::cout << light->GetGlobalTransform() << std::endl
+              << std::string(30, '=') << std::endl;
 }

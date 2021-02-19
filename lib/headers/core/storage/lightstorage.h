@@ -2,8 +2,9 @@
 #define LIGHTSTORAGE_H
 
 #include "interface/icanbeeverywhere.h"
-#include "light/pointlight.h"
 #include "light/directionallight.h"
+#include "light/pointlight.h"
+#include "light/spotlight.h"
 
 #include <vector>
 
@@ -18,6 +19,7 @@ public:
 private:
     std::vector<DirectionalLight*> m_directionalLights;
     std::vector<PointLight*> m_pointLights;
+    std::vector<SpotLight*> m_spotLights;
 
 public:
     LightStorage();
@@ -35,6 +37,9 @@ public:
 
     std::vector<PointLight*>& GetPointLights();
     const std::vector<PointLight*>& GetPointLights() const;
+
+    std::vector<SpotLight*>& GetSpotLights();
+    const std::vector<SpotLight*>& GetSpotLights() const;
 };
 
 #endif // LIGHTSTORAGE_H

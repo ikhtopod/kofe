@@ -24,6 +24,18 @@ struct PointLight {
     float quadratic;
 };
 
+struct SpotLight {
+    vec3 position;
+    vec3 direction;
+    float cutoff;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
 const int MAX_DIRECTIONAL_LIGHTS = 4;
 const int MAX_POINT_LIGHTS = 12;
 const int MAX_SPOT_LIGHTS = 6;
@@ -33,9 +45,11 @@ uniform vec3 cameraPosition;
 
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 uniform uint directionalLightArraySize;
 uniform uint pointLightArraySize;
+uniform uint spotLightArraySize;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -89,11 +103,46 @@ void ApplyPointLights(inout vec3 result) {
     }
 }
 
+void ApplySpotLights(inout vec3 result) {
+    const vec3 NORM = normalize(Normal);
+
+    for (uint i = 0; i < spotLightArraySize; i++) {
+        const SpotLight spotLight = spotLights[i];
+
+        vec3 ambient = spotLight.ambient * material.ambient;
+
+        const vec3 lightDirection = normalize(spotLight.position - FragPos);
+        const float theta = dot(lightDirection, normalize(-spotLight.direction));
+
+        if (theta > spotLight.cutoff) {
+            const float diff = max(dot(NORM, lightDirection), 0.0f);
+            vec3 diffuse = spotLight.diffuse * (diff * material.diffuse);
+
+            const vec3 viewDirection = normalize(cameraPosition - FragPos);
+            // Reflection vector along the normal axis
+            const vec3 reflectDirection = reflect(-lightDirection, NORM);
+            const float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
+            vec3 specular = spotLight.specular * (spec * material.specular);
+
+            const float DISTANCE = distance(spotLight.position, FragPos);
+            const float attenuation = 1.0f / (spotLight.constant + spotLight.linear * DISTANCE + spotLight.quadratic * pow(DISTANCE, 2));
+
+            diffuse *= attenuation;
+            specular *= attenuation;
+
+            result += ambient + diffuse + specular;
+        } /*else {
+            result += ambient;
+        }*/
+    }
+}
+
 void main() {
     vec3 result = vec3(0.0f);
 
     ApplyDirectionalLights(result);
     ApplyPointLights(result);
+    ApplySpotLights(result);
 
     FragColor = vec4(result, 1.0f);
 }
