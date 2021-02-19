@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include <cmath>
+#include <limits>
 
 
 namespace util {
@@ -19,6 +20,11 @@ T Repeat(T value, U min, U max) {
     }
 
     return result;
+}
+
+template<typename T = float>
+bool IsEqual(T x, T y) {
+    return std::abs(x - y) < std::numeric_limits<float>::epsilon();
 }
 
 } // namespace util
