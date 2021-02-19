@@ -81,10 +81,6 @@ Axis::Axis(glm::vec3&& right,
     m_up { std::move(up) },
     m_front { std::move(front) } {}
 
-glm::vec3 Axis::GetRight() const {
-    return m_right;
-}
-
 Axis::operator std::string() const {
     std::stringstream result {};
 
@@ -92,11 +88,12 @@ Axis::operator std::string() const {
     const glm::vec3 up = GetUp();
     const glm::vec3 front = GetFront();
 
-    result << "Right { x: " << right.x << ", y: " << right.y
+    result << "Axis:\n";
+    result << "  Right { x: " << right.x << ", y: " << right.y
            << ", z: " << right.z << " }\n";
-    result << "Up { x: " << up.x << ", y: " << up.y
+    result << "  Up { x: " << up.x << ", y: " << up.y
            << ", z: " << up.z << " }\n";
-    result << "Front { x: " << front.x << ", y: " << front.y
+    result << "  Front { x: " << front.x << ", y: " << front.y
            << ", z: " << front.z << " }";
 
     return result.str();
@@ -104,6 +101,10 @@ Axis::operator std::string() const {
 
 std::ostream& operator<<(std::ostream& out, const Axis& rhs) {
     return out << static_cast<std::string>(rhs);
+}
+
+glm::vec3 Axis::GetRight() const {
+    return m_right;
 }
 
 void Axis::SetRight(const glm::vec3& right) {
