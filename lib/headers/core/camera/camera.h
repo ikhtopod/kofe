@@ -40,7 +40,6 @@ private:
 
 protected:
     glm::vec2 m_lastMousePosition;
-    Axis m_axis;
 
     float m_yaw;
     float m_pitch;
@@ -54,9 +53,6 @@ public:
 public:
     Camera();
     virtual ~Camera();
-
-protected:
-    void UpdateCameraVectors();
 
 public:
     float GetFoV() const;

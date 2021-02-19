@@ -15,21 +15,22 @@ void FreeCamera::UpdateInput() {
     Input& input = Everywhere::Instance().Get<Input>();
     DeltaTime& delta = Everywhere::Instance().Get<DeltaTime>();
 
-    const float VELOCITY = DEFAULT_MOVEMENT_SPEED * delta.GetDelta();
-
     // Keyboard
+    const float VELOCITY = DEFAULT_MOVEMENT_SPEED * delta.GetDelta();
+    Axis axis = GetTransform().GetAxis();
+
     if (input.KeyIsPressed(GLFW_KEY_W))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetFront());
+        GetTransform().AddPosition(VELOCITY * axis.GetFront());
     if (input.KeyIsPressed(GLFW_KEY_S))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetFront());
+        GetTransform().AddPosition(-VELOCITY * axis.GetFront());
     if (input.KeyIsPressed(GLFW_KEY_A))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetRight());
+        GetTransform().AddPosition(-VELOCITY * axis.GetRight());
     if (input.KeyIsPressed(GLFW_KEY_D))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetRight());
+        GetTransform().AddPosition(VELOCITY * axis.GetRight());
     if (input.KeyIsPressed(GLFW_KEY_Q))
-        GetTransform().AddPosition(-VELOCITY * m_axis.GetUp());
+        GetTransform().AddPosition(-VELOCITY * axis.GetUp());
     if (input.KeyIsPressed(GLFW_KEY_E))
-        GetTransform().AddPosition(VELOCITY * m_axis.GetUp());
+        GetTransform().AddPosition(VELOCITY * axis.GetUp());
 
     // Mouse
     if (!input.WasChangedMousePosition()) return;
@@ -48,8 +49,6 @@ void FreeCamera::UpdateInput() {
     glm::quat qPitch = glm::angleAxis(glm::radians(m_pitch), Axis::RIGHT);
 
     GetTransform().SetOrientation(qYaw * qPitch);
-
-    UpdateCameraVectors();
 
     m_lastMousePosition = mousePosition;
 }
