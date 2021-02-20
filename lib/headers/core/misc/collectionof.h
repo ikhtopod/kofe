@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <algorithm>
 #include <type_traits>
 
 
@@ -29,8 +30,8 @@ private:
     Collection<TypePtr<ClearT>> m_objects;
 
 public:
-    template <typename U>
-    friend void swap(CollectionOf<U>&, CollectionOf<U>&);
+    template <typename U, bool S>
+    friend void swap(CollectionOf<U, S>&, CollectionOf<U, S>&);
 
 public:
     CollectionOf() :
@@ -111,16 +112,16 @@ public:
 
     void Delete(size_type idx) {
         if (idx >= Size()) return;
-
-        At(idx).reset();
         m_objects.erase(std::next(m_objects.begin(), idx));
     }
 
-    void Clear() {
-        for (auto& obj : m_objects) {
-            obj.reset();
-        }
+    void Delete(TypePtr<ClearT> object) {
+        m_objects.erase(
+            std::remove(m_objects.begin(), m_objects.end(), object),
+            m_objects.end());
+    }
 
+    void Clear() {
         m_objects.clear();
     }
 
@@ -133,14 +134,20 @@ public:
     }
 };
 
+template <typename T>
+using CollectionOfShared = CollectionOf<T, true>;
 
-template <typename U>
-void swap(CollectionOf<U>& rhs, CollectionOf<U>& lhs) {
+template <typename T>
+using CollectionOfPtr = CollectionOf<T, false>;
+
+
+template <typename U, bool S = true>
+void swap(CollectionOf<U, S>& rhs, CollectionOf<U, S>& lhs) {
     if (&rhs == &lhs) return;
 
     using std::swap;
 
-    swap(rhs.Get(), lhs.Get());
+    swap(rhs.m_objects, lhs.m_objects);
 }
 
 

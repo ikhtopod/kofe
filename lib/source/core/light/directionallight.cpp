@@ -123,7 +123,7 @@ Mesh* CreateSphere(const Color& color) {
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId =
-            Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
     Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
     mesh->SetDrawingMode(MeshDrawingMode::POINTS);
@@ -157,17 +157,11 @@ DirectionalLight::DirectionalLight(const Color& color, float ambient,
     m_specular { specular } {
     m_childMesh.reset(::CreateSphere(m_color));
 
-    auto& directionalLights =
-            Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
-    directionalLights.push_back(this);
+    Everywhere::Instance().Get<LightStorage>().GetDirectionalLights().Add(this);
 }
 
 DirectionalLight::~DirectionalLight() {
-    auto& directionalLights =
-            Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
-    directionalLights.erase(
-            std::remove(directionalLights.begin(), directionalLights.end(), this),
-            directionalLights.end());
+    Everywhere::Instance().Get<LightStorage>().GetDirectionalLights().Delete(this);
 }
 
 float DirectionalLight::GetAmbient() const {

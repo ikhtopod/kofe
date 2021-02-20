@@ -125,7 +125,7 @@ Mesh* CreateSphere(const Color& color) {
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId =
-            Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
     Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
     mesh->SetDrawingMode(MeshDrawingMode::POINTS);
@@ -181,15 +181,11 @@ PointLight::PointLight(const Color& color, float radius,
     UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
 
-    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
-    pointLights.push_back(this);
+    Everywhere::Instance().Get<LightStorage>().GetPointLights().Add(this);
 }
 
 PointLight::~PointLight() {
-    auto& pointLights = Everywhere::Instance().Get<LightStorage>().GetPointLights();
-    pointLights.erase(
-            std::remove(pointLights.begin(), pointLights.end(), this),
-            pointLights.end());
+    Everywhere::Instance().Get<LightStorage>().GetPointLights().Delete(this);
 }
 
 float PointLight::GetRadius() const {

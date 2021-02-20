@@ -40,7 +40,7 @@ void TextureMaterial::DoInitShader() {
             Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_DIRECTIONAL_LIGHTS,
-                                                   directionalLights.size());
+                                                   directionalLights.Size());
 
         shader->SetUInt("directionalLightArraySize", MAX_LIGHTS);
 
@@ -73,7 +73,7 @@ void TextureMaterial::DoInitShader() {
             Everywhere::Instance().Get<LightStorage>().GetPointLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
-                                                   pointLights.size());
+                                                   pointLights.Size());
 
         shader->SetUInt("pointLightArraySize", MAX_LIGHTS);
 
@@ -112,7 +112,7 @@ void TextureMaterial::DoInitShader() {
             Everywhere::Instance().Get<LightStorage>().GetSpotLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
-                                                   spotLights.size());
+                                                   spotLights.Size());
 
         shader->SetUInt("spotLightArraySize", MAX_LIGHTS);
 

@@ -2,11 +2,10 @@
 #define LIGHTSTORAGE_H
 
 #include "interface/icanbeeverywhere.h"
+#include "misc/collectionof.h"
 #include "light/directionallight.h"
 #include "light/pointlight.h"
 #include "light/spotlight.h"
-
-#include <vector>
 
 
 class LightStorage final :
@@ -17,9 +16,9 @@ public:
     static const size_t MAX_SPOT_LIGHTS;
 
 private:
-    std::vector<DirectionalLight*> m_directionalLights;
-    std::vector<PointLight*> m_pointLights;
-    std::vector<SpotLight*> m_spotLights;
+    CollectionOfPtr<DirectionalLight> m_directionalLights;
+    CollectionOfPtr<PointLight> m_pointLights;
+    CollectionOfPtr<SpotLight> m_spotLights;
 
 public:
     LightStorage();
@@ -32,21 +31,14 @@ public:
     LightStorage& operator=(LightStorage&&) noexcept = delete;
 
 public:
-    std::vector<DirectionalLight*>& GetDirectionalLights();
-    const std::vector<DirectionalLight*>& GetDirectionalLights() const;
+    CollectionOfPtr<DirectionalLight>& GetDirectionalLights();
+    const CollectionOfPtr<DirectionalLight>& GetDirectionalLights() const;
 
-    std::vector<PointLight*>& GetPointLights();
-    const std::vector<PointLight*>& GetPointLights() const;
+    CollectionOfPtr<PointLight>& GetPointLights();
+    const CollectionOfPtr<PointLight>& GetPointLights() const;
 
-    std::vector<SpotLight*>& GetSpotLights();
-    const std::vector<SpotLight*>& GetSpotLights() const;
-
-public:
-    const std::vector<DirectionalLight*> GetNearestDirectionalLights(const glm::vec3& position) const;
-    const std::vector<PointLight*> GetNearestPointLight(const glm::vec3& position) const;
-    const std::vector<SpotLight*> GetNearestSpotLight(const glm::vec3& position) const;
+    CollectionOfPtr<SpotLight>& GetSpotLights();
+    const CollectionOfPtr<SpotLight>& GetSpotLights() const;
 };
-
-#include "lightstorage.inl"
 
 #endif // LIGHTSTORAGE_H

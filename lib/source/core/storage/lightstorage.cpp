@@ -11,55 +11,31 @@ LightStorage::LightStorage() :
     m_spotLights {} {}
 
 LightStorage::~LightStorage() {
-    m_directionalLights.clear();
-    m_pointLights.clear();
-    m_spotLights.clear();
+    m_directionalLights.Clear();
+    m_pointLights.Clear();
+    m_spotLights.Clear();
 }
 
-std::vector<DirectionalLight*>& LightStorage::GetDirectionalLights() {
+CollectionOfPtr<DirectionalLight>& LightStorage::GetDirectionalLights() {
     return m_directionalLights;
 }
 
-const std::vector<DirectionalLight*>& LightStorage::GetDirectionalLights() const {
+const CollectionOfPtr<DirectionalLight>& LightStorage::GetDirectionalLights() const {
     return m_directionalLights;
 }
 
-std::vector<PointLight*>& LightStorage::GetPointLights() {
+CollectionOfPtr<PointLight>& LightStorage::GetPointLights() {
     return m_pointLights;
 }
 
-const std::vector<PointLight*>& LightStorage::GetPointLights() const {
+const CollectionOfPtr<PointLight>& LightStorage::GetPointLights() const {
     return m_pointLights;
 }
 
-std::vector<SpotLight*>& LightStorage::GetSpotLights() {
+CollectionOfPtr<SpotLight>& LightStorage::GetSpotLights() {
     return m_spotLights;
 }
 
-const std::vector<SpotLight*>& LightStorage::GetSpotLights() const {
+const CollectionOfPtr<SpotLight>& LightStorage::GetSpotLights() const {
     return m_spotLights;
-}
-
-const std::vector<DirectionalLight*>
-        LightStorage::GetNearestDirectionalLights(const glm::vec3& position) const {
-    return GetNearestLightSources<DirectionalLight>(
-            m_directionalLights,
-            position,
-            MAX_DIRECTIONAL_LIGHTS);
-}
-
-const std::vector<PointLight*>
-        LightStorage::GetNearestPointLight(const glm::vec3& position) const {
-    return GetNearestLightSources<PointLight>(
-            m_pointLights,
-            position,
-            MAX_POINT_LIGHTS);
-}
-
-const std::vector<SpotLight*>
-        LightStorage::GetNearestSpotLight(const glm::vec3& position) const {
-    return GetNearestLightSources<SpotLight>(
-            m_spotLights,
-            position,
-            MAX_SPOT_LIGHTS);
 }
