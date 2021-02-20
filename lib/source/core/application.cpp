@@ -84,19 +84,19 @@ void Application::Run() {
 Space* Application::CreateDemoSpace() {
     std::shared_ptr<Texture> tempDiffuseTexture {
         new Texture {
-                std::filesystem::path {
-                        R"png(./resources/textures/texture_box_01.png)png" } }
+            std::filesystem::path {
+                R"png(./resources/textures/texture_box_01.png)png" } }
     };
 
     std::shared_ptr<Texture> tempSpecularTexture {
         new Texture { std::filesystem::path {
-                              R"png(./resources/textures/texture_box_01_specular.png)png" },
+                          R"png(./resources/textures/texture_box_01_specular.png)png" },
                       tempDiffuseTexture->NextTextureUnit() }
     };
 
     std::shared_ptr<Texture> tempEmissionTexture {
         new Texture { std::filesystem::path {
-                              R"png(./resources/textures/texture_box_01_emission.png)png" },
+                          R"png(./resources/textures/texture_box_01_emission.png)png" },
                       tempSpecularTexture->NextTextureUnit() }
     };
 
@@ -167,9 +167,13 @@ Space* Application::CreateDemoSpace() {
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject_01);
 
-    auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
-    tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
-    tempScene->GetObjects().Add(tempDirectionalLight_01);
+    //auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    //tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
+    //tempScene->GetObjects().Add(tempDirectionalLight_01);
+
+    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 25.0f);
+    tempSpotLight_01->GetTransform().AddRotationY(90.0f);
+    tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
@@ -178,12 +182,8 @@ Space* Application::CreateDemoSpace() {
 }
 
 void Application::DemoMainLoop() {
+    static const float anglePerSec = 180.0f;
     auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
-    const float anglePerSec = 90.0f;
     const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
-    light->GetTransform().AddRotation({ 0.0f, angleRotation, 0.0f });
-
-    std::cout << std::string(30, '=') << std::endl
-              << light->GetGlobalTransform()
-              << std::endl;
+    light->GetTransform().AddRotationY(angleRotation);
 }

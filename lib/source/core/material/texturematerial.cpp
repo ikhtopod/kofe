@@ -37,7 +37,7 @@ void TextureMaterial::DoInitShader() {
         if (this == nullptr) return;
 
         auto& directionalLights =
-                Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
+            Everywhere::Instance().Get<LightStorage>().GetDirectionalLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_DIRECTIONAL_LIGHTS,
                                                    directionalLights.size());
@@ -45,21 +45,24 @@ void TextureMaterial::DoInitShader() {
         shader->SetUInt("directionalLightArraySize", MAX_LIGHTS);
 
         for (size_t i = 0; i < MAX_LIGHTS; ++i) {
-            const std::string directionalLightsName { "directionalLights[" + std::to_string(i) + "]." };
+            if (!directionalLights[i]) continue;
 
+            DirectionalLight* directionalLight = directionalLights[i];
+
+            const std::string directionalLightsName { "directionalLights[" + std::to_string(i) + "]." };
             const std::string directionName { directionalLightsName + "direction" };
             const std::string ambientName { directionalLightsName + "ambient" };
             const std::string diffusetName { directionalLightsName + "diffuse" };
             const std::string specularName { directionalLightsName + "specular" };
 
             shader->SetVec3(directionName,
-                            directionalLights[i]->GetGlobalTransform().GetAxis().GetFront());
+                            directionalLight->GetGlobalTransform().GetAxis().GetFront());
             shader->SetVec3(ambientName,
-                            static_cast<glm::vec3>(directionalLights[i]->GetAmbientColor()));
+                            static_cast<glm::vec3>(directionalLight->GetAmbientColor()));
             shader->SetVec3(diffusetName,
-                            static_cast<glm::vec3>(directionalLights[i]->GetDiffuseColor()));
+                            static_cast<glm::vec3>(directionalLight->GetDiffuseColor()));
             shader->SetVec3(specularName,
-                            static_cast<glm::vec3>(directionalLights[i]->GetSpecularColor()));
+                            static_cast<glm::vec3>(directionalLight->GetSpecularColor()));
         }
     };
 
@@ -67,7 +70,7 @@ void TextureMaterial::DoInitShader() {
         if (this == nullptr) return;
 
         auto& pointLights =
-                Everywhere::Instance().Get<LightStorage>().GetPointLights();
+            Everywhere::Instance().Get<LightStorage>().GetPointLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
                                                    pointLights.size());
@@ -75,8 +78,11 @@ void TextureMaterial::DoInitShader() {
         shader->SetUInt("pointLightArraySize", MAX_LIGHTS);
 
         for (size_t i = 0; i < MAX_LIGHTS; ++i) {
-            const std::string pointLightsName { "pointLights[" + std::to_string(i) + "]." };
+            if (!pointLights[i]) continue;
 
+            PointLight* pointLight = pointLights[i];
+
+            const std::string pointLightsName { "pointLights[" + std::to_string(i) + "]." };
             const std::string positionName { pointLightsName + "position" };
             const std::string ambientName { pointLightsName + "ambient" };
             const std::string diffusetName { pointLightsName + "diffuse" };
@@ -86,16 +92,16 @@ void TextureMaterial::DoInitShader() {
             const std::string quadraticName { pointLightsName + "quadratic" };
 
             shader->SetVec3(positionName,
-                            static_cast<glm::vec3>(pointLights[i]->GetGlobalTransform().GetPosition()));
+                            static_cast<glm::vec3>(pointLight->GetGlobalTransform().GetPosition()));
             shader->SetVec3(ambientName,
-                            static_cast<glm::vec3>(pointLights[i]->GetAmbientColor()));
+                            static_cast<glm::vec3>(pointLight->GetAmbientColor()));
             shader->SetVec3(diffusetName,
-                            static_cast<glm::vec3>(pointLights[i]->GetDiffuseColor()));
+                            static_cast<glm::vec3>(pointLight->GetDiffuseColor()));
             shader->SetVec3(specularName,
-                            static_cast<glm::vec3>(pointLights[i]->GetSpecularColor()));
-            shader->SetFloat(constantName, pointLights[i]->GetConstant());
-            shader->SetFloat(linearName, pointLights[i]->GetLinear());
-            shader->SetFloat(quadraticName, pointLights[i]->GetQuadratic());
+                            static_cast<glm::vec3>(pointLight->GetSpecularColor()));
+            shader->SetFloat(constantName, pointLight->GetConstant());
+            shader->SetFloat(linearName, pointLight->GetLinear());
+            shader->SetFloat(quadraticName, pointLight->GetQuadratic());
         }
     };
 
@@ -103,7 +109,7 @@ void TextureMaterial::DoInitShader() {
         if (this == nullptr) return;
 
         auto& spotLights =
-                Everywhere::Instance().Get<LightStorage>().GetSpotLights();
+            Everywhere::Instance().Get<LightStorage>().GetSpotLights();
 
         const size_t MAX_LIGHTS = std::min<size_t>(LightStorage::MAX_POINT_LIGHTS,
                                                    spotLights.size());
@@ -111,11 +117,15 @@ void TextureMaterial::DoInitShader() {
         shader->SetUInt("spotLightArraySize", MAX_LIGHTS);
 
         for (size_t i = 0; i < MAX_LIGHTS; ++i) {
-            const std::string spotLightsName { "spotLights[" + std::to_string(i) + "]." };
+            if (!spotLights[i]) continue;
 
+            SpotLight* spotLight = spotLights[i];
+
+            const std::string spotLightsName { "spotLights[" + std::to_string(i) + "]." };
             const std::string positionName { spotLightsName + "position" };
             const std::string directionName { spotLightsName + "direction" };
             const std::string cutoffName { spotLightsName + "cutoff" };
+            const std::string outerCutoffName { spotLightsName + "outercutoff" };
             const std::string ambientName { spotLightsName + "ambient" };
             const std::string diffusetName { spotLightsName + "diffuse" };
             const std::string specularName { spotLightsName + "specular" };
@@ -124,19 +134,20 @@ void TextureMaterial::DoInitShader() {
             const std::string quadraticName { spotLightsName + "quadratic" };
 
             shader->SetVec3(positionName,
-                            static_cast<glm::vec3>(spotLights[i]->GetGlobalTransform().GetPosition()));
+                            static_cast<glm::vec3>(spotLight->GetGlobalTransform().GetPosition()));
             shader->SetVec3(directionName,
-                            spotLights[i]->GetGlobalTransform().GetAxis().GetFront());
-            shader->SetFloat(cutoffName, glm::cos(spotLights[i]->GetCutoffRadians()));
+                            spotLight->GetGlobalTransform().GetAxis().GetFront());
+            shader->SetFloat(cutoffName, glm::cos(spotLight->GetCutoffRadians()));
+            shader->SetFloat(outerCutoffName, glm::cos(spotLight->GetOuterCutoffRadians()));
             shader->SetVec3(ambientName,
-                            static_cast<glm::vec3>(spotLights[i]->GetAmbientColor()));
+                            static_cast<glm::vec3>(spotLight->GetAmbientColor()));
             shader->SetVec3(diffusetName,
-                            static_cast<glm::vec3>(spotLights[i]->GetDiffuseColor()));
+                            static_cast<glm::vec3>(spotLight->GetDiffuseColor()));
             shader->SetVec3(specularName,
-                            static_cast<glm::vec3>(spotLights[i]->GetSpecularColor()));
-            shader->SetFloat(constantName, spotLights[i]->GetConstant());
-            shader->SetFloat(linearName, spotLights[i]->GetLinear());
-            shader->SetFloat(quadraticName, spotLights[i]->GetQuadratic());
+                            static_cast<glm::vec3>(spotLight->GetSpecularColor()));
+            shader->SetFloat(constantName, spotLight->GetConstant());
+            shader->SetFloat(linearName, spotLight->GetLinear());
+            shader->SetFloat(quadraticName, spotLight->GetQuadratic());
         }
     };
 
@@ -144,7 +155,7 @@ void TextureMaterial::DoInitShader() {
         if (this == nullptr) return;
 
         glm::vec3 cameraPosition =
-                Everywhere::Instance().Get<Camera>().GetTransform().GetPosition();
+            Everywhere::Instance().Get<Camera>().GetTransform().GetPosition();
 
         shader->SetVec3("cameraPosition", cameraPosition);
     };
@@ -176,7 +187,7 @@ TextureMaterial::TextureMaterial(const std::shared_ptr<Texture>& diffuse,
                                  const std::shared_ptr<Texture>& emission,
                                  float shininess) :
     Material { std::shared_ptr<Shader> {
-            new Shader { TEXTURE_VERTEX_PATH, TEXTURE_FRAGMENT_PATH } } },
+        new Shader { TEXTURE_VERTEX_PATH, TEXTURE_FRAGMENT_PATH } } },
     m_diffuse { diffuse },
     m_specular { specular },
     m_emission { emission },

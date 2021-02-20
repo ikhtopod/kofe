@@ -28,6 +28,7 @@ struct SpotLight {
     vec3 position;
     vec3 direction;
     float cutoff;
+    float outercutoff;
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -111,30 +112,31 @@ void ApplySpotLights(inout vec3 result) {
         const SpotLight spotLight = spotLights[i];
 
         vec3 ambient = spotLight.ambient * texture(material.diffuse, TextureCoordinates).rgb;
-        
+
         const vec3 lightDirection = normalize(spotLight.position - FragPos);
+        const float diff = max(dot(NORM, lightDirection), 0.0f);
+        vec3 diffuse = spotLight.diffuse * diff * texture(material.diffuse, TextureCoordinates).rgb;
+
+        const vec3 viewDirection = normalize(cameraPosition - FragPos);
+        // Reflection vector along the normal axis
+        const vec3 reflectDirection = reflect(-lightDirection, NORM);
+        const float spec = pow(max(dot(viewDirection, reflectDirection), 0.0f), material.shininess);
+        vec3 specular = spotLight.specular * spec * texture(material.specular, TextureCoordinates).rgb;
+
         const float theta = dot(lightDirection, normalize(-spotLight.direction));
+        const float epsilon = spotLight.cutoff - spotLight.outercutoff;
+        const float intencity = clamp((theta - spotLight.outercutoff) / epsilon, 0.0f, 1.0f);
+        diffuse *= intencity;
+        specular *= intencity;
 
-        if (theta > spotLight.cutoff) {
-            const float diff = max(dot(NORM, lightDirection), 0.0f);
-            vec3 diffuse = spotLight.diffuse * diff * texture(material.diffuse, TextureCoordinates).rgb;
+        const float DISTANCE = distance(spotLight.position, FragPos);
+        const float attenuation = 1.0f / (spotLight.constant + spotLight.linear * DISTANCE + spotLight.quadratic * pow(DISTANCE, 2));
 
-            const vec3 viewDirection = normalize(cameraPosition - FragPos);
-            // Reflection vector along the normal axis
-            const vec3 reflectDirection = reflect(-lightDirection, NORM);
-            const float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
-            vec3 specular = spotLight.specular * spec * texture(material.specular, TextureCoordinates).rgb;
+        ambient *= attenuation;
+        diffuse *= attenuation;
+        specular *= attenuation;
 
-            const float DISTANCE = distance(spotLight.position, FragPos);
-            const float attenuation = 1.0f / (spotLight.constant + spotLight.linear * DISTANCE + spotLight.quadratic * pow(DISTANCE, 2));
-
-            diffuse *= attenuation;
-            specular *= attenuation;
-
-            result += ambient + diffuse + specular;
-        } /*else {
-            result += ambient;
-        }*/
+        result += ambient + diffuse + specular;
     }
 }
 

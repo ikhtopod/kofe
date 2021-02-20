@@ -8,6 +8,7 @@ class SpotLight : public Light {
 protected:
     float m_radius;
     float m_cutoffAsRadians;
+    float m_outerCutoffAsRadians;
 
     float m_ambient;
     float m_diffuse;
@@ -51,6 +52,8 @@ public:
     float GetCutoffDegrees() const;
     float GetCutoffRadians() const;
 
+    float GetOuterCutoffRadians() const;
+
     float GetAmbient() const;
     float GetDiffuse() const;
     float GetSpecular() const;
@@ -86,6 +89,7 @@ private:
 
     void SetCLQ(float constant, float linear, float quadratic);
     void UpdateCLQByRadius();
+    void UpdateOuterCutoff();
 };
 
 #endif // SPOTLIGHT_H

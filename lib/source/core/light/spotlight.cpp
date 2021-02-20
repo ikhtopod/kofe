@@ -125,7 +125,7 @@ Mesh* CreateSphere(const Color& color) {
 
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempMaterial);
     size_t materialId =
-            Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
 
     Mesh* mesh = new Mesh(::VERTICES, ::INDICES);
     mesh->SetDrawingMode(MeshDrawingMode::POINTS);
@@ -135,6 +135,7 @@ Mesh* CreateSphere(const Color& color) {
 }
 
 static constexpr float DEFAULT_CUTOFF_DEGREES { 12.5f };
+static constexpr float DEFAULT_OUTERCUTOFF_FACTOR_DEGREES { 5.0f };
 
 static constexpr float DEFAULT_RADIUS { 1.0f };
 static constexpr float DEFAULT_CONSTANT { 1.0f };
@@ -180,10 +181,12 @@ SpotLight::SpotLight(const Color& color, float radius, float cutoffAsDegrees,
     Light { color },
     m_radius { radius },
     m_cutoffAsRadians { glm::radians(cutoffAsDegrees) },
+    m_outerCutoffAsRadians {},
     m_ambient { ambient }, m_diffuse { diffuse }, m_specular { specular },
     m_constant { DEFAULT_CONSTANT }, m_linear {}, m_quadratic {},
     m_linearInfluence { DEFAULT_LINEAR_INFLUENCE },
     m_quadraticInfluence { DEFAULT_QUADRATIC_INFLUENCE } {
+    UpdateOuterCutoff();
     UpdateCLQByRadius();
     m_childMesh.reset(::CreateSphere(m_color));
 
@@ -194,8 +197,8 @@ SpotLight::SpotLight(const Color& color, float radius, float cutoffAsDegrees,
 SpotLight::~SpotLight() {
     auto& spotLights = Everywhere::Instance().Get<LightStorage>().GetSpotLights();
     spotLights.erase(
-            std::remove(spotLights.begin(), spotLights.end(), this),
-            spotLights.end());
+        std::remove(spotLights.begin(), spotLights.end(), this),
+        spotLights.end());
 }
 
 float SpotLight::GetRadius() const {
@@ -208,6 +211,15 @@ float SpotLight::GetCutoffDegrees() const {
 
 float SpotLight::GetCutoffRadians() const {
     return m_cutoffAsRadians;
+}
+
+float SpotLight::GetOuterCutoffRadians() const {
+    return m_outerCutoffAsRadians;
+}
+
+void SpotLight::UpdateOuterCutoff() {
+    m_outerCutoffAsRadians =
+        glm::radians(GetCutoffDegrees() + DEFAULT_OUTERCUTOFF_FACTOR_DEGREES);
 }
 
 float SpotLight::GetAmbient() const {
@@ -258,7 +270,7 @@ void SpotLight::SetRadius(float radius) {
     if (util::IsEqual(radius, 0.0f)) {
         m_radius = radius;
     } else {
-        m_radius = std::numeric_limits<decltype(radius)>::min();
+        m_radius = std::numeric_limits<float>::min();
     }
 
     UpdateCLQByRadius();
@@ -266,10 +278,12 @@ void SpotLight::SetRadius(float radius) {
 
 void SpotLight::SetCutoffDegrees(float cutoffAsDegrees) {
     m_cutoffAsRadians = glm::radians(cutoffAsDegrees);
+    UpdateOuterCutoff();
 }
 
 void SpotLight::SetCutoffRadians(float cutoffAsRadians) {
     m_cutoffAsRadians = cutoffAsRadians;
+    UpdateOuterCutoff();
 }
 
 void SpotLight::SetAmbient(float ambient) {
