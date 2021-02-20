@@ -114,8 +114,8 @@ void Mesh::Free() {
 void Mesh::Processing() {
     Object::Processing(); // update children
 
-    auto& material =
-            Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
+    auto material =
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
     material->SetParentTransform(GetParentTransform() + GetTransform());
     material->Processing();
 

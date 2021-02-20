@@ -6,24 +6,30 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <type_traits>
 
 
-template<typename T>
+template <typename T, bool IsShared = true>
 class CollectionOf {
 public:
-    template<typename U>
-    using TypeSPtr = std::shared_ptr<U>;
+    using ClearT =
+        std::remove_pointer_t<
+            std::remove_reference_t<
+                std::remove_cv_t<T>>>;
 
-    template<typename U>
+    template <typename U>
+    using TypePtr = std::conditional_t<IsShared, std::shared_ptr<U>, U*>;
+
+    template <typename U>
     using Collection = std::vector<U>;
 
     using size_type = size_t;
 
 private:
-    Collection<TypeSPtr<T>> m_objects;
+    Collection<TypePtr<ClearT>> m_objects;
 
 public:
-    template<typename U>
+    template <typename U>
     friend void swap(CollectionOf<U>&, CollectionOf<U>&);
 
 public:
@@ -59,19 +65,19 @@ public:
     }
 
 public:
-    TypeSPtr<T>& operator[](size_type idx) {
+    TypePtr<ClearT> operator[](size_type idx) {
         return m_objects[idx];
     }
 
-    const TypeSPtr<T>& operator[](size_type idx) const {
+    const TypePtr<ClearT> operator[](size_type idx) const {
         return m_objects[idx];
     }
 
-    TypeSPtr<T>& At(size_type idx) {
+    TypePtr<ClearT> At(size_type idx) {
         return m_objects.at(idx);
     }
 
-    const TypeSPtr<T>& At(size_type idx) const {
+    const TypePtr<ClearT> At(size_type idx) const {
         return m_objects.at(idx);
     }
 
@@ -83,23 +89,23 @@ public:
         return m_objects.empty();
     }
 
-    TypeSPtr<T>& Front() {
+    TypePtr<ClearT> Front() {
         return m_objects.front();
     }
 
-    const TypeSPtr<T>& Front() const {
+    const TypePtr<ClearT> Front() const {
         return m_objects.front();
     }
 
-    TypeSPtr<T>& Back() {
+    TypePtr<ClearT> Back() {
         return m_objects.back();
     }
 
-    const TypeSPtr<T>& Back() const {
+    const TypePtr<ClearT> Back() const {
         return m_objects.back();
     }
 
-    void Add(const TypeSPtr<T>& object) {
+    void Add(TypePtr<ClearT> object) {
         m_objects.push_back(object);
     }
 
@@ -118,16 +124,17 @@ public:
         m_objects.clear();
     }
 
-    Collection<TypeSPtr<T>>& Get() {
+    Collection<TypePtr<ClearT>>& Get() {
         return m_objects;
     }
 
-    const Collection<TypeSPtr<T>>& Get() const {
+    const Collection<TypePtr<ClearT>>& Get() const {
         return m_objects;
     }
 };
 
-template<typename U>
+
+template <typename U>
 void swap(CollectionOf<U>& rhs, CollectionOf<U>& lhs) {
     if (&rhs == &lhs) return;
 
@@ -135,5 +142,6 @@ void swap(CollectionOf<U>& rhs, CollectionOf<U>& lhs) {
 
     swap(rhs.Get(), lhs.Get());
 }
+
 
 #endif // COLLECTIONOF_H

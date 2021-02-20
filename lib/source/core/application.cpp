@@ -183,7 +183,7 @@ Space* Application::CreateDemoSpace() {
 
 void Application::DemoMainLoop() {
     static const float anglePerSec = 180.0f;
-    auto& light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
+    auto light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
     const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
     light->GetTransform().AddRotationY(angleRotation);
 }
