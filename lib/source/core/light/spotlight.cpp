@@ -134,7 +134,7 @@ Mesh* CreateSphere(const Color& color) {
     return mesh;
 }
 
-static constexpr float DEFAULT_CUTOFF_RADIANS { glm::radians(12.5f) };
+static constexpr float DEFAULT_CUTOFF_DEGREES { 12.5f };
 
 static constexpr float DEFAULT_RADIUS { 1.0f };
 static constexpr float DEFAULT_CONSTANT { 1.0f };
@@ -172,7 +172,7 @@ SpotLight::SpotLight(float radius, float cutoffAsDegrees,
 SpotLight::SpotLight(const Color& color,
                      float ambient, float diffuse, float specular) :
     SpotLight { color,
-                DEFAULT_RADIUS, DEFAULT_CUTOFF_RADIANS,
+                DEFAULT_RADIUS, DEFAULT_CUTOFF_DEGREES,
                 ambient, diffuse, specular } {}
 
 SpotLight::SpotLight(const Color& color, float radius, float cutoffAsDegrees,
