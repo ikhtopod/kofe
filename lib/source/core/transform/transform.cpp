@@ -277,3 +277,143 @@ glm::mat4 Transform::GetScaleMatrix() const {
 glm::mat4 Transform::ToMatrix() const {
     return GetPositionMatrix() * GetOrientationMatrix() * GetScaleMatrix();
 }
+
+/* Additional rotation methods */
+
+void Transform::AddRotationX(float x) {
+    AddRotation({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddRotationY(float y) {
+    AddRotation({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddRotationZ(float z) {
+    AddRotation({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddRotationXY(float x, float y) {
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddRotationXZ(float x, float z) {
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddRotationYX(float y, float x) {
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddRotationYZ(float y, float z) {
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddRotationZX(float z, float x) {
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddRotationZY(float z, float y) {
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddRotationXYZ(float x, float y, float z) {
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddRotationXZY(float x, float z, float y) {
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddRotationYXZ(float y, float x, float z) {
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddRotationYZX(float y, float z, float x) {
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddRotationZXY(float z, float x, float y) {
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ x, 0.0f, 0.0f });
+    AddRotation({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddRotationZYX(float z, float y, float x) {
+    AddRotation({ 0.0f, 0.0f, z });
+    AddRotation({ 0.0f, y, 0.0f });
+    AddRotation({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddRotationX(const glm::vec3& rot) {
+    AddRotationX(rot.x);
+}
+
+void Transform::AddRotationY(const glm::vec3& rot) {
+    AddRotationY(rot.y);
+}
+
+void Transform::AddRotationZ(const glm::vec3& rot) {
+    AddRotationZ(rot.z);
+}
+
+void Transform::AddRotationXY(const glm::vec3& rot) {
+    AddRotationXY(rot.x, rot.y);
+}
+
+void Transform::AddRotationXZ(const glm::vec3& rot) {
+    AddRotationXZ(rot.x, rot.z);
+}
+
+void Transform::AddRotationYX(const glm::vec3& rot) {
+    AddRotationYX(rot.y, rot.x);
+}
+
+void Transform::AddRotationYZ(const glm::vec3& rot) {
+    AddRotationYZ(rot.y, rot.z);
+}
+
+void Transform::AddRotationZX(const glm::vec3& rot) {
+    AddRotationZX(rot.z, rot.x);
+}
+
+void Transform::AddRotationZY(const glm::vec3& rot) {
+    AddRotationZY(rot.z, rot.y);
+}
+
+void Transform::AddRotationXYZ(const glm::vec3& rot) {
+    AddRotationXYZ(rot.x, rot.y, rot.z);
+}
+
+void Transform::AddRotationXZY(const glm::vec3& rot) {
+    AddRotationXZY(rot.x, rot.z, rot.y);
+}
+
+void Transform::AddRotationYXZ(const glm::vec3& rot) {
+    AddRotationYXZ(rot.y, rot.x, rot.z);
+}
+
+void Transform::AddRotationYZX(const glm::vec3& rot) {
+    AddRotationYZX(rot.y, rot.z, rot.x);
+}
+
+void Transform::AddRotationZXY(const glm::vec3& rot) {
+    AddRotationZXY(rot.z, rot.x, rot.y);
+}
+
+void Transform::AddRotationZYX(const glm::vec3& rot) {
+    AddRotationZYX(rot.z, rot.y, rot.x);
+}

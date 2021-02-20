@@ -90,6 +90,43 @@ public:
 
 public: /* ICanBeMatrix */
     glm::mat4 ToMatrix() const override;
+
+public: /* Additional rotation methods */
+    void AddRotationX(float x);
+    void AddRotationY(float y);
+    void AddRotationZ(float z);
+
+    void AddRotationXY(float x, float y);
+    void AddRotationXZ(float x, float z);
+    void AddRotationYX(float y, float x);
+    void AddRotationYZ(float y, float z);
+    void AddRotationZX(float z, float x);
+    void AddRotationZY(float z, float y);
+
+    void AddRotationXYZ(float x, float y, float z);
+    void AddRotationXZY(float x, float z, float y);
+    void AddRotationYXZ(float y, float x, float z);
+    void AddRotationYZX(float y, float z, float x);
+    void AddRotationZXY(float z, float x, float y);
+    void AddRotationZYX(float z, float y, float x);
+
+    void AddRotationX(const glm::vec3& rot);
+    void AddRotationY(const glm::vec3& rot);
+    void AddRotationZ(const glm::vec3& rot);
+
+    void AddRotationXY(const glm::vec3& rot);
+    void AddRotationXZ(const glm::vec3& rot);
+    void AddRotationYX(const glm::vec3& rot);
+    void AddRotationYZ(const glm::vec3& rot);
+    void AddRotationZX(const glm::vec3& rot);
+    void AddRotationZY(const glm::vec3& rot);
+
+    void AddRotationXYZ(const glm::vec3& rot);
+    void AddRotationXZY(const glm::vec3& rot);
+    void AddRotationYXZ(const glm::vec3& rot);
+    void AddRotationYZX(const glm::vec3& rot);
+    void AddRotationZXY(const glm::vec3& rot);
+    void AddRotationZYX(const glm::vec3& rot);
 };
 
 Transform operator+(Transform lhs, const Transform& rhs);
