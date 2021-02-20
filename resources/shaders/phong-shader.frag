@@ -136,9 +136,9 @@ void ApplySpotLights(inout vec3 result) {
 void main() {
     vec3 result = vec3(0.0f);
 
-    ApplyDirectionalLights(result);
-    ApplyPointLights(result);
     ApplySpotLights(result);
+    ApplyPointLights(result);
+    ApplyDirectionalLights(result);
 
     FragColor = vec4(result, 1.0f);
 }

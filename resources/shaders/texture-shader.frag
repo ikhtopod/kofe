@@ -144,9 +144,9 @@ void ApplyEmission(inout vec3 result) {
 void main() {
     vec3 result = vec3(0.0f);
     
-    ApplyDirectionalLights(result);
-    ApplyPointLights(result);
     ApplySpotLights(result);
+    ApplyPointLights(result);
+    ApplyDirectionalLights(result);
 
     ApplyEmission(result);
 
