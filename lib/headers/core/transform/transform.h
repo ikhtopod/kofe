@@ -127,7 +127,19 @@ public: /* Additional rotation methods */
     void AddRotationYZX(const glm::vec3& rot);
     void AddRotationZXY(const glm::vec3& rot);
     void AddRotationZYX(const glm::vec3& rot);
+
+public: /* Additional position methods */
+    void AddPositionX(float x);
+    void AddPositionY(float y);
+    void AddPositionZ(float z);
+
+    void AddPositionXY(float x, float y);
+    void AddPositionXZ(float x, float z);
+    void AddPositionYZ(float y, float z);
+
+    void AddPositionXYZ(float x, float y, float z);
 };
+
 
 Transform operator+(Transform lhs, const Transform& rhs);
 std::ostream& operator<<(std::ostream& out, const Transform& rhs);

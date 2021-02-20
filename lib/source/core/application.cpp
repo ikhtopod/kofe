@@ -162,7 +162,7 @@ Space* Application::CreateDemoSpace() {
 
     std::shared_ptr<Mesh> tempMeshObject_01 { new Mesh { vertices, indices } };
     tempMeshObject_01->SetMaterialId(materialId);
-    tempMeshObject_01->GetTransform().AddPosition({ 0.0f, 0.0f, -1.0f });
+    tempMeshObject_01->GetTransform().AddPositionZ(-1.0f);
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempMeshObject_01);

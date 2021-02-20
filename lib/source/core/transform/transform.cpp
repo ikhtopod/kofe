@@ -254,10 +254,10 @@ void Transform::SetAxisOrientation(const glm::quat& axisOrientation) {
 
 void Transform::UpdateAxisByAxisOrientation() {
     const glm::quat ORIENTATION_FRONT =
-            GetOrientation() * m_axisOrientation * glm::conjugate(GetOrientation());
+        GetOrientation() * m_axisOrientation * glm::conjugate(GetOrientation());
 
     m_axis.SetFront(glm::normalize(
-            glm::vec3 { ORIENTATION_FRONT.x, ORIENTATION_FRONT.y, ORIENTATION_FRONT.z }));
+        glm::vec3 { ORIENTATION_FRONT.x, ORIENTATION_FRONT.y, ORIENTATION_FRONT.z }));
     m_axis.SetRight(glm::normalize(glm::cross(m_axis.GetFront(), Axis::UP)));
     m_axis.SetUp(glm::normalize(glm::cross(m_axis.GetRight(), m_axis.GetFront())));
 }
@@ -416,4 +416,34 @@ void Transform::AddRotationZXY(const glm::vec3& rot) {
 
 void Transform::AddRotationZYX(const glm::vec3& rot) {
     AddRotationZYX(rot.z, rot.y, rot.x);
+}
+
+/* Additional position methods */
+
+void Transform::AddPositionX(float x) {
+    AddPosition({ x, 0.0f, 0.0f });
+}
+
+void Transform::AddPositionY(float y) {
+    AddPosition({ 0.0f, y, 0.0f });
+}
+
+void Transform::AddPositionZ(float z) {
+    AddPosition({ 0.0f, 0.0f, z });
+}
+
+void Transform::AddPositionXY(float x, float y) {
+    AddPosition({ x, y, 0.0f });
+}
+
+void Transform::AddPositionXZ(float x, float z) {
+    AddPosition({ x, 0.0f, z });
+}
+
+void Transform::AddPositionYZ(float y, float z) {
+    AddPosition({ 0.0f, y, z });
+}
+
+void Transform::AddPositionXYZ(float x, float y, float z) {
+    AddPosition({ x, y, z });
 }
