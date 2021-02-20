@@ -126,24 +126,18 @@ void ApplySpotLights(inout vec3 result) {
         const float theta = dot(lightDirection, normalize(-spotLight.direction));
         const float epsilon = spotLight.cutoff - spotLight.outercutoff;
         const float intencity = clamp((theta - spotLight.outercutoff) / epsilon, 0.0f, 1.0f);
-        diffuse *= intencity;
-        specular *= intencity;
 
         const float DISTANCE = distance(spotLight.position, FragPos);
         const float attenuation = 1.0f / (spotLight.constant + spotLight.linear * DISTANCE + spotLight.quadratic * pow(DISTANCE, 2));
 
-        ambient *= attenuation;
-        diffuse *= attenuation;
-        specular *= attenuation;
-
-        result += ambient + diffuse + specular;
+        result += (ambient + diffuse + specular) * attenuation * intencity;
     }
 }
 
 void ApplyEmission(inout vec3 result) {
     const vec3 emissionFactor = step(vec3(1.0f), vec3(1.0f) - vec3(texture(material.specular, TextureCoordinates)));
     const vec3 emission = vec3(texture(material.emission, TextureCoordinates)) * emissionFactor;
-    
+
     result += emission;
 }
 

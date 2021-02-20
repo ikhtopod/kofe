@@ -66,7 +66,7 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
-        DemoMainLoop();
+        //DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -172,7 +172,7 @@ Space* Application::CreateDemoSpace() {
     //tempScene->GetObjects().Add(tempDirectionalLight_01);
 
     auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 25.0f);
-    tempSpotLight_01->GetTransform().AddRotationY(90.0f);
+    tempSpotLight_01->GetTransform().AddRotationY(180.0f);
     tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
