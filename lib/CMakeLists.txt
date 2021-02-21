@@ -18,4 +18,4 @@ target_include_directories(${PROJECT_CORE_TARGET}
 
 target_link_libraries(${PROJECT_CORE_TARGET}
     glfw ${GLFW_LIBRARIES}
-    glad-4.6-core stb)
+    glad-4.6-core stb assimp)

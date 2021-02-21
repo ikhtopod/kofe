@@ -7,3 +7,6 @@
 [submodule "thirdparty/stb/headers"]
 	path = thirdparty/stb/headers
 	url = git@github.com:nothings/stb.git
+[submodule "thirdparty/assimp"]
+	path = thirdparty/assimp
+	url = git@github.com:assimp/assimp.git

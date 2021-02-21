@@ -10,3 +10,4 @@ target_include_directories(${STB_PROJECT} PUBLIC ${STB_DIRECTORY}/headers)
 
 add_subdirectory(${THIRDPARTY_DIRECTORY}/glm)
 add_subdirectory(${THIRDPARTY_DIRECTORY}/glfw)
+add_subdirectory(${THIRDPARTY_DIRECTORY}/assimp)
