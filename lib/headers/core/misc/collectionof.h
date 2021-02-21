@@ -112,16 +112,33 @@ public:
 
     void Delete(size_type idx) {
         if (idx >= Size()) return;
+
+        if constexpr (IsShared) {
+            m_objects.at(idx).reset();
+        }
+
         m_objects.erase(std::next(m_objects.begin(), idx));
     }
 
     void Delete(TypePtr<ClearT> object) {
-        m_objects.erase(
-            std::remove(m_objects.begin(), m_objects.end(), object),
-            m_objects.end());
+        auto newEnd = std::remove(m_objects.begin(), m_objects.end(), object);
+
+        if constexpr (IsShared) {
+            std::for_each(newEnd, m_objects.end(), [](TypePtr<ClearT> obj) {
+                obj.reset();
+            });
+        }
+
+        m_objects.erase(newEnd, m_objects.end());
     }
 
     void Clear() {
+        if constexpr (IsShared) {
+            for (TypePtr<ClearT>& object : m_objects) {
+                object.reset();
+            }
+        }
+
         m_objects.clear();
     }
 
