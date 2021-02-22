@@ -1,4 +1,4 @@
-#include "misc/screensize.h"
+#include "window/screensize.h"
 
 
 void swap(ScreenSize& lhs, ScreenSize& rhs) {

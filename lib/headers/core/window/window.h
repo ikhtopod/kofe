@@ -3,7 +3,7 @@
 
 #include "interface/iprocess.h"
 #include "interface/icanbeeverywhere.h"
-#include "misc/screensize.h"
+#include "screensize.h"
 
 #include <utility>
 #include <string>
