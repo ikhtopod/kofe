@@ -1,6 +1,7 @@
 #include "application.h"
 
 #include "everywhere.h"
+#include "texture/texturedata.h"
 #include "mesh/mesh.h"
 #include "light/directionallight.h"
 #include "light/pointlight.h"
@@ -32,6 +33,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Projection>(new Perspective {});
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<Graphics>(new OpenGL {});
+        Everywhere::Instance().Init<TextureStorage>(new TextureStorage {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
@@ -49,6 +51,7 @@ Application::~Application() {
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Camera>();
     Everywhere::Instance().Free<Input>();
+    Everywhere::Instance().Free<TextureStorage>();
     Everywhere::Instance().Free<Graphics>();
     Everywhere::Instance().Free<Window>();
     Everywhere::Instance().Free<Projection>();
@@ -82,28 +85,25 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    std::shared_ptr<Texture> tempDiffuseTexture {
-        new Texture {
-            std::filesystem::path {
-                R"png(./resources/textures/texture_box_01.png)png" } }
+    TextureData tempDiffuseTextureData {
+        { R"png(./resources/textures/texture_box_01.png)png" },
+        GL_TEXTURE0
     };
 
-    std::shared_ptr<Texture> tempSpecularTexture {
-        new Texture { std::filesystem::path {
-                          R"png(./resources/textures/texture_box_01_specular.png)png" },
-                      tempDiffuseTexture->NextTextureUnit() }
+    TextureData tempSpecularTextureData {
+        { R"png(./resources/textures/texture_box_01_specular.png)png" },
+        tempDiffuseTextureData.GetUnit() + 1
     };
 
-    std::shared_ptr<Texture> tempEmissionTexture {
-        new Texture { std::filesystem::path {
-                          R"png(./resources/textures/texture_box_01_emission.png)png" },
-                      tempSpecularTexture->NextTextureUnit() }
+    TextureData tempEmissionTextureData {
+        { R"png(./resources/textures/texture_box_01_emission.png)png" },
+        tempDiffuseTextureData.GetUnit() + 2
     };
 
     std::shared_ptr<TextureMaterial> tempTextureMaterial {
-        new TextureMaterial { tempDiffuseTexture,
-                              tempSpecularTexture,
-                              tempEmissionTexture }
+        new TextureMaterial { tempDiffuseTextureData,
+                              tempSpecularTextureData,
+                              tempEmissionTextureData }
     };
 
     auto tempPhongMaterial = std::make_shared<PhongMaterial>();

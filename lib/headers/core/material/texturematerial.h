@@ -3,15 +3,16 @@
 
 #include "material.h"
 #include "texture/texture.h"
+#include "texture/texturedata.h"
 
 #include <memory>
 
 
 class TextureMaterial : public Material {
 protected:
-    std::shared_ptr<Texture> m_diffuse;
-    std::shared_ptr<Texture> m_specular;
-    std::shared_ptr<Texture> m_emission;
+    TextureData m_diffuse;
+    TextureData m_specular;
+    TextureData m_emission;
     float m_shininess;
 
 public:
@@ -24,24 +25,29 @@ public:
     TextureMaterial();
     virtual ~TextureMaterial() = default;
 
-    explicit TextureMaterial(const std::shared_ptr<Texture>& diffuse,
-                             const std::shared_ptr<Texture>& specular,
-                             const std::shared_ptr<Texture>& emission);
+    explicit TextureMaterial(const TextureData& diffuse,
+                             const TextureData& specular,
+                             const TextureData& emission);
 
-    explicit TextureMaterial(const std::shared_ptr<Texture>& diffuse,
-                             const std::shared_ptr<Texture>& specular,
-                             const std::shared_ptr<Texture>& emission,
+    explicit TextureMaterial(const TextureData& diffuse,
+                             const TextureData& specular,
+                             const TextureData& emission,
                              float shininess);
 
 public:
     std::shared_ptr<Texture> GetDiffuse() const;
     std::shared_ptr<Texture> GetSpecular() const;
     std::shared_ptr<Texture> GetEmission() const;
-    float GetShininess() const;
 
-    void SetDiffuse(const std::shared_ptr<Texture>& diffuse);
-    void SetSpecular(const std::shared_ptr<Texture>& specular);
-    void SetEmission(const std::shared_ptr<Texture>& emission);
+    TextureData GetDiffuseTextureData() const;
+    TextureData GetSpecularTextureData() const;
+    TextureData GetEmissionTextureData() const;
+
+    void SetDiffuseTextureData(const TextureData& diffuse);
+    void SetSpecularTextureData(const TextureData& specular);
+    void SetEmissionTextureData(const TextureData& emission);
+
+    float GetShininess() const;
     void SetShininess(float shininess);
 
 protected: /* Material */

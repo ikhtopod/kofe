@@ -10,10 +10,6 @@ static const GLsizei BUFFER_SIZE { 1 };
 static const GLint MIPMAP_LEVEL { 0 };
 static const GLint BORDER { 0 }; // always zero (legacy)
 
-static const std::filesystem::path DEFAULT_TEXTURE_PATH {
-    R"png(./resources/textures/default_texture.png)png"
-};
-
 } // namespace
 
 
@@ -66,12 +62,6 @@ void Texture::InitTexture(const std::filesystem::path& texturePath) {
     Unbind();
 }
 
-Texture::Texture() :
-    Texture { DEFAULT_TEXTURE_PATH } {}
-
-Texture::Texture(GLenum textureUnit) :
-    Texture { DEFAULT_TEXTURE_PATH, textureUnit } {}
-
 Texture::Texture(const std::filesystem::path& texturePath) :
     Texture { texturePath, GL_TEXTURE0 } {}
 
@@ -96,6 +86,10 @@ void Texture::Unbind() const {
 
 GLenum Texture::GetTextureUnit() const {
     return m_textureUnit;
+}
+
+void Texture::SetTextureUnit(GLenum textureUnit) {
+    m_textureUnit = textureUnit;
 }
 
 void Texture::InvertVertical() {

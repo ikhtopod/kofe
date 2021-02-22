@@ -19,6 +19,8 @@
 #include "camera/freecamera.h"
 #include "camera/targetcamera.h"
 
+#include "storage/texturestorage.h"
+
 #include "storage/lightstorage.h"
 #include "light/light.h"
 #include "light/pointlight.h"
@@ -37,7 +39,7 @@
 
 class Everywhere final : public Singleton<Everywhere> {
 private:
-    template<typename T>
+    template <typename T>
     static std::string ClassName() {
         static const std::string CLASS_NAME { typeid(T).name() };
         return CLASS_NAME;
@@ -46,7 +48,7 @@ private:
 private:
     std::unordered_map<std::string, ICanBeEverywhere*> m_units;
 
-    template<typename U>
+    template <typename U>
     U& FindBase() {
         for (auto& unit : m_units) {
             using Base = typename std::remove_pointer<decltype(unit.second)>::type;
@@ -64,7 +66,7 @@ public:
     Everywhere();
     virtual ~Everywhere();
 
-    template<typename U>
+    template <typename U>
     U& Get() {
         if (!m_units.count(ClassName<U>())) {
             throw EverywhereException { "Unit \"" + ClassName<U>() + "\" is not exists" };
@@ -73,7 +75,7 @@ public:
         return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
-    template<typename U>
+    template <typename U>
     const U& Get() const {
         if (!m_units.count(ClassName<U>())) {
             throw EverywhereException { "Unit \"" + ClassName<U>() + "\" is not exists" };
@@ -82,7 +84,7 @@ public:
         return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
-    template<typename U>
+    template <typename U>
     U& FindSimilarClass() {
         if (!m_units.count(ClassName<U>())) {
             return FindBase<U>();
@@ -91,7 +93,7 @@ public:
         return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
-    template<typename U>
+    template <typename U>
     const U& FindSimilarClass() const {
         if (!m_units.count(ClassName<U>())) {
             return FindBase<U>();
@@ -100,7 +102,7 @@ public:
         return *dynamic_cast<U*>(m_units.at(ClassName<U>()));
     }
 
-    template<typename U>
+    template <typename U>
     void Init(U* unit) {
         if (!dynamic_cast<ICanBeEverywhere*>(unit)) {
             throw EverywhereException { "Some unit cannot Init to Everywhere" };
@@ -113,7 +115,7 @@ public:
         m_units[ClassName<U>()] = unit;
     }
 
-    template<typename U>
+    template <typename U>
     void Free() {
         if (m_units.count(ClassName<U>())) {
             delete m_units[ClassName<U>()];
