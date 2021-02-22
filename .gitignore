@@ -142,4 +142,5 @@ CMakeUserPresets.json
 
 *~
 *.orig
+*.blend1
 [Bb]uild/
