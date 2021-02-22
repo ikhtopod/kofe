@@ -17,7 +17,7 @@ static std::filesystem::path defaultTexturePath {
 TextureStorage::TextureStorage() :
     m_textures {} {
 
-    defaultTexturePath = std::filesystem::absolute(defaultTexturePath);
+    defaultTexturePath = std::filesystem::canonical(defaultTexturePath);
 
     m_textures.insert({ defaultTexturePath.string(),
                         std::make_shared<Texture>(defaultTexturePath) });
@@ -28,7 +28,7 @@ TextureStorage::TextureStorage(
     TextureStorage {} {
 
     for (auto path : paths) {
-        path = std::filesystem::absolute(path);
+        path = std::filesystem::canonical(path);
 
         if (!m_textures.count(path.string())) {
             m_textures.insert({ path.string(), std::make_shared<Texture>(path) });
@@ -68,7 +68,7 @@ const TextureStorage::ValueType
 TextureStorage::ValueType
     TextureStorage::Get(std::filesystem::path path, GLenum textureUnit) {
 
-    path = std::filesystem::absolute(path);
+    path = std::filesystem::canonical(path);
 
     if (!m_textures.count(path.string())) {
         m_textures.insert({ path.string(), std::make_shared<Texture>(path) });
@@ -91,7 +91,7 @@ const TextureStorage::ValueType
 const TextureStorage::ValueType
     TextureStorage::Get(std::filesystem::path path, GLenum textureUnit) const {
 
-    path = std::filesystem::absolute(path);
+    path = std::filesystem::canonical(path);
 
     if (!m_textures.count(path.string())) {
         m_textures.insert({ path.string(), std::make_shared<Texture>(path) });
