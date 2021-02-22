@@ -170,6 +170,16 @@ public:
 };
 
 
+class ModelException : public ApplicationException {
+protected:
+    ModelException();
+
+public:
+    explicit ModelException(const std::string& message);
+    explicit ModelException(const char* message);
+};
+
+
 class FilesystemException : public ApplicationException {
 protected:
     FilesystemException();

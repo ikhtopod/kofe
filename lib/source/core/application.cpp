@@ -2,7 +2,7 @@
 
 #include "everywhere.h"
 #include "texture/texturedata.h"
-#include "mesh/mesh.h"
+#include "object/model.h"
 #include "light/directionallight.h"
 #include "light/pointlight.h"
 #include "light/spotlight.h"
@@ -85,95 +85,25 @@ void Application::Run() {
 /* Temp Methods */
 
 Space* Application::CreateDemoSpace() {
-    TextureData tempDiffuseTextureData {
-        { R"png(./resources/textures/texture_box_01.png)png" },
-        GL_TEXTURE0
-    };
-
-    TextureData tempSpecularTextureData {
-        { R"png(./resources/textures/texture_box_01_specular.png)png" },
-        tempDiffuseTextureData.GetUnit() + 1
-    };
-
-    TextureData tempEmissionTextureData {
-        { R"png(./resources/textures/texture_box_01_emission.png)png" },
-        tempDiffuseTextureData.GetUnit() + 2
-    };
-
-    std::shared_ptr<TextureMaterial> tempTextureMaterial {
-        new TextureMaterial { tempDiffuseTextureData,
-                              tempSpecularTextureData,
-                              tempEmissionTextureData }
-    };
-
-    auto tempPhongMaterial = std::make_shared<PhongMaterial>();
-    tempPhongMaterial->SetAmbientAndDiffuse(Color::GREEN);
-
-    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempTextureMaterial);
-    size_t materialId = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
-
-    std::vector<Vertex> vertices {
-        { { -0.500000, 0.500000, 0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, -0.500000, -0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { -0.500000, -0.500000, 0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 0.000000, 0.000000 } },
-        { { -0.500000, 0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, -0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 0.000000, 1.000000 } },
-        { { -0.500000, -0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 0.000000, 0.000000 } },
-        { { 0.500000, 0.500000, -0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, -0.500000, 0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, -0.500000, -0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 0.000000, 0.000000 } },
-        { { 0.500000, 0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, -0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, -0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 0.000000, 0.000000 } },
-        { { 0.500000, -0.500000, -0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, -0.500000, 0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { -0.500000, -0.500000, -0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 0.000000, 0.000000 } },
-        { { -0.500000, 0.500000, -0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, 0.500000, 0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, 0.500000, -0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 0.000000, 0.000000 } },
-        { { -0.500000, 0.500000, 0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, 0.500000, -0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 1.000000, 1.000000 } },
-        { { -0.500000, -0.500000, -0.500000 }, { -1.0000, 0.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { -0.500000, 0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, 0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 1.000000, 1.000000 } },
-        { { 0.500000, -0.500000, -0.500000 }, { 0.0000, 0.0000, -1.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, 0.500000, -0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, 0.500000, 0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 1.000000, 1.000000 } },
-        { { 0.500000, -0.500000, 0.500000 }, { 1.0000, 0.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, 0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, 0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 1.000000, 1.000000 } },
-        { { -0.500000, -0.500000, 0.500000 }, { 0.0000, 0.0000, 1.0000 }, { 0.000000, 1.000000 } },
-        { { 0.500000, -0.500000, -0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { 0.500000, -0.500000, 0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 1.000000, 1.000000 } },
-        { { -0.500000, -0.500000, 0.500000 }, { 0.0000, -1.0000, 0.0000 }, { 0.000000, 1.000000 } },
-        { { -0.500000, 0.500000, -0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 1.000000, 0.000000 } },
-        { { -0.500000, 0.500000, 0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 1.000000, 1.000000 } },
-        { { 0.500000, 0.500000, 0.500000 }, { 0.0000, 1.0000, 0.0000 }, { 0.000000, 1.000000 } }
-    };
-
-    std::vector<GLuint> indices {
-        0, 1, 2, 3, 4, 5,
-        6, 7, 8, 9, 10, 11,
-        12, 13, 14, 15, 16, 17,
-        18, 19, 20, 21, 22, 23,
-        24, 25, 26, 27, 28, 29,
-        30, 31, 32, 33, 34, 35
-    };
-
-    std::shared_ptr<Mesh> tempMeshObject_01 { new Mesh { vertices, indices } };
-    tempMeshObject_01->SetMaterialId(materialId);
-    tempMeshObject_01->GetTransform().AddPositionZ(-1.0f);
+    auto tempModel_01 = std::make_shared<Model>(
+        R"obj(./resources/models/props/tables/strange_table.obj)obj");
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
-    tempScene->GetObjects().Add(tempMeshObject_01);
+    tempScene->GetObjects().Add(tempModel_01);
 
-    //auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
-    //tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
-    //tempScene->GetObjects().Add(tempDirectionalLight_01);
+    auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
 
-    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 25.0f);
+    auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
+    tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
+
+    tempScene->GetObjects().Add(tempDirectionalLight_01);
+    tempScene->GetObjects().Add(tempDirectionalLight_02);
+
+    /*auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 25.0f);
     tempSpotLight_01->GetTransform().AddRotationY(180.0f);
-    tempScene->GetObjects().Add(tempSpotLight_01);
+    tempSpotLight_01->GetTransform().AddPositionZ(1.0f);
+    tempScene->GetObjects().Add(tempSpotLight_01);*/
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
