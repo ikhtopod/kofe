@@ -4,7 +4,7 @@
 #include "interface/iprocess.h"
 #include "transform/transformable.h"
 #include "misc/collectionof.h"
-#include "object.h"
+#include "object/object.h"
 
 
 class Scene :

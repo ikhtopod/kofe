@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "scene/object.h"
+#include "object/object.h"
 #include "misc/vertex.h"
 
 #include <glad/glad.h>

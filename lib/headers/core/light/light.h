@@ -1,7 +1,7 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "scene/object.h"
+#include "object/object.h"
 #include "mesh/mesh.h"
 #include "misc/color.h"
 
