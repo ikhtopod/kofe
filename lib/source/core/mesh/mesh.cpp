@@ -119,8 +119,6 @@ void Mesh::Processing() {
     material->SetParentTransform(GetParentTransform() + GetTransform());
     material->Processing();
 
-    glDisable(GL_CULL_FACE);
-
     glBindVertexArray(vao);
 
     glEnableVertexAttribArray(static_cast<GLuint>(AttribIndex::POSITION));
@@ -134,6 +132,4 @@ void Mesh::Processing() {
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::TEXTURE));
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::NORMAL));
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::POSITION));
-
-    glEnable(GL_CULL_FACE);
 }

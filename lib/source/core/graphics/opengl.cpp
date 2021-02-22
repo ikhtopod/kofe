@@ -17,7 +17,7 @@ void OpenGL::InitOpenGL() {
     glEnable(GL_MULTISAMPLE);
 
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
