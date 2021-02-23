@@ -9,6 +9,9 @@ static const glm::vec4 TEXTURE_BORDER_COLOR { .0f, .0f, .0f, 1.f };
 static const GLsizei BUFFER_SIZE { 1 };
 static const GLint MIPMAP_LEVEL { 0 };
 static const GLint BORDER { 0 }; // always zero (legacy)
+static const GLenum DEFAULT_TEXTURE_UNIT { GL_TEXTURE0 };
+static const GLenum LAST_TEXTURE_UNIT { GL_TEXTURE31 };
+static const bool DEFAULT_FLIP_VERTICAL { true };
 
 } // namespace
 
@@ -31,14 +34,14 @@ void Texture::InitTextureFilterParameter() const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);
 }
 
-void Texture::InitTexture(const std::filesystem::path& texturePath) {
+void Texture::InitTexture(const std::filesystem::path& texturePath, bool flipVertical) {
     glGenTextures(BUFFER_SIZE, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
     InitTextureWrapParameters();
     InitTextureFilterParameter();
 
-    stbi_set_flip_vertically_on_load(static_cast<int>(m_flipVertical));
+    stbi_set_flip_vertically_on_load(static_cast<int>(flipVertical));
 
     uint8_t* data = stbi_load(texturePath.c_str(), &m_width, &m_height, &m_channels,
                               static_cast<int>(m_textureChannelComponents));
@@ -63,17 +66,20 @@ void Texture::InitTexture(const std::filesystem::path& texturePath) {
 }
 
 Texture::Texture(const std::filesystem::path& texturePath) :
-    Texture { texturePath, GL_TEXTURE0 } {}
+    Texture { texturePath, DEFAULT_TEXTURE_UNIT } {}
 
 Texture::Texture(const std::filesystem::path& texturePath, GLenum textureUnit) :
+    Texture { texturePath, textureUnit, DEFAULT_FLIP_VERTICAL } {}
+
+Texture::Texture(const std::filesystem::path& texturePath, GLenum textureUnit, bool flipVertical) :
     m_textureChannelComponents { TextureChannelComponents::RGBA },
     m_textureUnit { textureUnit },
-    m_flipVertical { false },
+    m_samplePosition {},
     m_width {},
     m_height {},
     m_channels {},
     tex {} {
-    InitTexture(texturePath);
+    InitTexture(texturePath, flipVertical);
 }
 
 Texture::~Texture() {
@@ -90,14 +96,19 @@ GLenum Texture::GetTextureUnit() const {
 
 void Texture::SetTextureUnit(GLenum textureUnit) {
     m_textureUnit = textureUnit;
+    UpdateSamplePosition();
 }
 
-void Texture::InvertVertical() {
-    m_flipVertical = !m_flipVertical;
+int Texture::GetSamplePosition() const {
+    return m_samplePosition;
+}
+
+void Texture::UpdateSamplePosition() {
+    m_samplePosition = GetTextureUnit() - DEFAULT_TEXTURE_UNIT;
 }
 
 GLenum Texture::NextTextureUnit() const {
-    if (m_textureUnit == GL_TEXTURE31) {
+    if (m_textureUnit == LAST_TEXTURE_UNIT) {
         throw TextureException { "Cannot use next texture unit" };
     }
 

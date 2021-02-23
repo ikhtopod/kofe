@@ -27,9 +27,9 @@ static constexpr float DEFAULT_SHININESS { 32.0f };
 void TextureMaterial::DoInitShader() {
     auto UniformMaterialFunc = [this]([[maybe_unused]] Shader* shader) {
         if (this == nullptr) return;
-        shader->SetInt("material.diffuse", GetDiffuse()->GetTextureUnit());
-        shader->SetInt("material.specular", GetSpecular()->GetTextureUnit());
-        shader->SetInt("material.emission", GetEmission()->GetTextureUnit());
+        shader->SetInt("material.diffuse", GetDiffuse()->GetSamplePosition());
+        shader->SetInt("material.specular", GetSpecular()->GetSamplePosition());
+        shader->SetInt("material.emission", GetEmission()->GetSamplePosition());
         shader->SetFloat("material.shininess", GetShininess());
     };
 

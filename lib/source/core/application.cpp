@@ -39,7 +39,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
 
         // Additional settings
-        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0.0f, 0.0f, 3.0f });
+        Everywhere::Instance().Get<Camera>().GetTransform().AddPosition({ 0.0f, 0.0f, 2.0f });
     } catch (...) {
         Application::~Application();
         throw;
@@ -61,7 +61,6 @@ Application::~Application() {
 
     glfwTerminate();
 }
-
 
 void Application::MainLoop() {
     while (Everywhere::Instance().Get<Window>().CanProcess()) {
@@ -86,7 +85,7 @@ void Application::Run() {
 
 Space* Application::CreateDemoSpace() {
     auto tempModel_01 = std::make_shared<Model>(
-        R"dae(./resources/models/props/box/box.dae)dae");
+        R"obj(./resources/models/props/box/box.obj)obj");
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempModel_01);
@@ -100,10 +99,10 @@ Space* Application::CreateDemoSpace() {
     tempScene->GetObjects().Add(tempDirectionalLight_01);
     //tempScene->GetObjects().Add(tempDirectionalLight_02);
 
-    /*auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 10.0f);
+    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 10.0f);
     tempSpotLight_01->GetTransform().AddRotationY(180.0f);
     tempSpotLight_01->GetTransform().AddPositionZ(1.0f);
-    tempScene->GetObjects().Add(tempSpotLight_01);*/
+    tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);

@@ -25,7 +25,7 @@ class Texture final : public IProcess {
 private:
     const TextureChannelComponents m_textureChannelComponents;
     GLenum m_textureUnit; // GL_TEXTURE0 - always activated by default
-    bool m_flipVertical;
+    int m_samplePosition;
 
     int m_width;
     int m_height;
@@ -36,7 +36,8 @@ private:
 private:
     void InitTextureWrapParameters() const;
     void InitTextureFilterParameter() const;
-    void InitTexture(const std::filesystem::path& texturePath);
+    void InitTexture(const std::filesystem::path& texturePath,
+                     bool flipVertical);
 
 public:
     Texture() = delete;
@@ -50,15 +51,19 @@ public:
 
     explicit Texture(const std::filesystem::path& texturePath);
     explicit Texture(const std::filesystem::path& texturePath, GLenum textureUnit);
+    explicit Texture(const std::filesystem::path& texturePath,
+                     GLenum textureUnit, bool flipVertical);
 
 private:
     void Unbind() const;
+    void UpdateSamplePosition();
 
 public:
     GLenum GetTextureUnit() const;
     void SetTextureUnit(GLenum textureUnit);
 
-    void InvertVertical();
+    int GetSamplePosition() const;
+
     GLenum NextTextureUnit() const;
 
 public: /* IProcess */
