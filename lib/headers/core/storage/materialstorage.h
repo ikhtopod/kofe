@@ -5,6 +5,8 @@
 #include "misc/collectionof.h"
 #include "material/material.h"
 
+#include <cstddef>
+
 
 class MaterialStorage final : public ICanBeEverywhere {
 private:
@@ -23,6 +25,8 @@ public:
 public:
     CollectionOf<Material>& GetMaterials();
     const CollectionOf<Material>& GetMaterials() const;
+
+    size_t GetLastMaterialID() const;
 };
 
 #endif // MATERIALSTORAGE_H

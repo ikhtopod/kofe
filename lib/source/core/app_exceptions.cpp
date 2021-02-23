@@ -131,6 +131,20 @@ MeshException::MeshException(const char* message) :
     MeshException { std::string { message } } {}
 
 
+MaterialStorageException::MaterialStorageException() :
+    ApplicationException {} {
+    m_message = "[MaterialStorageException] ";
+}
+
+MaterialStorageException::MaterialStorageException(const std::string& message) :
+    MaterialStorageException {} {
+    m_message += message;
+}
+
+MaterialStorageException::MaterialStorageException(const char* message) :
+    MaterialStorageException { std::string { message } } {}
+
+
 MaterialException::MaterialException() :
     ApplicationException {} {
     m_message = "[MaterialException] ";

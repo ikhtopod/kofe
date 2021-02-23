@@ -100,6 +100,16 @@ public:
 };
 
 
+class MaterialStorageException : public ApplicationException {
+protected:
+    MaterialStorageException();
+
+public:
+    explicit MaterialStorageException(const std::string& message);
+    explicit MaterialStorageException(const char* message);
+};
+
+
 class MaterialException : public ApplicationException {
 protected:
     MaterialException();
