@@ -28,11 +28,12 @@ void swap(Color& lhs, Color& rhs) {
 
 
 const Color
-        Color::BLACK { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
-        Color::WHITE { ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE },
-        Color::RED { ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
-        Color::GREEN { ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE },
-        Color::BLUE { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE };
+    Color::DEFAULT { 0.8f, 0.8f, 0.8f, 1.0f },
+    Color::BLACK { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
+    Color::WHITE { ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MAX_COLOR_VALUE },
+    Color::RED { ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE },
+    Color::GREEN { ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE, ::MIN_COLOR_VALUE },
+    Color::BLUE { ::MIN_COLOR_VALUE, ::MIN_COLOR_VALUE, ::MAX_COLOR_VALUE };
 
 
 Color::Color() :

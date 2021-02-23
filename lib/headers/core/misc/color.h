@@ -9,7 +9,7 @@ public:
     using color_type = float;
 
 public: /* Standard colors */
-    static const Color BLACK, WHITE, RED, GREEN, BLUE;
+    static const Color DEFAULT, BLACK, WHITE, RED, GREEN, BLUE;
 
 private:
     float m_r, m_g, m_b, m_a;
