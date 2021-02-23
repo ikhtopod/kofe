@@ -13,8 +13,8 @@ static const std::filesystem::path PHONG_FRAGMENT_PATH {
     R"frag(./resources/shaders/phong-shader.frag)frag"
 };
 
-static const Color DEFAULT_AMBIENT { Color::BLACK };
-static const Color DEFAULT_DEFFUSE { Color::BLACK };
+static const Color DEFAULT_AMBIENT { Color::DEFAULT };
+static const Color DEFAULT_DEFFUSE { Color::DEFAULT };
 static const Color DEFAULT_SPECULAR { glm::vec3 { 0.5f } };
 static const float DEFAULT_SHININESS { 32.0f };
 
