@@ -86,7 +86,7 @@ void Application::Run() {
 
 Space* Application::CreateDemoSpace() {
     auto tempModel_01 = std::make_shared<Model>(
-        R"obj(./resources/models/props/tables/strange_table.obj)obj");
+        R"dae(./resources/models/props/box/box.dae)dae");
 
     std::shared_ptr<Scene> tempScene { new Scene {} };
     tempScene->GetObjects().Add(tempModel_01);
@@ -94,13 +94,13 @@ Space* Application::CreateDemoSpace() {
     auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
     tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
 
-    auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
-    tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
+    //auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
+    //tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
 
     tempScene->GetObjects().Add(tempDirectionalLight_01);
-    tempScene->GetObjects().Add(tempDirectionalLight_02);
+    //tempScene->GetObjects().Add(tempDirectionalLight_02);
 
-    /*auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 25.0f);
+    /*auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 10.0f);
     tempSpotLight_01->GetTransform().AddRotationY(180.0f);
     tempSpotLight_01->GetTransform().AddPositionZ(1.0f);
     tempScene->GetObjects().Add(tempSpotLight_01);*/

@@ -12,26 +12,40 @@
 
 #include <cstddef>
 #include <vector>
+#include <string>
+#include <regex>
 
 
 namespace {
 
-void CheckCorrectModelPath(std::filesystem::path path) {
-    path = std::filesystem::canonical(path);
+namespace fs = std::filesystem;
 
-    if (!std::filesystem::exists(path)) {
+static struct ModelTempPaths {
+    fs::path filepath {};
+    fs::path textureDirectory {};
+
+    void Reset() {
+        filepath.clear();
+        textureDirectory.clear();
+    }
+} sg_modelTempPath;
+
+void CheckCorrectModelPath(fs::path path) {
+    path = fs::canonical(path);
+
+    if (!fs::exists(path)) {
         throw ModelException { "File \"" + path.string() + "\" isn't exists." };
     }
 
-    if (std::filesystem::is_directory(path)) {
+    if (fs::is_directory(path)) {
         throw ModelException { "File \"" + path.string() + "\" is directory." };
     }
 
-    if (std::filesystem::is_socket(path)) {
+    if (fs::is_socket(path)) {
         throw ModelException { "File \"" + path.string() + "\" is socket." };
     }
 
-    if (std::filesystem::is_empty(path)) {
+    if (fs::is_empty(path)) {
         throw ModelException { "File \"" + path.string() + "\" is empty." };
     }
 }
@@ -76,8 +90,8 @@ bool HasNoOneTextures(aiMaterial* material) {
              material->GetTextureCount(aiTextureType_EMISSIVE));
 }
 
-std::filesystem::path GetTexturePath(aiMaterial* material, aiTextureType type, size_t idx = 0) {
-    std::filesystem::path texturePath =
+fs::path GetTexturePath(aiMaterial* material, aiTextureType type, size_t idx = 0) {
+    fs::path texturePath =
         Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath();
 
     if (material->GetTextureCount(type)) {
@@ -89,33 +103,140 @@ std::filesystem::path GetTexturePath(aiMaterial* material, aiTextureType type, s
     return texturePath;
 }
 
+void CreateDefaultDummyMaterial() {
+    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(
+        std::make_shared<PhongMaterial>());
+}
+
+void CreateTextureMaterial(const fs::path& deffusePath,
+                           const fs::path& specularPath,
+                           const fs::path& emissionPath) {
+    TextureData diffuseTextureData { deffusePath, GL_TEXTURE0 };
+
+    TextureData specularTextureData { specularPath,
+                                      diffuseTextureData.GetUnit() + 1 };
+
+    TextureData emissionTextureData { emissionPath,
+                                      diffuseTextureData.GetUnit() + 2 };
+
+    auto textureMaterial =
+        std::make_shared<TextureMaterial>(diffuseTextureData,
+                                          specularTextureData,
+                                          emissionTextureData);
+
+    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(textureMaterial);
+}
+
+bool IsSomeFilename(const fs::path& stem, const fs::path& modelFilename, const std::string& postfix) {
+    std::regex pattern { "^t_+" + modelFilename.string() + "_+" + postfix + "$",
+                         std::regex_constants::icase };
+    return std::regex_search(stem.string(), pattern);
+}
+
+bool IsDiffuseFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeFilename(stem, modelFilename, R"re(dif+use)re");
+}
+
+bool IsSpecularFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeFilename(stem, modelFilename, R"re(specular)re");
+}
+
+bool IsEmissionFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeFilename(stem, modelFilename, R"re(emis+i(?:(?:on)|(?:ve)))re");
+}
+
+bool CreateTextureMaterialByFilename(fs::path dirPath) {
+    dirPath = fs::canonical(dirPath);
+
+    fs::path deffusePath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
+    fs::path specularPath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
+    fs::path emissionPath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
+    fs::path modelFilename { sg_modelTempPath.filepath.stem() };
+
+    if (fs::exists(dirPath) && fs::is_directory(dirPath)) {
+        bool wasFound = false;
+
+        for (auto& entry : fs::directory_iterator(dirPath)) {
+            if (!entry.is_regular_file()) continue;
+            if (fs::canonical(entry.path()) == fs::canonical(sg_modelTempPath.filepath)) continue;
+
+            if (IsDiffuseFilename(entry.path().stem(), modelFilename)) {
+                deffusePath = entry.path();
+                wasFound = true;
+            } else if (IsSpecularFilename(entry.path().stem(), modelFilename)) {
+                specularPath = entry.path();
+                wasFound = true;
+            } else if (IsEmissionFilename(entry.path().stem(), modelFilename)) {
+                emissionPath = entry.path();
+                wasFound = true;
+            }
+        }
+
+        if (wasFound) {
+            CreateTextureMaterial(deffusePath, specularPath, emissionPath);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CreateTextureMaterialByDefaultFilenames() {
+    if (CreateTextureMaterialByFilename(sg_modelTempPath.textureDirectory)) {
+        return true;
+    }
+
+    fs::path currentDirectory = sg_modelTempPath.filepath.parent_path();
+    if (currentDirectory != sg_modelTempPath.textureDirectory) {
+        if (CreateTextureMaterialByFilename(currentDirectory)) {
+            return true;
+        }
+    }
+
+    std::regex pattern { R"re(^textures?$)re", std::regex_constants::icase };
+    for (auto& entry : fs::directory_iterator(currentDirectory)) {
+        if (!entry.is_directory()) continue;
+
+        if (std::regex_match(entry.path().stem().string(), pattern)) {
+            if (CreateTextureMaterialByFilename(entry.path())) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void CreateTextureMaterialByAssimpMaterial(aiMaterial* material) {
+    CreateTextureMaterial(
+        GetTexturePath(material, aiTextureType_DIFFUSE),
+        GetTexturePath(material, aiTextureType_SPECULAR),
+        GetTexturePath(material, aiTextureType_EMISSIVE));
+}
+
 size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-    if (!material || HasNoOneTextures(material)) {
-        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(
-            std::make_shared<PhongMaterial>());
+    if (!material) {
+        if (!CreateTextureMaterialByDefaultFilenames()) {
+            CreateDefaultDummyMaterial();
+        }
     } else {
-        TextureData diffuseTextureData {
-            GetTexturePath(material, aiTextureType_DIFFUSE),
-            GL_TEXTURE0
-        };
+        if (HasNoOneTextures(material)) {
+            if (!CreateTextureMaterialByDefaultFilenames()) {
+                CreateDefaultDummyMaterial();
+            }
+        } else {
+            size_t size = Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size();
 
-        TextureData specularTextureData {
-            GetTexturePath(material, aiTextureType_SPECULAR),
-            diffuseTextureData.GetUnit() + 1
-        };
+            CreateTextureMaterialByAssimpMaterial(material);
 
-        TextureData emissionTextureData {
-            GetTexturePath(material, aiTextureType_EMISSIVE),
-            diffuseTextureData.GetUnit() + 2
-        };
-
-        auto textureMaterial =
-            std::make_shared<TextureMaterial>(diffuseTextureData,
-                                              specularTextureData,
-                                              emissionTextureData);
-        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(textureMaterial);
+            if (size == Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size()) {
+                if (!CreateTextureMaterialByDefaultFilenames()) {
+                    CreateDefaultDummyMaterial();
+                }
+            }
+        }
     }
 
     return Everywhere::Instance().Get<MaterialStorage>().GetLastMaterialID();
@@ -123,17 +244,6 @@ size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
 
 } // namespace
 
-
-void Model::ProcessSceneNode(aiNode* node, const aiScene* scene) {
-    for (size_t i = 0; i < node->mNumMeshes; ++i) {
-        size_t meshId = node->mMeshes[i];
-        ProcessSceneMesh(scene->mMeshes[meshId], scene);
-    }
-
-    for (size_t i = 0; i < node->mNumChildren; ++i) {
-        ProcessSceneNode(node->mChildren[i], scene);
-    }
-}
 
 void Model::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector<Vertex> vertices {};
@@ -148,10 +258,19 @@ void Model::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     Children().Add(meshOfModel);
 }
 
-void Model::ImportModel(std::filesystem::path path) {
-    path = std::filesystem::canonical(path);
+void Model::ProcessSceneNode(aiNode* node, const aiScene* scene) {
+    for (size_t i = 0; i < node->mNumMeshes; ++i) {
+        size_t meshId = node->mMeshes[i];
+        ProcessSceneMesh(scene->mMeshes[meshId], scene);
+    }
 
-    CheckCorrectModelPath(path);
+    for (size_t i = 0; i < node->mNumChildren; ++i) {
+        ProcessSceneNode(node->mChildren[i], scene);
+    }
+}
+
+void Model::ImportModel() {
+    CheckCorrectModelPath(sg_modelTempPath.filepath);
 
     Assimp::Importer importer {};
 
@@ -163,18 +282,32 @@ void Model::ImportModel(std::filesystem::path path) {
     unsigned int postProcessParams = aiProcess_JoinIdenticalVertices |
                                      aiProcess_Triangulate;
 
-    const aiScene* scene = importer.ReadFile(path.string(), postProcessParams);
+    const aiScene* scene =
+        importer.ReadFile(sg_modelTempPath.filepath.string(), postProcessParams);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        sg_modelTempPath.Reset();
         throw ModelException {
-            "Can't import scene for file \"" + path.string() + "\"\n" +
-            "Assimp message: " + importer.GetErrorString()
+            "Can't import scene for file \"" + sg_modelTempPath.filepath.string() +
+            "\"\n" + "Assimp message: " + importer.GetErrorString()
         };
     }
 
     ProcessSceneNode(scene->mRootNode, scene);
 }
 
-Model::Model(const std::filesystem::path& path) {
-    ImportModel(path);
+Model::Model(const fs::path& path) :
+    Model { path, path.parent_path() } {
+}
+
+Model::Model(const fs::path& path,
+             const fs::path& textureDirectory) {
+    sg_modelTempPath = {
+        fs::canonical(path),
+        fs::canonical(textureDirectory)
+    };
+
+    ImportModel();
+
+    sg_modelTempPath.Reset();
 }

@@ -22,11 +22,13 @@ public:
     virtual ~Model() = default;
 
     explicit Model(const std::filesystem::path& path);
+    explicit Model(const std::filesystem::path& path,
+                   const std::filesystem::path& textureDirectory);
 
 private:
     void ProcessSceneNode(aiNode* node, const aiScene* scene);
     void ProcessSceneMesh(aiMesh* mesh, const aiScene* scene);
-    void ImportModel(std::filesystem::path path);
+    void ImportModel();
 };
 
 #endif // MODEL_H
