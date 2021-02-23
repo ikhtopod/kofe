@@ -3,11 +3,14 @@
 #include "app_exceptions.h"
 #include "everywhere.h"
 #include "misc/vertex.h"
+#include "texture/texturedata.h"
 #include "material/phongmaterial.h"
+#include "material/texturematerial.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
+#include <cstddef>
 #include <vector>
 
 
@@ -67,6 +70,57 @@ void InitIndices(aiMesh* mesh, std::vector<GLuint>& result) {
     }
 }
 
+bool HasNoOneTextures(aiMaterial* material) {
+    return !(material->GetTextureCount(aiTextureType_DIFFUSE) ||
+             material->GetTextureCount(aiTextureType_SPECULAR) ||
+             material->GetTextureCount(aiTextureType_EMISSIVE));
+}
+
+std::filesystem::path GetTexturePath(aiMaterial* material, aiTextureType type, size_t idx = 0) {
+    std::filesystem::path texturePath =
+        Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath();
+
+    if (material->GetTextureCount(type)) {
+        aiString stringPath {};
+        material->GetTexture(type, idx, &stringPath);
+        texturePath = stringPath.C_Str();
+    }
+
+    return texturePath;
+}
+
+size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+    if (!material || HasNoOneTextures(material)) {
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(
+            std::make_shared<PhongMaterial>());
+    } else {
+        TextureData diffuseTextureData {
+            GetTexturePath(material, aiTextureType_DIFFUSE),
+            GL_TEXTURE0
+        };
+
+        TextureData specularTextureData {
+            GetTexturePath(material, aiTextureType_SPECULAR),
+            diffuseTextureData.GetUnit() + 1
+        };
+
+        TextureData emissionTextureData {
+            GetTexturePath(material, aiTextureType_EMISSIVE),
+            diffuseTextureData.GetUnit() + 2
+        };
+
+        auto textureMaterial =
+            std::make_shared<TextureMaterial>(diffuseTextureData,
+                                              specularTextureData,
+                                              emissionTextureData);
+        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(textureMaterial);
+    }
+
+    return Everywhere::Instance().Get<MaterialStorage>().GetLastMaterialID();
+}
+
 } // namespace
 
 
@@ -81,22 +135,15 @@ void Model::ProcessSceneNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-void Model::ProcessSceneMesh(aiMesh* mesh, [[maybe_unused]] const aiScene* scene) {
+void Model::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector<Vertex> vertices {};
     std::vector<GLuint> indices {};
 
     InitVertices(mesh, vertices);
     InitIndices(mesh, indices);
 
-    //size_t materialIndex = mesh->mMaterialIndex;
-    auto tempPhongMaterial = std::make_shared<PhongMaterial>();
-    tempPhongMaterial->SetAmbientAndDiffuse(Color { 0.8f, 0.8f, 0.8f, 1.0f });
-
-    Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(tempPhongMaterial);
-    auto meshOfModel = std::make_shared<Mesh>(vertices, indices);
-    size_t materialId =
-        Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Size() - 1;
-    meshOfModel->SetMaterialId(materialId);
+    auto meshOfModel = std::make_shared<Mesh>(std::move(vertices), std::move(indices));
+    meshOfModel->SetMaterialId(GetMaterialId(mesh, scene));
 
     Children().Add(meshOfModel);
 }
