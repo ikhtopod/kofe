@@ -115,3 +115,7 @@ const TextureStorage::ValueType
     m_textures.at(defaultTexturePath.string())->SetTextureUnit(textureUnit);
     return m_textures.at(defaultTexturePath.string());
 }
+
+std::filesystem::path TextureStorage::GetDefaultTexturePath() const {
+    return defaultTexturePath;
+}

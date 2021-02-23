@@ -48,6 +48,8 @@ public:
 
     ValueType GetDefaultTexture(GLenum textureUnit);
     const ValueType GetDefaultTexture(GLenum textureUnit) const;
+
+    std::filesystem::path GetDefaultTexturePath() const;
 };
 
 #endif // TEXTURESTORAGE_H
