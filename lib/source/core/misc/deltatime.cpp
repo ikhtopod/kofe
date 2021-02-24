@@ -52,3 +52,7 @@ void DeltaTime::Update() {
 DeltaTime::Type DeltaTime::GetDelta() const {
     return m_delta;
 }
+
+DeltaTime::Type DeltaTime::GetFPS() const {
+    return 1.0f / GetDelta();
+}

@@ -33,6 +33,7 @@ public:
 public:
     void Update();
     Type GetDelta() const;
+    Type GetFPS() const;
 };
 
 void swap(DeltaTime& lhs, DeltaTime& rhs);
