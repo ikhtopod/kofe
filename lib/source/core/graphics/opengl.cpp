@@ -13,8 +13,10 @@ void OpenGL::UpdateClearColor() {
 }
 
 void OpenGL::InitOpenGL() {
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -23,7 +25,6 @@ void OpenGL::InitOpenGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     UpdateViewportSize();
-
     UpdateClearColor();
 }
 
