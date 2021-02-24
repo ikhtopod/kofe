@@ -112,6 +112,7 @@ std::string Window::GetTitle() const {
 
 void Window::SetTitle(const std::string& title) {
     m_title = title;
+    glfwSetWindowTitle(m_context, m_title.c_str());
 }
 
 bool Window::CanProcess() {
