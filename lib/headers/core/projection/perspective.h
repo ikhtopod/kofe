@@ -5,10 +5,6 @@
 
 
 class Perspective : public Projection {
-private:
-    static const float DEPTH_NEAR;
-    static const float DEPTH_FAR;
-
 public:
     Perspective(Perspective&& other) noexcept = delete;
     Perspective& operator=(Perspective&& other) noexcept = delete;

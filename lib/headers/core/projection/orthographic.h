@@ -5,12 +5,7 @@
 
 
 class Orthographic : public Projection {
-    static const float BOTTOM;
-    static const float TOP;
-    static const float DEPTH_NEAR;
-    static const float DEPTH_FAR;
-
-private:
+protected:
     glm::vec3 m_scale;
 
 public:
@@ -18,8 +13,8 @@ public:
     Orthographic& operator=(Orthographic&& other) noexcept = delete;
 
     Orthographic();
-    Orthographic(const Orthographic& other) = default;
-    Orthographic& operator=(const Orthographic& other) = default;
+    Orthographic(const Orthographic& other);
+    Orthographic& operator=(const Orthographic& other);
     virtual ~Orthographic() = default;
 
     explicit Orthographic(const glm::vec3& scale);

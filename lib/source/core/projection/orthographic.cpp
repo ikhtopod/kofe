@@ -5,24 +5,43 @@
 #include <utility>
 
 
-const float Orthographic::BOTTOM { -0.5f };
-const float Orthographic::TOP { 0.5f };
-const float Orthographic::DEPTH_NEAR { -10.0f };
-const float Orthographic::DEPTH_FAR { 100.0f };
+namespace {
+
+static constexpr float BOTTOM { -0.5f };
+static constexpr float TOP { 0.5f };
+
+} // namespace
 
 
 Orthographic::Orthographic() :
+    Projection {},
     m_scale {} {}
 
 Orthographic::Orthographic(const glm::vec3& scale) :
+    Projection {},
     m_scale { scale } {}
 
 Orthographic::Orthographic(glm::vec3&& scale) noexcept :
+    Projection {},
     m_scale { std::move(scale) } {}
 
 Orthographic::Orthographic(float distance) :
+    Projection {},
     m_scale {} {
     SetScaleByDistance(distance);
+}
+
+Orthographic::Orthographic(const Orthographic& other) :
+    Projection { other },
+    m_scale { other.m_scale } {}
+
+Orthographic& Orthographic::operator=(const Orthographic& other) {
+    if (this != &other) {
+        Projection::operator=(other);
+        m_scale = other.m_scale;
+    }
+
+    return *this;
 }
 
 glm::vec3 Orthographic::GetScale() const {
@@ -48,7 +67,7 @@ glm::mat4 Orthographic::ToMatrix() const {
     float left = -width / height * 0.5f;
     float right = width / height * 0.5f;
 
-    glm::mat4 matrix = glm::ortho(left, right, BOTTOM, TOP, DEPTH_NEAR, DEPTH_FAR);
+    glm::mat4 matrix = glm::ortho(left, right, BOTTOM, TOP, m_depthNear, m_depthFar);
     matrix = glm::scale(matrix, m_scale);
 
     return matrix;
