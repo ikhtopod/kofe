@@ -14,7 +14,67 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <cmath>
-#include <iostream>
+
+#ifdef DEBUG
+    #include <iostream>
+#endif
+
+
+namespace {
+
+/* Temp Methods */
+
+Space* CreateDemoSpace() {
+    std::shared_ptr<Scene> tempScene { new Scene {} };
+
+    /*for (size_t i = 0; i < 5; i++) {
+        for (size_t j = 0; j < 5; ++j) {
+            for (size_t k = 0; k < 5; ++k) {
+                auto tempModel = std::make_shared<Model>(
+                    R"obj(./resources/models/props/box/box.obj)obj");
+                tempModel->GetTransform().AddPosition({ i, j, k });
+                tempScene->GetObjects().Add(tempModel);
+            }
+        }
+    }*/
+
+    auto tempModel = std::make_shared<Model>(
+        R"obj(./resources/models/props/box/box.obj)obj");
+    tempScene->GetObjects().Add(tempModel);
+
+    //auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    //tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
+
+    //auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
+    //tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
+
+    //tempScene->GetObjects().Add(tempDirectionalLight_01);
+    //tempScene->GetObjects().Add(tempDirectionalLight_02);
+
+    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 15.0f);
+    tempSpotLight_01->GetTransform().AddRotationXY(-45.0f, 45.0f);
+    tempScene->GetObjects().Add(tempSpotLight_01);
+
+    Space* tempSpace = new Space {};
+    tempSpace->GetScenes().Add(tempScene);
+
+    return tempSpace;
+}
+
+void DemoMainLoop() {
+    std::string newTitle =
+        "kofe | FPS: " +
+        std::to_string(Everywhere::Instance().Get<DeltaTime>().GetFPS());
+    Everywhere::Instance().Get<Window>().SetTitle(newTitle);
+
+    /*static const float anglePerSec = 180.0f;
+    auto light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
+    const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
+    light->GetTransform().AddRotationY(angleRotation);*/
+}
+
+
+} // namespace
 
 
 Application::Application() :
@@ -68,7 +128,7 @@ void Application::MainLoop() {
         Everywhere::Instance().Get<Graphics>().Processing();
         Everywhere::Instance().Get<Input>().Processing();
 
-        //DemoMainLoop();
+        DemoMainLoop();
 
         Everywhere::Instance().Get<Space>().Processing();
 
@@ -78,41 +138,4 @@ void Application::MainLoop() {
 
 void Application::Run() {
     MainLoop();
-}
-
-
-/* Temp Methods */
-
-Space* Application::CreateDemoSpace() {
-    auto tempModel_01 = std::make_shared<Model>(
-        R"obj(./resources/models/props/box/box.obj)obj");
-
-    std::shared_ptr<Scene> tempScene { new Scene {} };
-    tempScene->GetObjects().Add(tempModel_01);
-
-    auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
-    tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
-
-    //auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
-    //tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
-
-    tempScene->GetObjects().Add(tempDirectionalLight_01);
-    //tempScene->GetObjects().Add(tempDirectionalLight_02);
-
-    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 10.0f);
-    tempSpotLight_01->GetTransform().AddRotationY(180.0f);
-    tempSpotLight_01->GetTransform().AddPositionZ(1.0f);
-    tempScene->GetObjects().Add(tempSpotLight_01);
-
-    Space* tempSpace = new Space {};
-    tempSpace->GetScenes().Add(tempScene);
-
-    return tempSpace;
-}
-
-void Application::DemoMainLoop() {
-    static const float anglePerSec = 180.0f;
-    auto light = Everywhere::Instance().Get<Space>().GetScenes().Front()->GetObjects().Back();
-    const float angleRotation = anglePerSec * Everywhere::Instance().Get<DeltaTime>().GetDelta();
-    light->GetTransform().AddRotationY(angleRotation);
 }
