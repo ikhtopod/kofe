@@ -22,7 +22,7 @@ void Material::SetShader(const std::shared_ptr<Shader>& shader) {
 }
 
 void Material::Processing() {
-    if (m_shader->UniformProcessingFunctions().size() == 0) {
+    if (m_shader->UniformProcessingFunctions().empty()) {
         DoInitShader();
     }
 

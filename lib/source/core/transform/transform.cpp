@@ -235,7 +235,7 @@ void Transform::SetScale(const glm::vec3& scale) {
 }
 
 void Transform::AddScale(const glm::vec3& scale) {
-    m_scale *= scale;
+    m_scale += scale;
 }
 
 Axis Transform::GetAxis() const {

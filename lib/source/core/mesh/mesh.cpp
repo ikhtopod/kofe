@@ -112,8 +112,6 @@ void Mesh::Free() {
 }
 
 void Mesh::Processing() {
-    Object::Processing(); // update children
-
     auto material =
         Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
     material->SetParentTransform(GetParentTransform() + GetTransform());
@@ -132,4 +130,6 @@ void Mesh::Processing() {
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::TEXTURE));
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::NORMAL));
     glDisableVertexAttribArray(static_cast<GLuint>(AttribIndex::POSITION));
+
+    Object::Processing(); // update children
 }
