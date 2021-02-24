@@ -114,7 +114,7 @@ void Mesh::Free() {
 void Mesh::Processing() {
     auto material =
         Everywhere::Instance().Get<MaterialStorage>().GetMaterials().At(m_materialId);
-    material->SetParentTransform(GetParentTransform() + GetTransform());
+    material->SetParentTransform(GetGlobalTransform());
     material->Processing();
 
     glBindVertexArray(vao);

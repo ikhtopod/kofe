@@ -17,7 +17,7 @@ void Light::Processing() {
     Object::Processing();
 
     if (m_childMesh) {
-        m_childMesh->SetParentTransform(GetParentTransform() + GetTransform());
+        m_childMesh->SetParentTransform(GetGlobalTransform());
         m_childMesh->Processing();
     }
 }

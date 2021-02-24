@@ -20,7 +20,7 @@ const CollectionOf<Object>& Object::Children() const {
 void Object::Processing() {
     for (auto& child : m_children.Get()) {
         if (child) {
-            child->SetParentTransform(GetParentTransform() + GetTransform());
+            child->SetParentTransform(GetGlobalTransform());
             child->Processing();
         }
     }
