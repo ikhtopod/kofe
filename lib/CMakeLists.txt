@@ -10,9 +10,9 @@ add_library(${PROJECT_CORE_TARGET} STATIC
 target_include_directories(${PROJECT_CORE_TARGET}
     PRIVATE
     ${THIRDPARTY_DIRECTORY}/glfw/include
-    ${THIRDPARTY_DIRECTORY}/glm
     ${PROJECT_LIB_DIRECTORY}/headers/core/everywhere
     PUBLIC
+    ${THIRDPARTY_DIRECTORY}/glm
     ${PROJECT_LIB_DIRECTORY}/headers
     ${PROJECT_LIB_DIRECTORY}/headers/core)
 
