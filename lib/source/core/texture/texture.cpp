@@ -43,7 +43,7 @@ void Texture::InitTexture(const std::filesystem::path& texturePath, bool flipVer
 
     stbi_set_flip_vertically_on_load(static_cast<int>(flipVertical));
 
-    uint8_t* data = stbi_load(texturePath.c_str(), &m_width, &m_height, &m_channels,
+    uint8_t* data = stbi_load(texturePath.string().c_str(), &m_width, &m_height, &m_channels,
                               static_cast<int>(m_textureChannelComponents));
 
     if (!data) {
