@@ -410,6 +410,8 @@ void Model::Processing() {
         size_t lodId = GetCurrentLodId();
 
         if (lodId < m_lods.Size()) {
+            m_lods.At(lodId)->SetParentTransform(GetParentTransform());
+            m_lods.At(lodId)->SetTransform(GetTransform());
             m_lods.At(lodId)->Processing();
         }
     }
