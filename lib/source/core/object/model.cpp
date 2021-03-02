@@ -11,14 +11,16 @@
 #include <assimp/postprocess.h>
 
 #include <cstddef>
-#include <vector>
 #include <string>
 #include <regex>
+#include <algorithm>
+#include <iterator>
 
 
 namespace {
 
 namespace fs = std::filesystem;
+namespace rx_const = std::regex_constants;
 
 static struct ModelTempPaths {
     fs::path filepath {};
@@ -127,22 +129,22 @@ void CreateTextureMaterial(const fs::path& deffusePath,
     Everywhere::Instance().Get<MaterialStorage>().GetMaterials().Add(textureMaterial);
 }
 
-bool IsSomeFilename(const fs::path& stem, const fs::path& modelFilename, const std::string& postfix) {
+bool IsSomeTextureFilename(const fs::path& stem, const fs::path& modelFilename, const std::string& postfix) {
     std::regex pattern { "^t_+" + modelFilename.string() + "_+" + postfix + "$",
-                         std::regex_constants::icase };
+                         rx_const::icase };
     return std::regex_search(stem.string(), pattern);
 }
 
-bool IsDiffuseFilename(const fs::path& stem, const fs::path& modelFilename) {
-    return IsSomeFilename(stem, modelFilename, R"re(dif+use)re");
+bool IsDiffuseTextureFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeTextureFilename(stem, modelFilename, R"re(dif+use)re");
 }
 
-bool IsSpecularFilename(const fs::path& stem, const fs::path& modelFilename) {
-    return IsSomeFilename(stem, modelFilename, R"re(specular)re");
+bool IsSpecularTextureFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeTextureFilename(stem, modelFilename, R"re(specular)re");
 }
 
-bool IsEmissionFilename(const fs::path& stem, const fs::path& modelFilename) {
-    return IsSomeFilename(stem, modelFilename, R"re(emis+i(?:(?:on)|(?:ve)))re");
+bool IsEmissionTextureFilename(const fs::path& stem, const fs::path& modelFilename) {
+    return IsSomeTextureFilename(stem, modelFilename, R"re(emis+i(?:(?:on)|(?:ve)))re");
 }
 
 bool CreateTextureMaterialByFilename(fs::path dirPath) {
@@ -158,15 +160,15 @@ bool CreateTextureMaterialByFilename(fs::path dirPath) {
 
         for (auto& entry : fs::directory_iterator(dirPath)) {
             if (!entry.is_regular_file()) continue;
-            if (fs::canonical(entry.path()) == fs::canonical(sg_modelTempPath.filepath)) continue;
+            if (fs::canonical(entry.path()) == sg_modelTempPath.filepath) continue;
 
-            if (IsDiffuseFilename(entry.path().stem(), modelFilename)) {
+            if (IsDiffuseTextureFilename(entry.path().stem(), modelFilename)) {
                 deffusePath = entry.path();
                 wasFound = true;
-            } else if (IsSpecularFilename(entry.path().stem(), modelFilename)) {
+            } else if (IsSpecularTextureFilename(entry.path().stem(), modelFilename)) {
                 specularPath = entry.path();
                 wasFound = true;
-            } else if (IsEmissionFilename(entry.path().stem(), modelFilename)) {
+            } else if (IsEmissionTextureFilename(entry.path().stem(), modelFilename)) {
                 emissionPath = entry.path();
                 wasFound = true;
             }
@@ -193,7 +195,7 @@ bool CreateTextureMaterialByDefaultFilenames() {
         }
     }
 
-    std::regex pattern { R"re(^textures?$)re", std::regex_constants::icase };
+    std::regex pattern { R"re(^textures?$)re", rx_const::icase };
     for (auto& entry : fs::directory_iterator(currentDirectory)) {
         if (!entry.is_directory()) continue;
 
@@ -215,6 +217,8 @@ void CreateTextureMaterialByAssimpMaterial(aiMaterial* material) {
 }
 
 size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
+    if (!mesh || !scene) return 0;
+
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
     if (!material) {
@@ -242,10 +246,56 @@ size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
     return Everywhere::Instance().Get<MaterialStorage>().GetLastMaterialID();
 }
 
+void FindLODFiles(const fs::path& mainFile, std::vector<fs::path>& lodPaths) {
+    const fs::path onlyFilename = mainFile.stem();
+    const fs::path currentDirectory = mainFile.parent_path();
+
+    std::regex pattern { "^" + onlyFilename.string() + "[\\._-]+lod[\\._-]?\\d+$",
+                         rx_const::icase };
+
+    for (auto& entry : fs::directory_iterator(currentDirectory)) {
+        if (!entry.is_regular_file()) continue;
+        if (fs::canonical(entry.path()) == fs::canonical(mainFile)) continue;
+        if (!entry.path().has_extension()) continue;
+        if (entry.path().extension() != mainFile.extension()) continue;
+
+        if (std::regex_match(entry.path().stem().string(), pattern)) {
+            lodPaths.push_back(fs::canonical(entry.path()));
+        }
+    }
+}
+
+void SortLodsByPostfixNumber(std::vector<fs::path>& lodPaths) {
+    auto pred = [](const fs::path& a, const fs::path& b) -> bool {
+        std::regex pattern { "^.+lod[\\._-]?0*(\\d+)$", rx_const::icase };
+        std::smatch mA {}, mB {};
+        const std::string strA { a.stem().string() };
+        const std::string strB { b.stem().string() };
+
+        if (!std::regex_match(strA, mA, pattern)) {
+            throw ModelException {
+                "Wrong match in sort function. Incorrect lod name " + a.string()
+            };
+        }
+
+        if (!std::regex_match(strB, mB, pattern)) {
+            throw ModelException {
+                "Wrong match in sort function. Incorrect lod name " + b.string()
+            };
+        }
+
+        return std::stoi(mA.str(1)) < std::stoi(mB.str(1));
+    };
+
+    std::sort(std::begin(lodPaths), std::end(lodPaths), pred);
+}
+
 } // namespace
 
 
 void Model::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
+    if (!mesh) return;
+
     std::vector<Vertex> vertices {};
     std::vector<GLuint> indices {};
 
@@ -255,13 +305,18 @@ void Model::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     auto meshOfModel = std::make_shared<Mesh>(std::move(vertices), std::move(indices));
     meshOfModel->SetMaterialId(GetMaterialId(mesh, scene));
 
-    Children().Add(meshOfModel);
+    m_lods.Back()->Children().Add(meshOfModel);
 }
 
 void Model::ProcessSceneNode(aiNode* node, const aiScene* scene) {
+    if (!node) return;
+
     for (size_t i = 0; i < node->mNumMeshes; ++i) {
         size_t meshId = node->mMeshes[i];
-        ProcessSceneMesh(scene->mMeshes[meshId], scene);
+
+        if (scene) {
+            ProcessSceneMesh(scene->mMeshes[meshId], scene);
+        }
     }
 
     for (size_t i = 0; i < node->mNumChildren; ++i) {
@@ -269,45 +324,95 @@ void Model::ProcessSceneNode(aiNode* node, const aiScene* scene) {
     }
 }
 
+void Model::InitMeshLOD(const std::vector<std::filesystem::path>& lodPaths) {
+    for (const fs::path& lodPath : lodPaths) {
+        Assimp::Importer importer {};
+
+        unsigned int postProcessParams = aiProcess_JoinIdenticalVertices |
+                                         aiProcess_Triangulate;
+
+        const aiScene* scene = importer.ReadFile(lodPath.string(), postProcessParams);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            throw ModelException {
+                "Can't import scene for file \"" + lodPath.string() + "\"\n" +
+                "Assimp message: " + importer.GetErrorString()
+            };
+        }
+
+        m_lods.Add(std::make_shared<Object>());
+        ProcessSceneNode(scene->mRootNode, scene);
+    }
+}
+
 void Model::ImportModel() {
     CheckCorrectModelPath(sg_modelTempPath.filepath);
 
-    Assimp::Importer importer {};
+    std::vector<fs::path> lodPaths {};
+    FindLODFiles(sg_modelTempPath.filepath, lodPaths);
 
-    // More postprocess:
-    // aiProcess_FindInstances
-    // aiProcess_FlipWindingOrder
-    // aiProcess_FlipUVs
-
-    unsigned int postProcessParams = aiProcess_JoinIdenticalVertices |
-                                     aiProcess_Triangulate;
-
-    const aiScene* scene =
-        importer.ReadFile(sg_modelTempPath.filepath.string(), postProcessParams);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        sg_modelTempPath.Reset();
-        throw ModelException {
-            "Can't import scene for file \"" + sg_modelTempPath.filepath.string() +
-            "\"\n" + "Assimp message: " + importer.GetErrorString()
-        };
+    if (lodPaths.size() > 1) {
+        SortLodsByPostfixNumber(lodPaths);
     }
 
-    ProcessSceneNode(scene->mRootNode, scene);
+    lodPaths.insert(lodPaths.begin(), sg_modelTempPath.filepath);
+    InitMeshLOD(lodPaths);
 }
 
 Model::Model(const fs::path& path) :
-    Model { path, path.parent_path() } {
-}
+    Model { path, path.parent_path() } {}
 
 Model::Model(const fs::path& path,
-             const fs::path& textureDirectory) {
+             const fs::path& textureDirectory) :
+    m_lods {},
+    m_distanceStep {} {
+
     sg_modelTempPath = {
         fs::canonical(path),
         fs::canonical(textureDirectory)
     };
 
     ImportModel();
+    UpdateDistanceStep();
 
     sg_modelTempPath.Reset();
+}
+
+Model::~Model() {
+    m_lods.Clear();
+}
+
+void Model::UpdateDistanceStep() {
+    m_distanceStep =
+        Everywhere::Instance().Get<Projection>().GetDepthFar() / m_lods.Size();
+}
+
+float Model::GetDistanceToCamera() const {
+    return glm::distance(
+        Everywhere::Instance().Get<Camera>().GetTransform().GetPosition(),
+        GetGlobalTransform().GetPosition());
+}
+
+size_t Model::GetCurrentLodId() const {
+    return static_cast<size_t>(GetDistanceToCamera() / m_distanceStep);
+}
+
+CollectionOf<Object>& Model::GetLODs() {
+    return m_lods;
+}
+
+const CollectionOf<Object>& Model::GetLODs() const {
+    return m_lods;
+}
+
+void Model::Processing() {
+    if (!m_lods.IsEmpty()) {
+        size_t lodId = GetCurrentLodId();
+
+        if (lodId < m_lods.Size()) {
+            m_lods.At(lodId)->Processing();
+        }
+    }
+
+    Object::Processing(); // update children
 }

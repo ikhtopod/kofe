@@ -38,22 +38,24 @@ Space* CreateDemoSpace() {
         }
     }*/
 
-    auto tempModel = std::make_shared<Model>(
-        R"obj(./resources/models/props/box/box.obj)obj");
-    tempScene->GetObjects().Add(tempModel);
+    Everywhere::Instance().Get<Projection>().SetDepthFar(10.0f);
 
-    //auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
-    //tempDirectionalLight_01->GetTransform().SetRotation({ 45.0f, 0.0f, 0.0f });
+    auto tempModelLOD = std::make_shared<Model>(
+        R"obj(./resources/models/lodtest/lodtest.obj)obj");
+    tempScene->GetObjects().Add(tempModelLOD);
+
+    auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
+    tempDirectionalLight_01->GetTransform().AddRotationYX({ -45.0f, -145.0f, 0.0f });
 
     //auto tempDirectionalLight_02 = std::make_shared<DirectionalLight>();
     //tempDirectionalLight_02->GetTransform().AddRotationYX({ 0.0f, 180.0f, -45.0f });
 
-    //tempScene->GetObjects().Add(tempDirectionalLight_01);
+    tempScene->GetObjects().Add(tempDirectionalLight_01);
     //tempScene->GetObjects().Add(tempDirectionalLight_02);
 
-    auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 15.0f);
-    tempSpotLight_01->GetTransform().AddRotationXY(-45.0f, 45.0f);
-    tempScene->GetObjects().Add(tempSpotLight_01);
+    //auto tempSpotLight_01 = std::make_shared<SpotLight>(2.0f, 15.0f);
+    //tempSpotLight_01->GetTransform().AddRotationXY(-45.0f, 45.0f);
+    //tempScene->GetObjects().Add(tempSpotLight_01);
 
     Space* tempSpace = new Space {};
     tempSpace->GetScenes().Add(tempScene);
