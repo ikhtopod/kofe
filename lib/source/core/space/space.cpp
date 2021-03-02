@@ -1,6 +1,7 @@
 #include "space/space.h"
 
 #include "app_exceptions.h"
+#include "everywhere.h"
 #include "transform/transform.h"
 
 #include <iterator>
@@ -25,6 +26,10 @@ const CollectionOf<Scene>& Space::GetScenes() const {
 }
 
 void Space::Processing() {
+    if (!Everywhere::Instance().Get<Input>().IsFocused()) {
+        return;
+    }
+
     for (auto& scene : m_scenes.Get()) {
         if (scene) {
             scene->Processing();

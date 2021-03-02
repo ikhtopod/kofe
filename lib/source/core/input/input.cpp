@@ -34,12 +34,18 @@ void Input::MousePositionCallback(GLFWwindow*, double x, double y) {
     thisInput->SetWasChangedMousePosition(true);
 }
 
+void Input::WindowIsFocused(GLFWwindow*, int isFocused) {
+    Input* thisInput = Input::GetThisInput();
+    thisInput->m_isFocused = isFocused == GLFW_TRUE;
+}
+
 void Input::AssignCallbacks() {
     glfwSetWindowUserPointer(context, this);
 
     glfwSetFramebufferSizeCallback(context, Input::FramebufferSizeCallback);
     glfwSetScrollCallback(context, Input::ScrollCallback);
     glfwSetCursorPosCallback(context, Input::MousePositionCallback);
+    glfwSetWindowFocusCallback(context, Input::WindowIsFocused);
 }
 
 void Input::FirstMousePosition() {
@@ -66,7 +72,8 @@ Input::Input() :
     context {},
     m_mousePosition {},
     m_scrollValue {},
-    m_wasChangedMousePosition { false } {
+    m_wasChangedMousePosition { false },
+    m_isFocused { true } {
     Init();
 }
 
@@ -130,11 +137,18 @@ void Input::UpdateContext() {
     context = Everywhere::Instance().Get<Window>().GetContext();
 }
 
+bool Input::IsFocused() const {
+    return m_isFocused;
+}
+
 void Input::Processing() {
     UpdateContext();
     KeyEvents();
 
     SetWasChangedMousePosition(false); // need before glfwPollEvents()
     glfwPollEvents();
-    Notify();
+
+    if (m_isFocused) {
+        Notify();
+    }
 }

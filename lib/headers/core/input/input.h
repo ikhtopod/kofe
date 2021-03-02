@@ -23,6 +23,7 @@ private: /* Callbacks */
     static void FramebufferSizeCallback(GLFWwindow*, int width, int height);
     static void ScrollCallback(GLFWwindow*, double x, double y);
     static void MousePositionCallback(GLFWwindow*, double x, double y);
+    static void WindowIsFocused(GLFWwindow*, int isFocused);
 
 private:
     GLFWwindow* context;
@@ -30,6 +31,7 @@ private:
     glm::vec2 m_mousePosition;
     glm::vec2 m_scrollValue;
     bool m_wasChangedMousePosition;
+    bool m_isFocused;
 
 private:
     void FirstMousePosition();
@@ -69,6 +71,8 @@ public:
     bool KeyIsReleased(int key) const;
     bool KeyIsPressed(int key) const;
 
+public:
+    bool IsFocused() const;
 
 public: /* IProcess */
     void Processing() override;
