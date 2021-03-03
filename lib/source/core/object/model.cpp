@@ -211,9 +211,9 @@ bool CreateTextureMaterialByDefaultFilenames() {
 
 void CreateTextureMaterialByAssimpMaterial(aiMaterial* material) {
     CreateTextureMaterial(
-        GetTexturePath(material, aiTextureType_DIFFUSE),
-        GetTexturePath(material, aiTextureType_SPECULAR),
-        GetTexturePath(material, aiTextureType_EMISSIVE));
+        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_DIFFUSE),
+        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_SPECULAR),
+        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_EMISSIVE));
 }
 
 size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
