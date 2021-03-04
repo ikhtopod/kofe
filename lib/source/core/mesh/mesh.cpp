@@ -16,6 +16,7 @@ void swap(Mesh& lhs, Mesh& rhs) {
 
     using std::swap;
 
+    swap(static_cast<Object>(lhs), static_cast<Object>(rhs));
     swap(lhs.vao, rhs.vao);
     swap(lhs.vbo, rhs.vbo);
     swap(lhs.ebo, rhs.ebo);
