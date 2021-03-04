@@ -13,7 +13,14 @@ protected:
     CollectionOf<Object> m_children;
 
 public:
+    friend void swap(Object&, Object&);
+
+public:
     Object();
+    Object(const Object& other);
+    Object(Object&& other) noexcept;
+    Object& operator=(const Object& other);
+    Object& operator=(Object&& other) noexcept;
     virtual ~Object();
 
 public:
@@ -23,5 +30,8 @@ public:
 public: /* IProcess */
     void Processing() override;
 };
+
+
+void swap(Object& lhs, Object& rhs);
 
 #endif // OBJECT_H
