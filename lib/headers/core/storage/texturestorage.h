@@ -2,17 +2,17 @@
 #define TEXTURESTORAGE_H
 
 #include "texture/texture.h"
-#include "texture/texturedata.h"
+#include "texture/textureparams.h"
 #include "interface/icanbeeverywhere.h"
 
 #include <unordered_map>
 #include <initializer_list>
+#include <filesystem>
 #include <string>
 #include <memory>
 
 
-class TextureStorage final :
-    public ICanBeEverywhere {
+class TextureStorage final : public ICanBeEverywhere {
 private:
     using StoredType = Texture;
     using KeyType = std::string;
@@ -37,8 +37,8 @@ public:
     ValueType Get(std::filesystem::path path);
     const ValueType Get(std::filesystem::path path) const;
 
-    ValueType Get(const TextureData& textureData);
-    const ValueType Get(const TextureData& textureData) const;
+    ValueType Get(const TextureParams& textureData);
+    const ValueType Get(const TextureParams& textureData) const;
 
     ValueType Get(std::filesystem::path path, GLenum textureUnit);
     const ValueType Get(std::filesystem::path path, GLenum textureUnit) const;

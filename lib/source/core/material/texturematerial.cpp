@@ -170,21 +170,21 @@ void TextureMaterial::DoInitShader() {
 
 TextureMaterial::TextureMaterial() :
     TextureMaterial {
-        TextureData { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE0 },
-        TextureData { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE1 },
-        TextureData { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE2 },
+        TextureParams { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE0 },
+        TextureParams { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE1 },
+        TextureParams { ::DEFAULT_TEXTURE_PATH, GL_TEXTURE2 },
         ::DEFAULT_SHININESS
     } {}
 
 
-TextureMaterial::TextureMaterial(const TextureData& diffuse,
-                                 const TextureData& specular,
-                                 const TextureData& emission) :
+TextureMaterial::TextureMaterial(const TextureParams& diffuse,
+                                 const TextureParams& specular,
+                                 const TextureParams& emission) :
     TextureMaterial { diffuse, specular, emission, ::DEFAULT_SHININESS } {}
 
-TextureMaterial::TextureMaterial(const TextureData& diffuse,
-                                 const TextureData& specular,
-                                 const TextureData& emission,
+TextureMaterial::TextureMaterial(const TextureParams& diffuse,
+                                 const TextureParams& specular,
+                                 const TextureParams& emission,
                                  float shininess) :
     Material { std::shared_ptr<Shader> {
         new Shader { TEXTURE_VERTEX_PATH, TEXTURE_FRAGMENT_PATH } } },
@@ -215,27 +215,27 @@ std::shared_ptr<Texture> TextureMaterial::GetEmission() const {
     return Everywhere::Instance().Get<TextureStorage>().Get(m_emission);
 }
 
-TextureData TextureMaterial::GetDiffuseTextureData() const {
+TextureParams TextureMaterial::GetDiffuseTextureParams() const {
     return m_diffuse;
 }
 
-TextureData TextureMaterial::GetSpecularTextureData() const {
+TextureParams TextureMaterial::GetSpecularTextureParams() const {
     return m_specular;
 }
 
-TextureData TextureMaterial::GetEmissionTextureData() const {
+TextureParams TextureMaterial::GetEmissionTextureParams() const {
     return m_emission;
 }
 
-void TextureMaterial::SetDiffuseTextureData(const TextureData& diffuse) {
+void TextureMaterial::SetDiffuseTextureParams(const TextureParams& diffuse) {
     m_diffuse = diffuse;
 }
 
-void TextureMaterial::SetSpecularTextureData(const TextureData& specular) {
+void TextureMaterial::SetSpecularTextureParams(const TextureParams& specular) {
     m_specular = specular;
 }
 
-void TextureMaterial::SetEmissionTextureData(const TextureData& emission) {
+void TextureMaterial::SetEmissionTextureParams(const TextureParams& emission) {
     m_emission = emission;
 }
 

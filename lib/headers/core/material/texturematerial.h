@@ -3,16 +3,16 @@
 
 #include "material.h"
 #include "texture/texture.h"
-#include "texture/texturedata.h"
+#include "texture/textureparams.h"
 
 #include <memory>
 
 
 class TextureMaterial : public Material {
 protected:
-    TextureData m_diffuse;
-    TextureData m_specular;
-    TextureData m_emission;
+    TextureParams m_diffuse;
+    TextureParams m_specular;
+    TextureParams m_emission;
     float m_shininess;
 
 public:
@@ -25,13 +25,13 @@ public:
     TextureMaterial();
     virtual ~TextureMaterial() = default;
 
-    explicit TextureMaterial(const TextureData& diffuse,
-                             const TextureData& specular,
-                             const TextureData& emission);
+    explicit TextureMaterial(const TextureParams& diffuse,
+                             const TextureParams& specular,
+                             const TextureParams& emission);
 
-    explicit TextureMaterial(const TextureData& diffuse,
-                             const TextureData& specular,
-                             const TextureData& emission,
+    explicit TextureMaterial(const TextureParams& diffuse,
+                             const TextureParams& specular,
+                             const TextureParams& emission,
                              float shininess);
 
 public:
@@ -39,13 +39,13 @@ public:
     std::shared_ptr<Texture> GetSpecular() const;
     std::shared_ptr<Texture> GetEmission() const;
 
-    TextureData GetDiffuseTextureData() const;
-    TextureData GetSpecularTextureData() const;
-    TextureData GetEmissionTextureData() const;
+    TextureParams GetDiffuseTextureParams() const;
+    TextureParams GetSpecularTextureParams() const;
+    TextureParams GetEmissionTextureParams() const;
 
-    void SetDiffuseTextureData(const TextureData& diffuse);
-    void SetSpecularTextureData(const TextureData& specular);
-    void SetEmissionTextureData(const TextureData& emission);
+    void SetDiffuseTextureParams(const TextureParams& diffuse);
+    void SetSpecularTextureParams(const TextureParams& specular);
+    void SetEmissionTextureParams(const TextureParams& emission);
 
     float GetShininess() const;
     void SetShininess(float shininess);

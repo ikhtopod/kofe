@@ -79,12 +79,12 @@ TextureStorage::ValueType
     return m_textures.at(path.string());
 }
 
-TextureStorage::ValueType TextureStorage::Get(const TextureData& textureData) {
+TextureStorage::ValueType TextureStorage::Get(const TextureParams& textureData) {
     return Get(textureData.GetPath(), textureData.GetUnit());
 }
 
 const TextureStorage::ValueType
-    TextureStorage::Get(const TextureData& textureData) const {
+    TextureStorage::Get(const TextureParams& textureData) const {
     return Get(textureData.GetPath(), textureData.GetUnit());
 }
 
