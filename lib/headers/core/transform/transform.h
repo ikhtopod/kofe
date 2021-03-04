@@ -51,6 +51,8 @@ public:
 
     Transform(const glm::mat4& matrix);
 
+    bool operator==(const Transform& other);
+    bool operator!=(const Transform& other);
     Transform& operator+=(const Transform& other);
 
     explicit operator std::string() const;

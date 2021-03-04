@@ -53,6 +53,8 @@ public:
          glm::vec3&& up,
          glm::vec3&& front) noexcept;
 
+    bool operator==(const Axis& other);
+    bool operator!=(const Axis& other);
     explicit operator std::string() const;
 
 public:

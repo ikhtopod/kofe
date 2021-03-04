@@ -81,6 +81,17 @@ Axis::Axis(glm::vec3&& right,
     m_up { std::move(up) },
     m_front { std::move(front) } {}
 
+bool Axis::operator==(const Axis& other) {
+    return this == &other ||
+           (m_front == other.m_front &&
+            m_right == other.m_right &&
+            m_up == other.m_up);
+}
+
+bool Axis::operator!=(const Axis& other) {
+    return !(*this == other);
+}
+
 Axis::operator std::string() const {
     std::stringstream result {};
 

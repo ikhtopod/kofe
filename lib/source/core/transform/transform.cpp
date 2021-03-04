@@ -105,7 +105,7 @@ Transform::Transform(glm::vec3&& position,
 }
 
 Transform& Transform::operator=(const Transform& other) {
-    if (this != &other) {
+    if (*this != other) {
         m_position = other.m_position;
         m_orientation = other.m_orientation;
         m_scale = other.m_scale;
@@ -117,7 +117,7 @@ Transform& Transform::operator=(const Transform& other) {
 }
 
 Transform& Transform::operator=(Transform&& other) noexcept {
-    if (this != &other) {
+    if (*this != other) {
         m_position = std::move(other.m_position);
         m_orientation = std::move(other.m_orientation);
         m_scale = std::move(other.m_scale);
@@ -126,6 +126,19 @@ Transform& Transform::operator=(Transform&& other) noexcept {
     }
 
     return *this;
+}
+
+bool Transform::operator==(const Transform& other) {
+    return this == &other ||
+           (m_position == other.m_position &&
+            m_orientation == other.m_orientation &&
+            m_scale == other.m_scale &&
+            m_axis == other.m_axis &&
+            m_axisOrientation == other.m_axisOrientation);
+}
+
+bool Transform::operator!=(const Transform& other) {
+    return !(*this == other);
 }
 
 Transform& Transform::operator+=(const Transform& other) {
