@@ -8,8 +8,8 @@ void swap(Transformable& lhs, Transformable& rhs) {
 
     using std::swap;
 
-    swap(lhs.m_parentTransform, rhs.m_parentTransform);
-    swap(lhs.m_localTransform, rhs.m_localTransform);
+    swap(static_cast<ParentTransformation>(lhs), static_cast<ParentTransformation>(rhs));
+    swap(static_cast<LocalTransformation>(lhs), static_cast<LocalTransformation>(rhs));
 }
 
 Transformable::Transformable() :
