@@ -48,7 +48,9 @@ Model::Model(const std::filesystem::path& path) :
 Model::Model(const std::filesystem::path& path,
              const std::filesystem::path& textureDirectory) :
     m_pathId { std::filesystem::canonical(path) } {
-    Everywhere::Instance().Get<ModelStorage>().CreateModelData(m_pathId, textureDirectory);
+
+    Everywhere::Instance().Get<ModelStorage>().CreateModelData(
+        m_pathId, std::filesystem::canonical(textureDirectory));
 }
 
 void Model::Processing() {

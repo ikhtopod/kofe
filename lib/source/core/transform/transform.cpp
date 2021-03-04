@@ -138,7 +138,12 @@ bool Transform::operator==(const Transform& other) {
 }
 
 bool Transform::operator!=(const Transform& other) {
-    return !(*this == other);
+    return this != &other ||
+           m_position != other.m_position ||
+           m_orientation != other.m_orientation ||
+           m_scale != other.m_scale ||
+           m_axis != other.m_axis ||
+           m_axisOrientation != other.m_axisOrientation;
 }
 
 Transform& Transform::operator+=(const Transform& other) {

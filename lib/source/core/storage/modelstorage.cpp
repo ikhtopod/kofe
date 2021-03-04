@@ -15,9 +15,13 @@ ModelStorage::~ModelStorage() {
 }
 
 void ModelStorage::CreateModelData(std::filesystem::path path) const {
-    path = std::filesystem::canonical(path);
+    if (path.empty()) {
+        throw ModelStorageException { "An empty file path was received." };
+    }
 
-    CreateModelData(path, path.parent_path());
+    if (!m_models.count(path.string())) {
+        m_models.insert({ path.string(), std::make_shared<ModelData>(path, path.parent_path()) });
+    }
 }
 
 void ModelStorage::CreateModelData(std::filesystem::path path,
@@ -26,26 +30,18 @@ void ModelStorage::CreateModelData(std::filesystem::path path,
         throw ModelStorageException { "An empty file path was received." };
     }
 
-    path = std::filesystem::canonical(path);
-    textureDirectory = std::filesystem::canonical(textureDirectory);
-
     if (!m_models.count(path.string())) {
         m_models.insert({ path.string(), std::make_shared<ModelData>(path, textureDirectory) });
     }
 }
 
 const ModelStorage::ValueType ModelStorage::Get(std::filesystem::path path) const {
-    path = std::filesystem::canonical(path);
-
-    return Get(path, path.parent_path());
+    CreateModelData(path, path.parent_path());
+    return m_models.at(path.string());
 }
 
 const ModelStorage::ValueType
     ModelStorage::Get(std::filesystem::path path, std::filesystem::path textureDirectory) const {
-    path = std::filesystem::canonical(path);
-    textureDirectory = std::filesystem::canonical(textureDirectory);
-
     CreateModelData(path, textureDirectory);
-
     return m_models.at(path.string());
 }

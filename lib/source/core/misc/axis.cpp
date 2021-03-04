@@ -89,7 +89,10 @@ bool Axis::operator==(const Axis& other) {
 }
 
 bool Axis::operator!=(const Axis& other) {
-    return !(*this == other);
+    return this != &other ||
+           m_front != other.m_front ||
+           m_right != other.m_right ||
+           m_up != other.m_up;
 }
 
 Axis::operator std::string() const {
