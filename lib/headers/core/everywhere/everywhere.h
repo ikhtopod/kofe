@@ -20,6 +20,7 @@
 #include "camera/targetcamera.h"
 
 #include "storage/texturestorage.h"
+#include "storage/modelstorage.h"
 
 #include "storage/lightstorage.h"
 #include "light/light.h"

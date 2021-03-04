@@ -243,18 +243,32 @@ TextureException::TextureException(const char* message) :
     TextureException { std::string { message } } {}
 
 
-ModelException::ModelException() :
+ModelStorageException::ModelStorageException() :
     ApplicationException {} {
-    m_message = "[ModelException] ";
+    m_message = "[ModelStorageException] ";
 }
 
-ModelException::ModelException(const std::string& message) :
-    ModelException {} {
+ModelStorageException::ModelStorageException(const std::string& message) :
+    ModelStorageException {} {
     m_message += message;
 }
 
-ModelException::ModelException(const char* message) :
-    ModelException { std::string { message } } {}
+ModelStorageException::ModelStorageException(const char* message) :
+    ModelStorageException { std::string { message } } {}
+
+
+ModelDataException::ModelDataException() :
+    ApplicationException {} {
+    m_message = "[ModelDataException] ";
+}
+
+ModelDataException::ModelDataException(const std::string& message) :
+    ModelDataException {} {
+    m_message += message;
+}
+
+ModelDataException::ModelDataException(const char* message) :
+    ModelDataException { std::string { message } } {}
 
 
 FilesystemException::FilesystemException() :

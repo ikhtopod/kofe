@@ -1,13 +1,10 @@
 #include "application.h"
 
 #include "everywhere.h"
-#include "texture/texturedata.h"
 #include "object/model.h"
 #include "light/directionallight.h"
 #include "light/pointlight.h"
 #include "light/spotlight.h"
-#include "material/texturematerial.h"
-#include "material/phongmaterial.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,14 +23,14 @@ namespace {
 
 Space* CreateDemoSpace() {
     std::shared_ptr<Scene> tempScene { new Scene {} };
-    Everywhere::Instance().Get<Projection>().SetDepthFar(20.0f);
+    Everywhere::Instance().Get<Projection>().SetDepthFar(10.0f);
 
-    const size_t SIZE_END = 3;
+    const size_t SIZE_END = 10;
     for (size_t i = 0; i < SIZE_END; i++) {
         for (size_t j = 0; j < SIZE_END; ++j) {
             for (size_t k = 0; k < SIZE_END; ++k) {
                 auto tempModel = std::make_shared<Model>(
-                    R"obj(./resources/models/human/human.obj)obj");
+                    R"obj(./resources/models/lodtest/lodtest.obj)obj");
                 tempModel->GetTransform().AddPosition({ i * 2, j * 2, k * 2 });
                 tempScene->GetObjects().Add(tempModel);
             }
@@ -41,7 +38,7 @@ Space* CreateDemoSpace() {
     }
 
     //auto tempModelLOD = std::make_shared<Model>(
-    //    R"obj(./resources/models/human/human.obj)obj");
+    //    R"obj(./resources/models/lodtest/lodtest.obj)obj");
     //tempScene->GetObjects().Add(tempModelLOD);
 
     auto tempDirectionalLight_01 = std::make_shared<DirectionalLight>();
@@ -96,6 +93,7 @@ Application::Application(const std::string& title) {
         Everywhere::Instance().Init<Window>(new Window { ScreenSize { 960, 540 }, title });
         Everywhere::Instance().Init<Graphics>(new OpenGL {});
         Everywhere::Instance().Init<TextureStorage>(new TextureStorage {});
+        Everywhere::Instance().Init<ModelStorage>(new ModelStorage {});
         Everywhere::Instance().Init<Input>(new Input {});
         Everywhere::Instance().Init<Camera>(new FreeCamera {});
         Everywhere::Instance().Init<Space>(CreateDemoSpace());
@@ -113,6 +111,7 @@ Application::~Application() {
     Everywhere::Instance().Free<Space>();
     Everywhere::Instance().Free<Camera>();
     Everywhere::Instance().Free<Input>();
+    Everywhere::Instance().Free<ModelStorage>();
     Everywhere::Instance().Free<TextureStorage>();
     Everywhere::Instance().Free<Graphics>();
     Everywhere::Instance().Free<Window>();
