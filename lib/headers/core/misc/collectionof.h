@@ -38,15 +38,15 @@ public:
         m_objects {} {}
 
     CollectionOf(const CollectionOf& other) :
-        m_objects { other } {}
+        m_objects { other.m_objects } {}
 
     CollectionOf(CollectionOf&& other) noexcept :
-        m_objects { other } {}
+        m_objects { other.m_objects } {}
 
     CollectionOf& operator=(const CollectionOf& other) {
         if (this != &other) {
             Clear();
-            m_objects = other;
+            m_objects = other.m_objects;
         }
 
         return *this;
@@ -55,7 +55,7 @@ public:
     CollectionOf& operator=(CollectionOf&& other) noexcept {
         if (this != &other) {
             Clear();
-            m_objects = std::move(other);
+            m_objects = std::move(other.m_objects);
         }
 
         return *this;
