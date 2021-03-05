@@ -285,6 +285,20 @@ ModelDataException::ModelDataException(const char* message) :
     ModelDataException { std::string { message } } {}
 
 
+ModelDataImporterException::ModelDataImporterException() :
+    ApplicationException {} {
+    m_message = "[ModelDataImporterException] ";
+}
+
+ModelDataImporterException::ModelDataImporterException(const std::string& message) :
+    ModelDataImporterException {} {
+    m_message += message;
+}
+
+ModelDataImporterException::ModelDataImporterException(const char* message) :
+    ModelDataImporterException { std::string { message } } {}
+
+
 FilesystemException::FilesystemException() :
     ApplicationException {} {
     m_message = "[FilesystemException] ";

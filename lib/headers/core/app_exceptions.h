@@ -209,6 +209,14 @@ public:
     explicit ModelDataException(const char* message);
 };
 
+class ModelDataImporterException : public ApplicationException {
+protected:
+    ModelDataImporterException();
+
+public:
+    explicit ModelDataImporterException(const std::string& message);
+    explicit ModelDataImporterException(const char* message);
+};
 
 class FilesystemException : public ApplicationException {
 protected:
