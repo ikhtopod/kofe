@@ -149,6 +149,54 @@ public:
     const Collection<TypePtr<ClearT>>& Get() const {
         return m_objects;
     }
+
+    decltype(auto) begin() noexcept {
+        return m_objects.begin();
+    }
+
+    decltype(auto) begin() const noexcept {
+        return m_objects.begin();
+    }
+
+    decltype(auto) end() noexcept {
+        return m_objects.end();
+    }
+
+    decltype(auto) end() const noexcept {
+        return m_objects.end();
+    }
+
+    decltype(auto) rbegin() noexcept {
+        return m_objects.rbegin();
+    }
+
+    decltype(auto) rbegin() const noexcept {
+        return m_objects.rbegin();
+    }
+
+    decltype(auto) rend() noexcept {
+        return m_objects.rend();
+    }
+
+    decltype(auto) rend() const noexcept {
+        return m_objects.rend();
+    }
+
+    decltype(auto) cbegin() const noexcept {
+        return m_objects.cbegin();
+    }
+
+    decltype(auto) cend() const noexcept {
+        return m_objects.cend();
+    }
+
+    decltype(auto) crbegin() const noexcept {
+        return m_objects.crbegin();
+    }
+
+    decltype(auto) crend() const noexcept {
+        return m_objects.crend();
+    }
 };
 
 template <typename T>
