@@ -14,6 +14,11 @@ ModelStorage::~ModelStorage() {
     m_models.clear();
 }
 
+bool ModelStorage::HasModel(std::filesystem::path path) const {
+    path = std::filesystem::canonical(path);
+    return static_cast<bool>(m_models.count(path.string()));
+}
+
 void ModelStorage::CreateModelData(std::filesystem::path path) const {
     if (path.empty()) {
         throw ModelStorageException { "An empty file path was received." };

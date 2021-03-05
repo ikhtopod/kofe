@@ -11,10 +11,6 @@
 
 
 class ModelData : public Object {
-private:
-    CollectionOf<Object> m_lods;
-    float m_distanceStep;
-
 public:
     friend void swap(ModelData&, ModelData&);
 
@@ -29,26 +25,12 @@ public:
     explicit ModelData(const std::filesystem::path& path);
     explicit ModelData(const std::filesystem::path& path,
                        const std::filesystem::path& textureDirectory);
-    virtual ~ModelData();
-
-private:
-    void UpdateDistanceStep();
-    float GetDistanceToCamera() const;
-    size_t GetCurrentLodId() const;
+    virtual ~ModelData() = default;
 
 private:
     void ProcessSceneNode(aiNode* node, const aiScene* scene);
     void ProcessSceneMesh(aiMesh* mesh, const aiScene* scene);
-    void InitMeshLOD(const std::vector<std::filesystem::path>& lodPaths);
-
     void ImportModelData();
-
-public:
-    CollectionOf<Object>& GetLODs();
-    const CollectionOf<Object>& GetLODs() const;
-
-public: /* IProcess */
-    void Processing() override;
 };
 
 

@@ -31,8 +31,9 @@ public:
     ~ModelStorage();
 
 public:
-    void CreateModelData(std::filesystem::path path) const;
+    bool HasModel(std::filesystem::path path) const;
 
+    void CreateModelData(std::filesystem::path path) const;
     void CreateModelData(std::filesystem::path path,
                          std::filesystem::path textureDirectory) const;
 

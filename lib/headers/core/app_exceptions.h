@@ -180,6 +180,16 @@ public:
 };
 
 
+class ModelException : public ApplicationException {
+protected:
+    ModelException();
+
+public:
+    explicit ModelException(const std::string& message);
+    explicit ModelException(const char* message);
+};
+
+
 class ModelStorageException : public ApplicationException {
 protected:
     ModelStorageException();

@@ -247,49 +247,6 @@ size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
     return Everywhere::Instance().Get<MaterialStorage>().GetLastMaterialID();
 }
 
-void FindLODFiles(const fs::path& mainFile, std::vector<fs::path>& lodPaths) {
-    const fs::path onlyFilename = mainFile.stem();
-    const fs::path currentDirectory = mainFile.parent_path();
-
-    std::regex pattern { "^" + onlyFilename.string() + "[\\._-]+lod[\\._-]?\\d+$",
-                         rx_const::icase };
-
-    for (auto& entry : fs::directory_iterator(currentDirectory)) {
-        if (!entry.is_regular_file()) continue;
-        if (fs::canonical(entry.path()) == fs::canonical(mainFile)) continue;
-        if (!entry.path().has_extension()) continue;
-        if (entry.path().extension() != mainFile.extension()) continue;
-
-        if (std::regex_match(entry.path().stem().string(), pattern)) {
-            lodPaths.push_back(fs::canonical(entry.path()));
-        }
-    }
-}
-
-void SortLodsByPostfixNumber(std::vector<fs::path>& lodPaths) {
-    auto pred = [](const fs::path& a, const fs::path& b) -> bool {
-        std::regex pattern { "^.+lod[\\._-]?0*(\\d+)$", rx_const::icase };
-        std::smatch mA {}, mB {};
-        const std::string strA { a.stem().string() };
-        const std::string strB { b.stem().string() };
-
-        if (!std::regex_match(strA, mA, pattern)) {
-            throw ModelDataException {
-                "Wrong match in sort function. Incorrect lod name " + a.string()
-            };
-        }
-
-        if (!std::regex_match(strB, mB, pattern)) {
-            throw ModelDataException {
-                "Wrong match in sort function. Incorrect lod name " + b.string()
-            };
-        }
-
-        return std::stoi(mA.str(1)) < std::stoi(mB.str(1));
-    };
-
-    std::sort(std::begin(lodPaths), std::end(lodPaths), pred);
-}
 
 } // namespace
 
@@ -300,8 +257,6 @@ void swap(ModelData& lhs, ModelData& rhs) {
     using std::swap;
 
     swap(static_cast<Object>(lhs), static_cast<Object>(rhs));
-    swap(lhs.m_lods, rhs.m_lods);
-    swap(lhs.m_distanceStep, rhs.m_distanceStep);
 }
 
 
@@ -317,7 +272,7 @@ void ModelData::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     auto meshOfModel = std::make_shared<Mesh>(std::move(vertices), std::move(indices));
     meshOfModel->SetMaterialId(GetMaterialId(mesh, scene));
 
-    m_lods.Back()->Children().Add(meshOfModel);
+    Children().Add(meshOfModel);
 }
 
 void ModelData::ProcessSceneNode(aiNode* node, const aiScene* scene) {
@@ -336,39 +291,25 @@ void ModelData::ProcessSceneNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-void ModelData::InitMeshLOD(const std::vector<std::filesystem::path>& lodPaths) {
-    for (const fs::path& lodPath : lodPaths) {
-        Assimp::Importer importer {};
-
-        unsigned int postProcessParams = aiProcess_JoinIdenticalVertices |
-                                         aiProcess_Triangulate;
-
-        const aiScene* scene = importer.ReadFile(lodPath.string(), postProcessParams);
-
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            throw ModelDataException {
-                "Can't import scene for file \"" + lodPath.string() + "\"\n" +
-                "Assimp message: " + importer.GetErrorString()
-            };
-        }
-
-        m_lods.Add(std::make_shared<Object>());
-        ProcessSceneNode(scene->mRootNode, scene);
-    }
-}
-
 void ModelData::ImportModelData() {
     CheckCorrectModelPath(sg_modelTempPath.filepath);
 
-    std::vector<fs::path> lodPaths {};
-    FindLODFiles(sg_modelTempPath.filepath, lodPaths);
+    Assimp::Importer importer {};
 
-    if (lodPaths.size() > 1) {
-        SortLodsByPostfixNumber(lodPaths);
+    unsigned int postProcessParams = aiProcess_JoinIdenticalVertices |
+                                     aiProcess_Triangulate;
+
+    const aiScene* scene =
+        importer.ReadFile(sg_modelTempPath.filepath.string(), postProcessParams);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        throw ModelDataException {
+            "Can't import scene for file \"" + sg_modelTempPath.filepath.string() + "\"\n" +
+            "Assimp message: " + importer.GetErrorString()
+        };
     }
 
-    lodPaths.insert(lodPaths.begin(), sg_modelTempPath.filepath);
-    InitMeshLOD(lodPaths);
+    ProcessSceneNode(scene->mRootNode, scene);
 }
 
 ModelData::ModelData(const fs::path& path) :
@@ -376,8 +317,7 @@ ModelData::ModelData(const fs::path& path) :
 
 ModelData::ModelData(const fs::path& path,
                      const fs::path& textureDirectory) :
-    m_lods {},
-    m_distanceStep {} {
+    Object {} {
 
     sg_modelTempPath = {
         fs::canonical(path),
@@ -385,48 +325,6 @@ ModelData::ModelData(const fs::path& path,
     };
 
     ImportModelData();
-    UpdateDistanceStep();
 
     sg_modelTempPath.Reset();
-}
-
-ModelData::~ModelData() {
-    m_lods.Clear();
-}
-
-void ModelData::UpdateDistanceStep() {
-    m_distanceStep =
-        Everywhere::Instance().Get<Projection>().GetDepthFar() / m_lods.Size();
-}
-
-float ModelData::GetDistanceToCamera() const {
-    return glm::distance(
-        Everywhere::Instance().Get<Camera>().GetTransform().GetPosition(),
-        GetGlobalTransform().GetPosition());
-}
-
-size_t ModelData::GetCurrentLodId() const {
-    return static_cast<size_t>(GetDistanceToCamera() / m_distanceStep);
-}
-
-CollectionOf<Object>& ModelData::GetLODs() {
-    return m_lods;
-}
-
-const CollectionOf<Object>& ModelData::GetLODs() const {
-    return m_lods;
-}
-
-void ModelData::Processing() {
-    if (!m_lods.IsEmpty()) {
-        size_t lodId = GetCurrentLodId();
-
-        if (lodId < m_lods.Size()) {
-            m_lods.At(lodId)->SetParentTransform(GetParentTransform());
-            m_lods.At(lodId)->SetTransform(GetTransform());
-            m_lods.At(lodId)->Processing();
-        }
-    }
-
-    Object::Processing(); // update children
 }

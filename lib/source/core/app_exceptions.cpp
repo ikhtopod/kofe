@@ -243,6 +243,20 @@ TextureException::TextureException(const char* message) :
     TextureException { std::string { message } } {}
 
 
+ModelException::ModelException() :
+    ApplicationException {} {
+    m_message = "[ModelException] ";
+}
+
+ModelException::ModelException(const std::string& message) :
+    ModelException {} {
+    m_message += message;
+}
+
+ModelException::ModelException(const char* message) :
+    ModelException { std::string { message } } {}
+
+
 ModelStorageException::ModelStorageException() :
     ApplicationException {} {
     m_message = "[ModelStorageException] ";
