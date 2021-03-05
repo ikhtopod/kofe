@@ -23,35 +23,6 @@ namespace {
 namespace fs = std::filesystem;
 namespace rx_const = std::regex_constants;
 
-static struct ModelTempPaths {
-    fs::path filepath {};
-    fs::path textureDirectory {};
-
-    void Reset() {
-        filepath.clear();
-        textureDirectory.clear();
-    }
-} sg_modelTempPath;
-
-void CheckCorrectModelPath(fs::path path) {
-    path = fs::canonical(path);
-
-    if (!fs::exists(path)) {
-        throw ModelDataException { "File \"" + path.string() + "\" isn't exists." };
-    }
-
-    if (fs::is_directory(path)) {
-        throw ModelDataException { "File \"" + path.string() + "\" is directory." };
-    }
-
-    if (fs::is_socket(path)) {
-        throw ModelDataException { "File \"" + path.string() + "\" is socket." };
-    }
-
-    if (fs::is_empty(path)) {
-        throw ModelDataException { "File \"" + path.string() + "\" is empty." };
-    }
-}
 
 glm::vec2 ToVec2(const aiVector3D& vec3d) {
     return { vec3d.x, vec3d.y };
@@ -148,20 +119,24 @@ bool IsEmissionTextureFilename(const fs::path& stem, const fs::path& modelFilena
     return IsSomeTextureFilename(stem, modelFilename, R"re(emis+i(?:(?:on)|(?:ve)))re");
 }
 
-bool CreateTextureMaterialByFilename(fs::path dirPath) {
-    dirPath = fs::canonical(dirPath);
+} // namespace
 
+
+/* ModelDataImporter */
+
+
+bool ModelDataImporter::CreateTextureMaterialByFilename(const std::filesystem::path& textureDirectory) const {
     fs::path deffusePath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
     fs::path specularPath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
     fs::path emissionPath { Everywhere::Instance().Get<TextureStorage>().GetDefaultTexturePath() };
-    fs::path modelFilename { sg_modelTempPath.filepath.stem() };
+    fs::path modelFilename { m_filepath.stem() };
 
-    if (fs::exists(dirPath) && fs::is_directory(dirPath)) {
+    if (fs::exists(textureDirectory) && fs::is_directory(textureDirectory)) {
         bool wasFound = false;
 
-        for (auto& entry : fs::directory_iterator(dirPath)) {
+        for (auto& entry : fs::directory_iterator(textureDirectory)) {
             if (!entry.is_regular_file()) continue;
-            if (fs::canonical(entry.path()) == sg_modelTempPath.filepath) continue;
+            if (fs::canonical(entry.path()) == m_filepath) continue;
 
             if (IsDiffuseTextureFilename(entry.path().stem(), modelFilename)) {
                 deffusePath = entry.path();
@@ -184,13 +159,13 @@ bool CreateTextureMaterialByFilename(fs::path dirPath) {
     return false;
 }
 
-bool CreateTextureMaterialByDefaultFilenames() {
-    if (CreateTextureMaterialByFilename(sg_modelTempPath.textureDirectory)) {
+bool ModelDataImporter::CreateTextureMaterialByDefaultFilenames() const {
+    if (CreateTextureMaterialByFilename(m_textureDirectory)) {
         return true;
     }
 
-    fs::path currentDirectory = sg_modelTempPath.filepath.parent_path();
-    if (currentDirectory != sg_modelTempPath.textureDirectory) {
+    fs::path currentDirectory = m_filepath.parent_path();
+    if (currentDirectory != m_textureDirectory) {
         if (CreateTextureMaterialByFilename(currentDirectory)) {
             return true;
         }
@@ -210,14 +185,7 @@ bool CreateTextureMaterialByDefaultFilenames() {
     return false;
 }
 
-void CreateTextureMaterialByAssimpMaterial(aiMaterial* material) {
-    CreateTextureMaterial(
-        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_DIFFUSE),
-        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_SPECULAR),
-        sg_modelTempPath.filepath.parent_path() / GetTexturePath(material, aiTextureType_EMISSIVE));
-}
-
-size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
+size_t ModelDataImporter::GetMaterialId(aiMesh* mesh, const aiScene* scene) const {
     if (!mesh || !scene) return 0;
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -247,20 +215,32 @@ size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) {
     return Everywhere::Instance().Get<MaterialStorage>().GetLastMaterialID();
 }
 
-
-} // namespace
-
-
-void swap(ModelData& lhs, ModelData& rhs) {
-    if (&lhs == &rhs) return;
-
-    using std::swap;
-
-    swap(static_cast<Object>(lhs), static_cast<Object>(rhs));
+void ModelDataImporter::CreateTextureMaterialByAssimpMaterial(aiMaterial* material) const {
+    CreateTextureMaterial(
+        m_filepath.parent_path() / GetTexturePath(material, aiTextureType_DIFFUSE),
+        m_filepath.parent_path() / GetTexturePath(material, aiTextureType_SPECULAR),
+        m_filepath.parent_path() / GetTexturePath(material, aiTextureType_EMISSIVE));
 }
 
+void ModelDataImporter::CheckCorrectModelPath() const {
+    if (!fs::exists(m_filepath)) {
+        throw ModelDataImporterException { "File \"" + m_filepath.string() + "\" isn't exists." };
+    }
 
-void ModelData::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
+    if (fs::is_directory(m_filepath)) {
+        throw ModelDataImporterException { "File \"" + m_filepath.string() + "\" is directory." };
+    }
+
+    if (fs::is_socket(m_filepath)) {
+        throw ModelDataImporterException { "File \"" + m_filepath.string() + "\" is socket." };
+    }
+
+    if (fs::is_empty(m_filepath)) {
+        throw ModelDataImporterException { "File \"" + m_filepath.string() + "\" is empty." };
+    }
+}
+
+void ModelDataImporter::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     if (!mesh) return;
 
     std::vector<Vertex> vertices {};
@@ -272,10 +252,12 @@ void ModelData::ProcessSceneMesh(aiMesh* mesh, const aiScene* scene) {
     auto meshOfModel = std::make_shared<Mesh>(std::move(vertices), std::move(indices));
     meshOfModel->SetMaterialId(GetMaterialId(mesh, scene));
 
-    Children().Add(meshOfModel);
+    if (m_modelData) {
+        m_modelData->Children().Add(meshOfModel);
+    }
 }
 
-void ModelData::ProcessSceneNode(aiNode* node, const aiScene* scene) {
+void ModelDataImporter::ProcessSceneNode(aiNode* node, const aiScene* scene) {
     if (!node) return;
 
     for (size_t i = 0; i < node->mNumMeshes; ++i) {
@@ -291,8 +273,8 @@ void ModelData::ProcessSceneNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-void ModelData::ImportModelData() {
-    CheckCorrectModelPath(sg_modelTempPath.filepath);
+void ModelDataImporter::Import() {
+    CheckCorrectModelPath();
 
     Assimp::Importer importer {};
 
@@ -300,16 +282,34 @@ void ModelData::ImportModelData() {
                                      aiProcess_Triangulate;
 
     const aiScene* scene =
-        importer.ReadFile(sg_modelTempPath.filepath.string(), postProcessParams);
+        importer.ReadFile(m_filepath.string(), postProcessParams);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        throw ModelDataException {
-            "Can't import scene for file \"" + sg_modelTempPath.filepath.string() + "\"\n" +
+        throw ModelDataImporterException {
+            "Can't import scene for file \"" + m_filepath.string() + "\"\n" +
             "Assimp message: " + importer.GetErrorString()
         };
     }
 
     ProcessSceneNode(scene->mRootNode, scene);
+}
+
+ModelDataImporter::ModelDataImporter(std::filesystem::path filepath,
+                                     std::filesystem::path textureDirectory,
+                                     ModelData* modelData) :
+    m_filepath { fs::canonical(filepath) },
+    m_textureDirectory { fs::canonical(textureDirectory) },
+    m_modelData { modelData } {}
+
+/* ModelData */
+
+
+void swap(ModelData& lhs, ModelData& rhs) {
+    if (&lhs == &rhs) return;
+
+    using std::swap;
+
+    swap(static_cast<Object>(lhs), static_cast<Object>(rhs));
 }
 
 ModelData::ModelData(const fs::path& path) :
@@ -319,12 +319,6 @@ ModelData::ModelData(const fs::path& path,
                      const fs::path& textureDirectory) :
     Object {} {
 
-    sg_modelTempPath = {
-        fs::canonical(path),
-        fs::canonical(textureDirectory)
-    };
-
-    ImportModelData();
-
-    sg_modelTempPath.Reset();
+    ModelDataImporter importer { path, textureDirectory, this };
+    importer.Import();
 }

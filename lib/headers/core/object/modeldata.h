@@ -2,7 +2,6 @@
 #define MODELDATA_H
 
 #include "object.h"
-#include "misc/collectionof.h"
 
 #include <assimp/scene.h>
 
@@ -26,11 +25,41 @@ public:
     explicit ModelData(const std::filesystem::path& path,
                        const std::filesystem::path& textureDirectory);
     virtual ~ModelData() = default;
+};
+
+
+class ModelDataImporter final {
+private:
+    std::filesystem::path m_filepath;
+    std::filesystem::path m_textureDirectory;
+    ModelData* m_modelData;
+
+public:
+    ModelDataImporter() = delete;
+    ModelDataImporter(const ModelDataImporter&) = delete;
+    ModelDataImporter(ModelDataImporter&&) noexcept = delete;
+    ModelDataImporter& operator=(const ModelDataImporter&) = delete;
+    ModelDataImporter& operator=(ModelDataImporter&&) noexcept = delete;
+
+public:
+    ModelDataImporter(std::filesystem::path filepath,
+                      std::filesystem::path textureDirectory,
+                      ModelData* modelData);
+    ~ModelDataImporter() = default;
+
+private:
+    bool CreateTextureMaterialByFilename(const std::filesystem::path& textureDirectory) const;
+    bool CreateTextureMaterialByDefaultFilenames() const;
+    size_t GetMaterialId(aiMesh* mesh, const aiScene* scene) const;
+    void CheckCorrectModelPath() const;
+    void CreateTextureMaterialByAssimpMaterial(aiMaterial* material) const;
 
 private:
     void ProcessSceneNode(aiNode* node, const aiScene* scene);
     void ProcessSceneMesh(aiMesh* mesh, const aiScene* scene);
-    void ImportModelData();
+
+public:
+    void Import();
 };
 
 
